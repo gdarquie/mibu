@@ -14,8 +14,6 @@ use Symfony\Component\HttpFoundation\Response;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\FOSRestController;
 
-
-
 class FictionController extends FOSRestController
 {
     /**
@@ -29,7 +27,7 @@ class FictionController extends FOSRestController
         $fictionsIO = [];
 
         foreach ($fictions as $fiction){
-            $fictionIO = $fictionHydrator->hydrateFiction($em, $fiction);
+            $fictionIO = $fictionHydrator->createFiction($em, $fiction);
             array_push($fictionsIO, $fictionIO);
         }
         $serializer = new CustomSerializer();
@@ -61,7 +59,7 @@ class FictionController extends FOSRestController
         }
 
         $fictionHydrator = new FictionHydrator();
-        $fictionIO = $fictionHydrator->hydrateFiction($em, $fiction);
+        $fictionIO = $fictionHydrator->createFiction($em, $fiction);
         $serializer = new CustomSerializer();
         $fictionIO = $serializer->serialize($fictionIO);
 
@@ -92,9 +90,11 @@ class FictionController extends FOSRestController
             $response = new JsonResponse('Projet sauvegardé', 201);
             $fictionUrl = $this->generateUrl(
                 'get_fiction', array(
-                'id' => $fictionId
+                'id' => $fictionId //erreur id pas ids pour test
             ));
+
             $response->headers->set('Location', $fictionUrl);
+
             return $response;
         }
 

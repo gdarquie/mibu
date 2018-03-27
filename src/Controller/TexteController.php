@@ -1,50 +1,53 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: gaetan
- * Date: 20/03/2018
- * Time: 09:26
- */
 
 namespace App\Controller;
 
+use App\Entity\Element\Texte;
+use App\Component\Hydrator\TexteHydrator;
+use App\Component\Serializer\CustomSerializer;
+use Symfony\Component\HttpFoundation\Response;
+use FOS\RestBundle\Controller\Annotations as Rest;
+use FOS\RestBundle\Controller\FOSRestController;
 
-class TexteController
+
+class TexteController extends FOSRestController
 {
 
-    private $em;
-
-    public function __construct()
+    /**
+     * @Rest\Get("textes/{texteId}", name="get_texte")
+     */
+    public function getTexte($texteId)
     {
-        $this->em = $this->getDoctrine()->getManager();
-    }
+        $em = $this->getDoctrine()->getManager();
+        $texte = $em->getRepository(Texte::class)->findOneById($texteId);
 
-
-    public function getTexte()
-    {
-        $fiction = $this->em->getRepository('App:Concept\Texte')->findOneById($id);
-
-        //autorisé ?
-
-        if (!$fiction) {
+        if (!$texte) {
             throw $this->createNotFoundException(sprintf(
                 'Aucun texte avec l\'id "%s" n\'a été trouvé',
-                $id
+                $texteId
             ));
         }
 
-        //return texte
-    }
+        $texteHydrator = new TexteHydrator();
+        $texteIO = $texteHydrator->createTexte($em, $texte);
+        $serializer = new CustomSerializer();
+        $texteIO = $serializer->serialize($texteIO);
 
-    public function getTextesByFiction()
-    {
-        
+        $response = new Response($texteIO);
+        $response->headers->set('Content-Type', 'application/json');
+
+        return $response;
     }
 
     public function postTexte()
     {
         //post texte for a projet
 
+    }
+
+    public function putTexte()
+    {
+        //modifier un texte existant
     }
 
     public function deleteTexte()

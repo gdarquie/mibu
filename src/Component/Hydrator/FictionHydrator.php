@@ -11,13 +11,13 @@ class FictionHydrator
     public function getFiction($em, $id)
     {
         $fiction = $em->getRepository('App:Concept\Fiction')->getFiction($id);
-        $fictionIO = $this->hydrateFiction($em, $fiction);
+        $fictionIO = $this->createFiction($em, $fiction);
         $fictionIO = $this->serialize($fictionIO);
         return $fictionIO;
 
     }
 
-    public function hydrateFiction($em, $fiction)
+    public function createFiction($em, $fiction)
     {
         $textesFiction = $em->getRepository('App:Concept\Fiction')->getTextesFiction($fiction->getId());
         $fictionIO = new FictionIO();

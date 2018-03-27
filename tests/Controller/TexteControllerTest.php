@@ -4,25 +4,25 @@ namespace App\tests\Controller;
 
 use App\Tests\ApiTestCase;
 
-class FictionControllerTest extends ApiTestCase
+class TexteControllerTest extends ApiTestCase
 {
-    public function testGetFiction()
-    {
-        $fictionId = 212;
 
-        $response = $this->client->get('/fictions/'.$fictionId);
+    public function testGetTexte()
+    {
+        $texteId = 1;
+
+        $response = $this->client->get('/textes/'.$texteId);
         $this->assertEquals(200, $response->getStatusCode());
     }
-
-    public function testPostFiction()
+    
+    public function testPostTexte()
     {
         $data = array(
-            'titre' => 'Nouvel exemple de titre de fiction',
-            'description' => 'Une description de fiction comme exemple',
-            'promesse' => 'Un contenu de promesse'
+            'titre' => 'Titre de texte',
+            'contenu' => 'Un contenu de texte',
         );
 
-        $response = $this->client->post('/fictions', [
+        $response = $this->client->post('/textes', [
             'body' => json_encode($data)
         ]);
 
@@ -30,11 +30,10 @@ class FictionControllerTest extends ApiTestCase
         $this->assertTrue($response->hasHeader('Location'));
 
         $fictionUrl = $response->getHeader('Location');
-
         $response = $this->client->get($fictionUrl[0]);
 
         $finishedData = json_decode($response->getBody(true), true);
-        $this->assertArrayHasKey('titre', $finishedData, "Il n'y a pas de champ titre");
+        $this->assertArrayHasKey('titres', $finishedData, "Il n'y a pas de champ titre");
 
         echo $response->getBody();
         echo "\n\n";

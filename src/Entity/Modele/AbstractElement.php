@@ -1,16 +1,18 @@
 <?php
 
-namespace App\Entity\Concept;
+namespace App\Entity\Modele;
 
-use App\Entity\Modele\AbstractConcept;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\ItemRepository")
- * @ORM\Table(name="item")
+ * Abstract base class to be extended by my entity classes with same fields
+ *
+ * @ORM\MappedSuperclass()
+ * @ORM\HasLifecycleCallbacks
  */
-class Item extends AbstractConcept
+abstract class AbstractElement extends AbstractConcept
 {
+
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Concept\Fiction")
      * @ORM\JoinColumn(name="fiction_id", referencedColumnName="id")
@@ -32,6 +34,4 @@ class Item extends AbstractConcept
     {
         $this->fiction = $fiction;
     }
-
-
 }

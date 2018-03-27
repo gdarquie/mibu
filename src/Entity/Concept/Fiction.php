@@ -4,6 +4,8 @@ namespace App\Entity\Concept;
 
 use Doctrine\ORM\Mapping as ORM;
 use App\Entity\Modele\AbstractConcept;
+use App\Entity\Element\Texte;
+use App\Entity\Element\Item;
 
 
 /**
@@ -14,12 +16,12 @@ class Fiction extends AbstractConcept
 {
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Concept\Texte", mappedBy="fiction")
+     * @ORM\OneToMany(targetEntity=Texte::class, mappedBy="fiction")
      */
     private $textes;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Concept\Item", mappedBy="fiction")
+     * @ORM\OneToMany(targetEntity=Item::class, mappedBy="fiction")
      */
     private $items;
 

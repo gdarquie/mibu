@@ -60,7 +60,7 @@ class ApiTestCase extends KernelTestCase
         $this->client = self::$staticClient;
         // reset the history
         self::$history = array();
-//        $this->purgeDatabase();
+        $this->purgeDatabase();
     }
 
     /**
@@ -71,21 +71,21 @@ class ApiTestCase extends KernelTestCase
         // purposefully not calling parent class, which shuts down the kernel
     }
 
-    protected function onNotSuccessfulTest(\Throwable $e)
-    {
-        if (self::$history && $lastResponse = self::$history->getLastResponse()) {
-            if ($lastResponse = $this->getLastResponse()) {
-
-                $this->printDebug('');
-                $this->printDebug('<error>Failure!</error> when making the following request:');
-                $this->printLastRequestUrl();
-                $this->printDebug('');
-
-                $this->debugResponse($lastResponse);
-            }
-        }
-        throw $e;
-    }
+//    protected function onNotSuccessfulTest(\Throwable $e)
+//    {
+//        if (self::$history && $lastResponse = self::$history->getLastResponse()) {
+//            if ($lastResponse = $this->getLastResponse()) {
+//
+//                $this->printDebug('');
+//                $this->printDebug('<error>Failure!</error> when making the following request:');
+//                $this->printLastRequestUrl();
+//                $this->printDebug('');
+//
+//                $this->debugResponse($lastResponse);
+//            }
+//        }
+//        throw $e;
+//    }
 
     public function purgeDatabase()
     {
@@ -220,6 +220,8 @@ class ApiTestCase extends KernelTestCase
      */
     private function getLastResponse()
     {
+
+//        dump('history');
         if (!self::$history || empty(self::$history)) {
             return null;
         }
