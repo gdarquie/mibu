@@ -6,14 +6,6 @@ use App\Tests\ApiTestCase;
 
 class FictionControllerTest extends ApiTestCase
 {
-    public function testGetFiction()
-    {
-        $fictionId = 212;
-
-        $response = $this->client->get('/fictions/'.$fictionId);
-        $this->assertEquals(200, $response->getStatusCode());
-    }
-
     public function testPostFiction()
     {
         $data = array(
@@ -39,5 +31,15 @@ class FictionControllerTest extends ApiTestCase
         echo $response->getBody();
         echo "\n\n";
 
+    }
+
+    public function testGetFiction()
+    {
+        $fictionId = 1;
+
+        //createFiction and get its id
+
+        $response = $this->client->get('/fictions/'.$fictionId);
+        $this->assertEquals(200, $response->getStatusCode());
     }
 }

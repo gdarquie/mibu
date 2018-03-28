@@ -14,7 +14,6 @@ use App\Entity\Element\Item;
  */
 class Fiction extends AbstractConcept
 {
-
     /**
      * @ORM\OneToMany(targetEntity=Texte::class, mappedBy="fiction")
      */

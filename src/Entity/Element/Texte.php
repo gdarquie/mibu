@@ -11,4 +11,11 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Texte extends AbstractElement
 {
+    CONST TYPE_FRAGMENT = 'fragment';
+    CONST TYPE_PROMESSE = 'promesse';
+
+    /**
+     * @ORM\Column(type="string")
+     */
+    private $type;
 }
