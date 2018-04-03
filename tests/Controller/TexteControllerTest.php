@@ -6,7 +6,6 @@ use App\Tests\ApiTestCase;
 
 class TexteControllerTest extends ApiTestCase
 {
-
     public function testGetTexte()
     {
         $texteId = 1;

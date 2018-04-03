@@ -11,11 +11,19 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Evenement extends AbstractElement
 {
-
+    /**
+     * @ORM\Column(type="integer")
+     */
     private $annee_debut;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
     private $annee_fin;
 
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\Element\Item")
+     */
     private $item;
 
     /**
@@ -49,8 +57,5 @@ class Evenement extends AbstractElement
     {
         $this->annee_fin = $annee_fin;
     }
-
-
-
 
 }

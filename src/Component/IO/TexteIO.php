@@ -13,6 +13,7 @@ class TexteIO
 {
     private $titre;
     private $contenu;
+    private $type;
     private $fiction;
 
     /**
@@ -45,6 +46,22 @@ class TexteIO
     public function setContenu($contenu)
     {
         $this->contenu = $contenu;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * @param mixed $type
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
     }
 
     /**

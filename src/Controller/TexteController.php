@@ -2,9 +2,13 @@
 
 namespace App\Controller;
 
+use App\Component\Handler\AbstractItemHandler;
+use App\Entity\Concept\Fiction;
 use App\Entity\Element\Texte;
 use App\Component\Hydrator\TexteHydrator;
 use App\Component\Serializer\CustomSerializer;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\FOSRestController;
@@ -39,9 +43,28 @@ class TexteController extends FOSRestController
         return $response;
     }
 
-    public function postTexte()
+    /**
+     * @Rest\Post("textes/{fictionId}", name="post_texte")
+     */
+    public function postTexte(Request $request, $fictionId)
     {
-        //post texte for a projet
+        $data = json_decode($request->getContent(), true);
+
+        $em = $this->getDoctrine()->getManager();
+        $fiction = $em->getRepository(Fiction::class)->findOneById($fictionId);
+
+        $handlerTexte = new AbstractItemHandler();
+        $handlerTexte->createTexte($em, $data, $fiction);
+
+        $response = new JsonResponse('Texte sauvegardé', 201);
+//        $fictionUrl = $this->generateUrl(
+//            'get_texte', array(
+//            'id' => $fiction->getId()
+//        ));
+
+//        $response->headers->set('Location', $fictionUrl);
+
+        return $response;
 
     }
 

@@ -17,6 +17,11 @@ class Personnage extends AbstractItem
 
     private $item;
 
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
     /**
      * @return mixed
      */

@@ -33,6 +33,16 @@ class FictionControllerTest extends ApiTestCase
 
     }
 
+    public function testPostFictionWithTextes(){
+        $data = array(
+            'titre' => 'Nouvel exemple de titre de fiction',
+            'description' => 'Une description de fiction comme exemple',
+            'promesse' => 'Un contenu de promesse'
+        );
+        $textes = [];
+        $data = array_push($data, $textes);
+    }
+
     public function testGetFiction()
     {
         $fictionId = 1;

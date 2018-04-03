@@ -8,18 +8,15 @@ use Doctrine\ORM\EntityManager;
 
 class FictionHandler
 {
-    public function createFiction(EntityManager $em, FictionIO $fictionIO)
+    public function createFiction(EntityManager $em, $data)
     {
         $fiction = new Fiction();
-        $fiction->setTitre($fictionIO->getTitre());
-        $fiction->setDescription($fictionIO->getPromesse());
+
+        $fiction->setTitre($data['titre']);
+        $fiction->setDescription($data['description']);
         $em->persist($fiction);
         $em->flush();
 
-        //save texte avec la promesse
-
-        $id = $fiction->getId();
-        return $id;
-
+        return $fiction;
     }
 }

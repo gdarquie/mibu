@@ -3,8 +3,8 @@
 namespace App\Controller;
 
 use App\Component\Handler\FictionHandler;
+use App\Component\Handler\AbstractItemHandler;
 use App\Component\Hydrator\FictionHydrator;
-use App\Component\IO\FictionIO;
 use App\Component\Serializer\CustomSerializer;
 use App\Entity\Concept\Fiction;
 use App\Form\FictionType;
@@ -14,10 +14,11 @@ use Symfony\Component\HttpFoundation\Response;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\FOSRestController;
 
+
 class FictionController extends FOSRestController
 {
     /**
-     * @Rest\Get("/fictions", name="get_fictions")
+     * @Rest\Get("fictions", name="get_fictions")
      */
     public function getFictions()
     {
@@ -45,8 +46,6 @@ class FictionController extends FOSRestController
      */
     public function getFiction($id)
     {
-
-        //https://knpuniversity.com/screencast/symfony-rest/tightening-up-response#play
         $em = $this->getDoctrine()->getManager();
 
         $fiction = $em->getRepository('App:Concept\Fiction')->findOneById($id);
@@ -69,28 +68,33 @@ class FictionController extends FOSRestController
         return $response;
     }
 
-
     /**
-     * @Rest\Post("/fictions", name="post_fiction")
+     * @Rest\Post("fictions", name="post_fiction")
      */
     public function postFiction(Request $request)
     {
         $data = json_decode($request->getContent(), true);
 
-        $fictionIO = new FictionIO();
-        $form = $this->createForm(FictionType::class, $fictionIO);
+        $fiction = new Fiction();
+        $form = $this->createForm(FictionType::class, $fiction);
         $form->submit($data);
 
-        //Validation du formulaire?
         if($form->isSubmitted()){
+
             $em = $this->getDoctrine()->getManager();
+
             $fictionHandler  = new FictionHandler();
-            $fictionId = $fictionHandler->createFiction($em, $fictionIO);
+            $fiction = $fictionHandler->createFiction($em, $data);
+
+            $texteHandler = new AbstractItemHandler();
+            if($texteHandler->createTextes($em, $data['textes'], $fiction) !== true){
+                return new JsonResponse('Echec de la sauvegarde des textes');
+            };
 
             $response = new JsonResponse('Projet sauvegardé', 201);
             $fictionUrl = $this->generateUrl(
                 'get_fiction', array(
-                'id' => $fictionId //erreur id pas ids pour test
+                'id' => $fiction->getId()
             ));
 
             $response->headers->set('Location', $fictionUrl);
@@ -103,7 +107,26 @@ class FictionController extends FOSRestController
     }
 
     /**
-     * @Rest\Delete("/fictions/{id}", name="delete_fiction")
+     * @Rest\Post("fictions/{id}", name="put_fiction")
+     */
+    public function putFiction(Request $request)
+    {
+        $data = json_decode($request->getContent(), true);
+//        $form = $this->createForm(FictionType::class, $fiction);
+//        $form->submit($data);
+
+//        if($form->isSubmitted()){
+//            //vérifier que le texte existe bien
+//        }
+
+        //récupérer la fiction et save
+
+        return new JsonResponse("Echec de la mise à jour");
+
+    }
+
+    /**
+     * @Rest\GET("delete/fictions/{id}", name="delete_fiction")
      */
     public function deleteAction(Request $request, Fiction $fiction)
     {
@@ -113,6 +136,7 @@ class FictionController extends FOSRestController
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $em->remove($fiction);
+            dump($fiction);die;
             $em->flush();
         }
 

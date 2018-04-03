@@ -1,19 +1,21 @@
 <?php
 
 namespace App\Form;
-use App\Entity\Concept\Fiction;
+
+use App\Entity\Element\Texte;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class FictionType extends AbstractType
+class TexteType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
             ->add('titre')
             ->add('description')
-            ->add('textes')
+            ->add('type')
+            ->add('fiction')
             ;
     }
 
@@ -23,7 +25,7 @@ class FictionType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => Fiction::class
+            'data_class' => Texte::class
         ));
     }
 
