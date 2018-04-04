@@ -22,11 +22,6 @@ class Evenement extends AbstractElement
     private $annee_fin;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Element\Item")
-     */
-    private $item;
-
-    /**
      * @return mixed
      */
     public function getAnneeDebut()

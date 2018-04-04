@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Component\Handler\AbstractItemHandler;
+use App\Component\Handler\TexteHandler;
 use App\Entity\Concept\Fiction;
 use App\Entity\Element\Texte;
 use App\Component\Hydrator\TexteHydrator;
@@ -44,7 +44,7 @@ class TexteController extends FOSRestController
     }
 
     /**
-     * @Rest\Post("textes/{fictionId}", name="post_texte")
+     * @Rest\Post("textes/fiction={fictionId}", name="post_texte")
      */
     public function postTexte(Request $request, $fictionId)
     {
@@ -53,16 +53,16 @@ class TexteController extends FOSRestController
         $em = $this->getDoctrine()->getManager();
         $fiction = $em->getRepository(Fiction::class)->findOneById($fictionId);
 
-        $handlerTexte = new AbstractItemHandler();
-        $handlerTexte->createTexte($em, $data, $fiction);
+        $handlerTexte = new TexteHandler();
+        $texte = $handlerTexte->createTexte($em, $data, $fiction);
 
         $response = new JsonResponse('Texte sauvegardé', 201);
-//        $fictionUrl = $this->generateUrl(
-//            'get_texte', array(
-//            'id' => $fiction->getId()
-//        ));
+        $texteUrl = $this->generateUrl(
+            'get_texte', array(
+            'texteId' => $texte->getId()
+        ));
 
-//        $response->headers->set('Location', $fictionUrl);
+        $response->headers->set('Location', $texteUrl);
 
         return $response;
 

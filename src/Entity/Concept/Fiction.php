@@ -20,11 +20,6 @@ class Fiction extends AbstractConcept
     private $textes;
 
     /**
-     * @ORM\OneToMany(targetEntity=Item::class, mappedBy="fiction")
-     */
-    private $items;
-
-    /**
      * @return mixed
      */
     public function getTextes()
@@ -39,23 +34,6 @@ class Fiction extends AbstractConcept
     {
         $this->textes = $textes;
     }
-
-    /**
-     * @return mixed
-     */
-    public function getItems()
-    {
-        return $this->items;
-    }
-
-    /**
-     * @param mixed $items
-     */
-    public function setItems($items)
-    {
-        $this->items = $items;
-    }
-
 
     /**
      * @return string

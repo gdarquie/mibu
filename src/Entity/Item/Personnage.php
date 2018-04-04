@@ -11,32 +11,59 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Personnage extends AbstractItem
 {
-    private $date_naissance;
+    /**
+     * @var integer
+     *
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $annee_naissance;
 
-    private $date_mort;
+    /**
+     * @var integer
+     *
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $annee_mort;
 
-    private $item;
-
-    public function __construct()
+    public function __construct($nom, $description)
     {
         parent::__construct();
+        $this->setTitre($nom);
+        $this->setDescription($description);
     }
 
     /**
-     * @return mixed
+     * @return int
      */
-    public function getDateNaissance()
+    public function getAnneeNaissance()
     {
-        return $this->date_naissance;
+        return $this->annee_naissance;
     }
 
     /**
-     * @param mixed $date_naissance
+     * @param int $annee_naissance
      */
-    public function setDateNaissance($date_naissance)
+    public function setAnneeNaissance($annee_naissance)
     {
-        $this->date_naissance = $date_naissance;
+        $this->annee_naissance = $annee_naissance;
     }
+
+    /**
+     * @return int
+     */
+    public function getAnneeMort()
+    {
+        return $this->annee_mort;
+    }
+
+    /**
+     * @param int $annee_mort
+     */
+    public function setAnneeMort($annee_mort)
+    {
+        $this->annee_mort = $annee_mort;
+    }
+
 
     /**
      * @return mixed
@@ -53,6 +80,5 @@ class Personnage extends AbstractItem
     {
         $this->date_mort = $date_mort;
     }
-
 
 }

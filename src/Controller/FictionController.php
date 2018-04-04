@@ -3,7 +3,8 @@
 namespace App\Controller;
 
 use App\Component\Handler\FictionHandler;
-use App\Component\Handler\AbstractItemHandler;
+
+use App\Component\Handler\TexteHandler;
 use App\Component\Hydrator\FictionHydrator;
 use App\Component\Serializer\CustomSerializer;
 use App\Entity\Concept\Fiction;
@@ -86,12 +87,12 @@ class FictionController extends FOSRestController
             $fictionHandler  = new FictionHandler();
             $fiction = $fictionHandler->createFiction($em, $data);
 
-            $texteHandler = new AbstractItemHandler();
+            $texteHandler = new TexteHandler();
             if($texteHandler->createTextes($em, $data['textes'], $fiction) !== true){
                 return new JsonResponse('Echec de la sauvegarde des textes');
             };
 
-            $response = new JsonResponse('Projet sauvegardé', 201);
+            $response = new JsonResponse('Fiction sauvegardée', 201);
             $fictionUrl = $this->generateUrl(
                 'get_fiction', array(
                 'id' => $fiction->getId()
