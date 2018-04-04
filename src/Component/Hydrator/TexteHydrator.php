@@ -24,9 +24,6 @@ class TexteHydrator
         $texteIO->setTitre($texte->getTitre());
         $texteIO->setContenu($texte->getDescription());
 
-        //date de création et dernière update?
-
-
         return $texteIO;
     }
 }

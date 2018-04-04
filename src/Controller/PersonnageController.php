@@ -2,7 +2,10 @@
 
 namespace App\Controller;
 
+use App\Component\Handler\PersonnageHandler;
+use App\Component\IO\PersonnageIO;
 use App\Entity\Concept\Fiction;
+use App\Entity\Item\Personnage;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\Controller\Annotations as Rest;
@@ -18,12 +21,22 @@ class PersonnageController extends FOSRestController
     public function getTexte($personnageId)
     {
         $em = $this->getDoctrine()->getManager();
+        $personnage = $em->getRepository(Personnage::class)->findOneById($personnageId);
+
+        if (!$personnage) {
+            throw $this->createNotFoundException(sprintf(
+                'Aucun personnage avec l\'id "%s" n\'a été trouvé',
+                $personnageId
+            ));
+        }
+
+        $personnageIO = new PersonnageIO();
 
         return new JsonResponse('Exemple de personnage', 201);
     }
 
     /**
-     * @Rest\Post("personnages/{fictionId}", name="post_personnage")
+     * @Rest\Post("personnages/fiction={fictionId}", name="post_personnage")
      */
     public function postTexte(Request $request, $fictionId)
     {
@@ -41,7 +54,7 @@ class PersonnageController extends FOSRestController
 
     }
 
-    public function putPersonnage()
+    public function putPersonnage(Request $request)
     {
         //modifier un texte existant
     }

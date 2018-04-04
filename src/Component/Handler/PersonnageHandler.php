@@ -2,19 +2,20 @@
 
 namespace App\Component\Handler;
 
-use App\Component\IO\TexteIO;
-use App\Entity\Element\Texte;
 use App\Entity\Item\Personnage;
-use App\Entity\Modele\AbstractElement;
 use Doctrine\ORM\EntityManager;
 
-class PersonnageHandler extends AbstractItemHandler
+class PersonnageHandler
 {
     public function createPersonnage(EntityManager $em, $data, $fiction)
     {
-        $item = $this->createItem($data, $fiction);
+        $nom = $data['nom'];
+        $description = $data['description'];
 
-        $personnage = new Personnage($item);
+        $personnage = new Personnage($nom, $description);
+        $personnage->setAnneeNaissance($data['date_naissance']);
+        $personnage->setAnneeMort($data['date_mort']);
+        $personnage->setFiction($fiction);
 
         $em->persist($personnage);
         $em->flush();

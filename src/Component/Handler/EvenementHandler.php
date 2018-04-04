@@ -9,7 +9,7 @@ use App\Entity\Item\Personnage;
 use App\Entity\Modele\AbstractElement;
 use Doctrine\ORM\EntityManager;
 
-class EvenementHandler extends AbstractItemHandler
+class EvenementHandler
 {
     public function createEvenement(EntityManager $em, $data, $fiction)
     {
