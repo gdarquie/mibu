@@ -11,7 +11,14 @@ namespace App\Component\IO;
 
 class PersonnageIO
 {
+<<<<<<< HEAD
     private $nom;
+=======
+    private $surnom;
+    private $prenom;
+    private $nom;
+    private $genre;
+>>>>>>> a5f13c03ea52f3c7f4818ff464ba1860fdb39b11
     private $description;
     private $annee_naissance;
     private $annee_mort;
@@ -80,6 +87,56 @@ class PersonnageIO
         $this->annee_mort = $annee_mort;
     }
 
+<<<<<<< HEAD
 
+=======
+    /**
+     * @return mixed
+     */
+    public function getSurnom()
+    {
+        return $this->surnom;
+    }
+
+    /**
+     * @param mixed $surnom
+     */
+    public function setSurnom($surnom)
+    {
+        $this->surnom = $surnom;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPrenom()
+    {
+        return $this->prenom;
+    }
+
+    /**
+     * @param mixed $prenom
+     */
+    public function setPrenom($prenom)
+    {
+        $this->prenom = $prenom;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getGenre()
+    {
+        return $this->genre;
+    }
+
+    /**
+     * @param mixed $genre
+     */
+    public function setGenre($genre)
+    {
+        $this->genre = $genre;
+    }
+>>>>>>> a5f13c03ea52f3c7f4818ff464ba1860fdb39b11
 
 }

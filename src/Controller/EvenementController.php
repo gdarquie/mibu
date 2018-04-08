@@ -5,8 +5,11 @@ namespace App\Controller;
 
 use App\Component\Handler\EvenementHandler;
 use App\Entity\Concept\Fiction;
+<<<<<<< HEAD
 use App\Entity\Item\Evenement;
 use App\Form\EvenementType;
+=======
+>>>>>>> a5f13c03ea52f3c7f4818ff464ba1860fdb39b11
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\Controller\Annotations as Rest;
@@ -45,6 +48,7 @@ class EvenementController extends FOSRestController
 
     }
 
+<<<<<<< HEAD
     /**
      * @Rest\Put("/evenement/{evenementId}",name="delete_evenement")
      */
@@ -98,5 +102,15 @@ class EvenementController extends FOSRestController
         $em->flush();
 
         return new JsonResponse('Suppression de l\'évènement '.$evenementId.'.');
+=======
+    public function putEvenement(Request $request)
+    {
+        //modifier un texte existant
+    }
+
+    public function deleteEvenement()
+    {
+        
+>>>>>>> a5f13c03ea52f3c7f4818ff464ba1860fdb39b11
     }
 }
