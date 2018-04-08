@@ -5,6 +5,8 @@ namespace App\Controller;
 
 use App\Component\Handler\EvenementHandler;
 use App\Entity\Concept\Fiction;
+use App\Entity\Item\Evenement;
+use App\Form\EvenementType;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\Controller\Annotations as Rest;
@@ -43,13 +45,58 @@ class EvenementController extends FOSRestController
 
     }
 
-    public function putEvenement(Request $request)
+    /**
+     * @Rest\Put("/evenement/{evenementId}",name="delete_evenement")
+     */
+    public function putEvenement(Request $request,$evenementId)
     {
-        //modifier un texte existant
+        $em = $this->getDoctrine()->getManager();
+
+        $evenement = $this->getDoctrine()
+            ->getRepository(Evenement::class)
+            ->findOneById($evenementId);
+
+        if (!$evenement) {
+            throw $this->createNotFoundException(sprintf(
+                'Pas d\'évènement trouvé avec l\'id "%s"',
+                $evenement
+            ));
+        }
+
+        $data = json_decode($request->getContent(), true);
+
+        $form = $this->createForm(EvenementType::class, $evenement);
+        $form->submit($data);
+
+        if($form->isSubmitted()){
+            $em->persist($evenement);
+            $em->flush();
+
+            return new JsonResponse("Mise à jour de l\'évènement ".$evenementId, 200);
+        }
+
+        return new JsonResponse("Echec de la mise à jour");
     }
 
-    public function deleteEvenement()
+    /**
+     * @Rest\Delete("/evenement/{evenementId}",name="delete_evenement")
+     */
+    public function deleteEvenement($evenementId)
     {
-        
+        $em = $this->getDoctrine()->getManager();
+
+        $evenement = $this->getDoctrine()->getRepository(Evenement::class)->findOneById($evenementId);
+
+        if (!$evenement) {
+            throw $this->createNotFoundException(sprintf(
+                'Pas d\'évènement trouvé avec l\'id "%s"',
+                $evenement
+            ));
+        }
+
+        $em->remove($evenement);
+        $em->flush();
+
+        return new JsonResponse('Suppression de l\'évènement '.$evenementId.'.');
     }
 }

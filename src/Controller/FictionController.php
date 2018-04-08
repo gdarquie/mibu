@@ -48,7 +48,6 @@ class FictionController extends FOSRestController
     public function getFiction($id)
     {
         $em = $this->getDoctrine()->getManager();
-
         $fiction = $em->getRepository('App:Concept\Fiction')->findOneById($id);
 
         if (!$fiction) {
@@ -60,6 +59,7 @@ class FictionController extends FOSRestController
 
         $fictionHydrator = new FictionHydrator();
         $fictionIO = $fictionHydrator->createFiction($em, $fiction);
+
         $serializer = new CustomSerializer();
         $fictionIO = $serializer->serialize($fictionIO);
 
@@ -108,56 +108,62 @@ class FictionController extends FOSRestController
     }
 
     /**
-     * @Rest\Post("fictions/{id}", name="put_fiction")
+     * @Rest\Put("fictions/{fictionId}", name="put_fiction")
      */
-    public function putFiction(Request $request)
+    public function putFiction(Request $request, $fictionId)
     {
+        $em = $this->getDoctrine()->getManager();
+
+        $fiction = $this->getDoctrine()
+            ->getRepository(Fiction::class)
+            ->findOneById($fictionId);
+
+        if (!$fiction) {
+            throw $this->createNotFoundException(sprintf(
+                'Pas de fiction trouvée avec l\'id "%s"',
+                $fictionId
+            ));
+        }
+
         $data = json_decode($request->getContent(), true);
-//        $form = $this->createForm(FictionType::class, $fiction);
-//        $form->submit($data);
 
-//        if($form->isSubmitted()){
-//            //vérifier que le texte existe bien
-//        }
+        $form = $this->createForm(FictionType::class, $fiction);
+        $form->submit($data);
 
-        //récupérer la fiction et save
+        if($form->isSubmitted()){
+            $em->persist($fiction);
+            $em->flush();
+
+            return new JsonResponse("Mise à jour de la fiction", 200);
+        }
 
         return new JsonResponse("Echec de la mise à jour");
 
     }
 
     /**
-     * @Rest\GET("delete/fictions/{id}", name="delete_fiction")
+     * @Rest\Delete("/fictions/{fictionId}",name="delete_fiction")
      */
-    public function deleteAction(Request $request, Fiction $fiction)
+    public function deleteAction(Request $request, $fictionId)
     {
-        $form = $this->createDeleteForm($fiction);
-        $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($fiction);
-            dump($fiction);die;
-            $em->flush();
+        $em = $this->getDoctrine()->getManager();
+
+        $fiction = $this->getDoctrine()->getRepository(Fiction::class)->findOneById($fictionId);
+
+        if (!$fiction) {
+            throw $this->createNotFoundException(sprintf(
+                'Aucune fiction avec l\'id "%s" n\'a été trouvée',
+                $fictionId
+            ));
         }
 
-        return $this->redirectToRoute('get_fictions');
+        $em->remove($fiction);
+        $em->flush();
+
+        return new JsonResponse('Suppression de la fiction '.$fictionId.'.');
     }
 
-    /**
-     *
-     * @param Fiction $fiction
-     *
-     * @return \Symfony\Component\Form\Form
-     */
-    private function createDeleteForm(Fiction $fiction)
-    {
-        return $this->createFormBuilder()
-            ->setAction($this->generateUrl('delete_fiction', array('id' => $fiction->getId())))
-            ->setMethod('DELETE')
-            ->getForm()
-            ;
-    }
 
 
 }

@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Component\Handler\PersonnageHandler;
 use App\Entity\Concept\Fiction;
 use App\Entity\Item\Personnage;
+use App\Form\PersonnageType;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\Controller\Annotations as Rest;
@@ -53,13 +54,58 @@ class PersonnageController extends FOSRestController
 
     }
 
-    public function putPersonnage(Request $request)
+    /**
+     * @Rest\Put("personnages/{personnageId}", name="put_personnage")
+     */
+    public function putPersonnage(Request $request, $personnageId)
     {
-        //modifier un texte existant
+        $em = $this->getDoctrine()->getManager();
+
+        $personnage = $this->getDoctrine()
+            ->getRepository(Personnage::class)
+            ->findOneById($personnageId);
+
+        if (!$personnage) {
+            throw $this->createNotFoundException(sprintf(
+                'Pas de personnage trouvé avec l\'id "%s"',
+                $personnageId
+            ));
+        }
+
+        $data = json_decode($request->getContent(), true);
+
+        $form = $this->createForm(PersonnageType::class, $personnage);
+        $form->submit($data);
+
+        if($form->isSubmitted()){
+            $em->persist($personnage);
+            $em->flush();
+
+            return new JsonResponse("Mise à jour du personnage", 200);
+        }
+
+        return new JsonResponse("Echec de la mise à jour");
     }
 
-    public function deletePersonnage()
+    /**
+     * @Rest\Delete("/personnages/{texteId}",name="delete_personnage")
+     */
+    public function deletePersonnage($personnageId)
     {
-        
+        $em = $this->getDoctrine()->getManager();
+
+        $personnage = $this->getDoctrine()->getRepository(Personnage::class)->findOneById($personnageId);
+
+        if (!$personnage) {
+            throw $this->createNotFoundException(sprintf(
+                'Pas de personnage trouvé avec l\'id "%s"',
+                $personnageId
+            ));
+        }
+
+        $em->remove($personnage);
+        $em->flush();
+
+        return new JsonResponse('Suppression du personnage '.$personnageId.'.');
     }
 }

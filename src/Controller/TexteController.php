@@ -7,6 +7,7 @@ use App\Entity\Concept\Fiction;
 use App\Entity\Element\Texte;
 use App\Component\Hydrator\TexteHydrator;
 use App\Component\Serializer\CustomSerializer;
+use App\Form\TexteType;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -68,13 +69,58 @@ class TexteController extends FOSRestController
 
     }
 
-    public function putTexte()
+    /**
+     * @Rest\Put("textes/{texteId}", name="put_texte")
+     */
+    public function putTexte(Request $request, $texteId)
     {
-        //modifier un texte existant
+        $em = $this->getDoctrine()->getManager();
+
+        $texte = $this->getDoctrine()
+            ->getRepository(Texte::class)
+            ->findOneById($texteId);
+
+        if (!$texte) {
+            throw $this->createNotFoundException(sprintf(
+                'Pas de texte trouvé avec l\'id "%s"',
+                $texteId
+            ));
+        }
+
+        $data = json_decode($request->getContent(), true);
+
+        $form = $this->createForm(TexteType::class, $texte);
+        $form->submit($data);
+
+        if($form->isSubmitted()){
+            $em->persist($texte);
+            $em->flush();
+
+            return new JsonResponse("Mise à jour du texte", 200);
+        }
+
+        return new JsonResponse("Echec de la mise à jour");
     }
 
-    public function deleteTexte()
+    /**
+     * @Rest\Delete("/textes/{texteId}",name="delete_texte")
+     */
+    public function deleteTexte(Request $request, $texteId)
     {
-        
+        $em = $this->getDoctrine()->getManager();
+
+        $texte = $this->getDoctrine()->getRepository(Texte::class)->findOneById($texteId);
+
+        if (!$texte) {
+            throw $this->createNotFoundException(sprintf(
+                'Pas de texte trouvé avec l\'id "%s"',
+                $texteId
+            ));
+        }
+
+        $em->remove($texte);
+        $em->flush();
+
+        return new JsonResponse('Suppression du texte '.$texteId.'.');
     }
 }
