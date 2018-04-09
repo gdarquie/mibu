@@ -3,15 +3,10 @@
 namespace App\Controller;
 
 use App\Component\Handler\PersonnageHandler;
-<<<<<<< HEAD
 use App\Entity\Concept\Fiction;
 use App\Entity\Item\Personnage;
 use App\Form\PersonnageType;
-=======
 use App\Component\IO\PersonnageIO;
-use App\Entity\Concept\Fiction;
-use App\Entity\Item\Personnage;
->>>>>>> a5f13c03ea52f3c7f4818ff464ba1860fdb39b11
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\Controller\Annotations as Rest;
@@ -60,14 +55,10 @@ class PersonnageController extends FOSRestController
 
     }
 
-<<<<<<< HEAD
     /**
      * @Rest\Put("personnages/{personnageId}", name="put_personnage")
      */
     public function putPersonnage(Request $request, $personnageId)
-=======
-    public function putPersonnage(Request $request)
->>>>>>> a5f13c03ea52f3c7f4818ff464ba1860fdb39b11
     {
         $em = $this->getDoctrine()->getManager();
 
