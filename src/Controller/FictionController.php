@@ -88,9 +88,10 @@ class FictionController extends FOSRestController
             $fiction = $fictionHandler->createFiction($em, $data);
 
             $texteHandler = new TexteHandler();
-            if($texteHandler->createTextes($em, $data['textes'], $fiction) !== true){
-                return new JsonResponse('Echec de la sauvegarde des textes');
-            };
+
+            if($data['textes'] !== null){
+                $texteHandler->createTextes($em, $data['textes'], $fiction);
+            }
 
             $response = new JsonResponse('Fiction sauvegardée', 201);
             $fictionUrl = $this->generateUrl(
@@ -103,7 +104,7 @@ class FictionController extends FOSRestController
             return $response;
         }
 
-        return new JsonResponse("Echec de l'insertion");
+        return new JsonResponse("Echec de l'insertion", 500);
 
     }
 

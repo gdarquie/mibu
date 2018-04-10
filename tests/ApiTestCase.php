@@ -2,17 +2,16 @@
 
 namespace App\Tests;
 
-use GuzzleHttp\Client;
+use Doctrine\Common\DataFixtures\Purger\ORMPurger;
 use Exception;
+use GuzzleHttp\Client;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Doctrine\Common\DataFixtures\Purger\ORMPurger;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Middleware;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\DomCrawler\Crawler;
-use Doctrine\ORM\EntityManager;
 
 
 class ApiTestCase extends KernelTestCase
@@ -57,10 +56,11 @@ class ApiTestCase extends KernelTestCase
 
     public function setup()
     {
+
         $this->client = self::$staticClient;
         // reset the history
         self::$history = array();
-//        $this->purgeDatabase();
+        $this->purgeDatabase();
     }
 
     /**

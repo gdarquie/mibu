@@ -17,15 +17,6 @@ class Personnage extends AbstractItem
      * @ORM\Column(type="integer", nullable=true)
      */
     private $annee_naissance;
-<<<<<<< HEAD
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    private $annee_mort;
-=======
 
     /**
      * @var integer
@@ -54,7 +45,6 @@ class Personnage extends AbstractItem
      * @ORM\Column(type="string", nullable=true)
      */
     private $genre;
->>>>>>> a5f13c03ea52f3c7f4818ff464ba1860fdb39b11
 
     public function __construct($nom, $description)
     {
@@ -65,7 +55,6 @@ class Personnage extends AbstractItem
 
     /**
      * @return int
-<<<<<<< HEAD
      */
     public function getAnneeNaissance()
     {
@@ -89,31 +78,6 @@ class Personnage extends AbstractItem
     }
 
     /**
-=======
-     */
-    public function getAnneeNaissance()
-    {
-        return $this->annee_naissance;
-    }
-
-    /**
-     * @param int $annee_naissance
-     */
-    public function setAnneeNaissance($annee_naissance)
-    {
-        $this->annee_naissance = $annee_naissance;
-    }
-
-    /**
-     * @return int
-     */
-    public function getAnneeMort()
-    {
-        return $this->annee_mort;
-    }
-
-    /**
->>>>>>> a5f13c03ea52f3c7f4818ff464ba1860fdb39b11
      * @param int $annee_mort
      */
     public function setAnneeMort($annee_mort)
@@ -121,25 +85,6 @@ class Personnage extends AbstractItem
         $this->annee_mort = $annee_mort;
     }
 
-
-    /**
-     * @return mixed
-     */
-    public function getDateMort()
-    {
-        return $this->date_mort;
-    }
-
-    /**
-     * @param mixed $date_mort
-     */
-    public function setDateMort($date_mort)
-    {
-        $this->date_mort = $date_mort;
-    }
-
-<<<<<<< HEAD
-=======
     /**
      * @return string
      */
@@ -188,5 +133,4 @@ class Personnage extends AbstractItem
         $this->genre = $genre;
     }
 
->>>>>>> a5f13c03ea52f3c7f4818ff464ba1860fdb39b11
 }
