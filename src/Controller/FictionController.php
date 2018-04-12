@@ -89,9 +89,12 @@ class FictionController extends FOSRestController
 
             $texteHandler = new TexteHandler();
 
-            if($data['textes'] !== null){
-                $texteHandler->createTextes($em, $data['textes'], $fiction);
+            if(isset($data['textes'])){
+                if($data['textes'] !== null){
+                    $texteHandler->createTextes($em, $data['textes'], $fiction);
+                }
             }
+
 
             $response = new JsonResponse('Fiction sauvegardée', 201);
             $fictionUrl = $this->generateUrl(

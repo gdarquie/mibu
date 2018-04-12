@@ -2,6 +2,7 @@
 
 namespace App\tests\Controller;
 
+use App\Entity\Concept\Fiction;
 use App\Tests\ApiTestCase;
 
 class FictionControllerTest extends ApiTestCase
@@ -9,9 +10,8 @@ class FictionControllerTest extends ApiTestCase
     public function testPostFiction()  //pas possible sans textes?
     {
         $data = array(
-            'titre' => 'Nouvel exemple de titre de fiction',
-            'description' => 'Une description de fiction comme exemple',
-            'promesse' => 'Un contenu de promesse'
+            'titre' => 'Ajout de titre de texte',
+            'description' => 'Une description de fiction comme exemple'
         );
 
         $response = $this->client->post('/fictions', [
@@ -64,14 +64,38 @@ class FictionControllerTest extends ApiTestCase
         echo "\n\n";
     }
 
+    public function testPutFiction()
+    {
+        
+    }
+
     public function testGetFiction()
     {
 
-        //createFiction and get its id
-        $fictionId = 1; //and replace this line
+//        $data = array(
+//            'titre' => 'Nouvel exemple de titre de fiction',
+//            'description' => 'Une description de fiction comme exemple',
+//            'promesse' => 'Un contenu de promesse'
+//        );
+
+        $fiction = new Fiction();
+        $fiction->setTitre('Titre');
+        $fiction->setDescription('Description');
+
+        $this->getService('doctrine')->getManager()->persist($fiction);
+//        $this->getEntityManager()->persist($fiction);
+        $this->getService('doctrine')->getManager()->flush();
+
+        $response = $this->client->get('/fictions/'.$fiction->getId());
+
+        $payload = json_decode($response->getBody(true), true);
+        $this->assertArrayHasKey('titre', $payload, "Il n'y a pas de champ titre");
+dump($payload);die; //setter l'id
+
+//        $this->assertEquals($fiction->getId(), $payload['id']);
 
 
-        $response = $this->client->get('/fictions/'.$fictionId);
-        $this->assertEquals(200, $response->getStatusCode());
+
+//        $this->assertEquals(200, $response->getStatusCode());
     }
 }
