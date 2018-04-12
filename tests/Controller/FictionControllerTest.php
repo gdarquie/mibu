@@ -7,7 +7,27 @@ use App\Tests\ApiTestCase;
 
 class FictionControllerTest extends ApiTestCase
 {
-    public function testPostFiction()  //pas possible sans textes?
+    public function testGetFiction()
+    {
+        $fiction = new Fiction();
+        $fiction->setTitre('Titre');
+        $fiction->setDescription('Description');
+
+        $this->getService('doctrine')->getManager()->persist($fiction);
+        $this->getService('doctrine')->getManager()->flush();
+
+        $response = $this->client->get('/fictions/'.$fiction->getId());
+
+        $payload = json_decode($response->getBody(true), true);
+        $this->assertArrayHasKey('titre', $payload, "Il n'y a pas de champ titre");
+        $this->assertEquals($fiction->getId(), $payload['id']);
+        $this->assertEquals(200, $response->getStatusCode());
+
+        echo $response->getBody();
+        echo "\n\n";
+    }
+
+    public function testPostFiction()
     {
         $data = array(
             'titre' => 'Ajout de titre de texte',
@@ -57,8 +77,8 @@ class FictionControllerTest extends ApiTestCase
 
         $response = $this->client->get($fictionUrl[0]);
 
-        $finishedData = json_decode($response->getBody(true), true);
-        $this->assertArrayHasKey('titre', $finishedData, "Il n'y a pas de champ titre");
+        $payload = json_decode($response->getBody(true), true);
+        $this->assertArrayHasKey('titre', $payload, "Il n'y a pas de champ titre");
 
         echo $response->getBody();
         echo "\n\n";
@@ -66,36 +86,36 @@ class FictionControllerTest extends ApiTestCase
 
     public function testPutFiction()
     {
-        
-    }
-
-    public function testGetFiction()
-    {
-
-//        $data = array(
-//            'titre' => 'Nouvel exemple de titre de fiction',
-//            'description' => 'Une description de fiction comme exemple',
-//            'promesse' => 'Un contenu de promesse'
-//        );
-
         $fiction = new Fiction();
         $fiction->setTitre('Titre');
         $fiction->setDescription('Description');
 
         $this->getService('doctrine')->getManager()->persist($fiction);
-//        $this->getEntityManager()->persist($fiction);
         $this->getService('doctrine')->getManager()->flush();
 
-        $response = $this->client->get('/fictions/'.$fiction->getId());
+        $data = array(
+            'titre' => 'Titre de la fiction modifié',
+            "description" => "Description test"
+        );
 
-        $payload = json_decode($response->getBody(true), true);
-        $this->assertArrayHasKey('titre', $payload, "Il n'y a pas de champ titre");
-dump($payload);die; //setter l'id
+        $response = $this->client->put('/fictions/'.$fiction->getId(), [
+            'body' => json_encode($data)
+        ]);
 
-//        $this->assertEquals($fiction->getId(), $payload['id']);
+        $this->assertEquals(202, $response->getStatusCode());
+    }
 
+    public function testDeleteFiction()
+    {
+        $fiction = new Fiction();
+        $fiction->setTitre('Titre');
+        $fiction->setDescription('Description');
 
+        $this->getService('doctrine')->getManager()->persist($fiction);
+        $this->getService('doctrine')->getManager()->flush();
 
-//        $this->assertEquals(200, $response->getStatusCode());
+        $response = $this->client->delete('/fictions/'.$fiction->getId());
+        $this->assertEquals(202, $response->getStatusCode());
+
     }
 }

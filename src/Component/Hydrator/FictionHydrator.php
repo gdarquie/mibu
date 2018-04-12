@@ -22,6 +22,7 @@ class FictionHydrator
         $textesFiction = $em->getRepository('App:Concept\Fiction')->getTextesFiction($fiction->getId());
         $fictionIO = new FictionIO();
 
+        $fictionIO->setId($fiction->getId());
         $fictionIO->setTitre($fiction->getTitre());
         $fictionIO->setResume($fiction->getDescription());
 

@@ -95,7 +95,6 @@ class FictionController extends FOSRestController
                 }
             }
 
-
             $response = new JsonResponse('Fiction sauvegardée', 201);
             $fictionUrl = $this->generateUrl(
                 'get_fiction', array(
@@ -138,7 +137,7 @@ class FictionController extends FOSRestController
             $em->persist($fiction);
             $em->flush();
 
-            return new JsonResponse("Mise à jour de la fiction", 200);
+            return new JsonResponse("Mise à jour de la fiction", 202);
         }
 
         return new JsonResponse("Echec de la mise à jour");
@@ -165,7 +164,7 @@ class FictionController extends FOSRestController
         $em->remove($fiction);
         $em->flush();
 
-        return new JsonResponse('Suppression de la fiction '.$fictionId.'.');
+        return new JsonResponse('Suppression de la fiction '.$fictionId.'.', 202);
     }
 
 
