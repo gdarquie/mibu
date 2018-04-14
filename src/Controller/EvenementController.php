@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-
 use App\Component\Handler\EvenementHandler;
 use App\Entity\Concept\Fiction;
 use App\Entity\Item\Evenement;
@@ -12,12 +11,11 @@ use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\FOSRestController;
 
-
 class EvenementController extends FOSRestController
 {
 
     /**
-     * @Rest\Get("evenements/{personnageId}", name="get_personnage")
+     * @Rest\Get("evenements/{personnageId}", name="get_evemement")
      */
     public function getEvenement($personnageId)
     {
@@ -27,24 +25,35 @@ class EvenementController extends FOSRestController
     }
 
     /**
-     * @Rest\Post("evenements/fiction={fictionId}", name="post_personnage")
+     * @Rest\Post("evenements/fiction={fictionId}", name="post_evemement")
      */
     public function postEvenement(Request $request, $fictionId)
     {
-        $data = json_decode($request->getContent(), true);
-
         $em = $this->getDoctrine()->getManager();
         $fiction = $em->getRepository(Fiction::class)->findOneById($fictionId);
+
+        if(!$fiction) {
+            throw $this->createNotFoundException(sprintf(
+                'Aucune fiction avec l\'id "%s" n\'a été trouvé',
+                $fictionId
+            ));
+        }
+
+        $data = json_decode($request->getContent(), true);
 
         $handlerEvenement = new EvenementHandler();
         $handlerEvenement->createEvenement($em, $data, $fiction);
 
         $response = new JsonResponse('Evènement sauvegardé', 201);
+        $evenementUrl = $this->generateUrl(
+            'get_texte', array(
+            'texteId' => $texte->getId()
+        ));
 
+        $response->headers->set('Location', $evenementUrl);
         return $response;
 
     }
-
 
     /**
      * @Rest\Put("/evenement/{evenementId}",name="delete_evenement")

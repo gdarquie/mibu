@@ -38,6 +38,7 @@ class FictionControllerTest extends ApiTestCase
             'body' => json_encode($data)
         ]);
 
+
         $this->assertEquals(201, $response->getStatusCode());
 
         $this->assertTrue($response->hasHeader('Location'));

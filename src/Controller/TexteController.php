@@ -49,10 +49,17 @@ class TexteController extends FOSRestController
      */
     public function postTexte(Request $request, $fictionId)
     {
-        $data = json_decode($request->getContent(), true);
-
         $em = $this->getDoctrine()->getManager();
         $fiction = $em->getRepository(Fiction::class)->findOneById($fictionId);
+
+        if(!$fiction) {
+            throw $this->createNotFoundException(sprintf(
+                'Aucune fiction avec l\'id "%s" n\'a été trouvé',
+                $fictionId
+            ));
+        }
+
+        $data = json_decode($request->getContent(), true);
 
         $handlerTexte = new TexteHandler();
         $texte = $handlerTexte->createTexte($em, $data, $fiction);

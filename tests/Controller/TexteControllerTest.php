@@ -13,12 +13,13 @@ class TexteControllerTest extends ApiTestCase
         $response = $this->client->get('/textes/'.$texteId);
         $this->assertEquals(200, $response->getStatusCode());
     }
-    
+
     public function testPostTexte()
     {
         $data = array(
             'titre' => 'Titre de texte',
             'contenu' => 'Un contenu de texte',
+            'type' => 'promesse'
         );
 
         $response = $this->client->post('/textes', [
