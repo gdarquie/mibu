@@ -13,12 +13,17 @@ class EvenementHandler
 {
     public function createEvenement(EntityManager $em, $data, $fiction)
     {
-        $item = $this->createItem($data, $fiction);
-
-        $evenement = new Evenement($item);
+        $evenement = new Evenement();
+        $evenement->setTitre($data['titre']);
+        $evenement->setDescription($data['description']);
+        $evenement->setAnneeDebut($data['annee_debut']);
+        $evenement->setAnneeFin($data['annee_fin']);
+        $evenement->setFiction($fiction);
 
         $em->persist($evenement);
         $em->flush();
+
+        return $evenement;
     }
 
 }

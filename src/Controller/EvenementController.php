@@ -15,7 +15,7 @@ class EvenementController extends FOSRestController
 {
 
     /**
-     * @Rest\Get("evenements/{personnageId}", name="get_evemement")
+     * @Rest\Get("evenements/{evenementId}", name="get_evenement")
      */
     public function getEvenement($personnageId)
     {
@@ -42,12 +42,12 @@ class EvenementController extends FOSRestController
         $data = json_decode($request->getContent(), true);
 
         $handlerEvenement = new EvenementHandler();
-        $handlerEvenement->createEvenement($em, $data, $fiction);
+        $evenement = $handlerEvenement->createEvenement($em, $data, $fiction);
 
         $response = new JsonResponse('Evènement sauvegardé', 201);
         $evenementUrl = $this->generateUrl(
-            'get_texte', array(
-            'texteId' => $texte->getId()
+            'get_evenement', array(
+            'evenementId' => $evenement->getId()
         ));
 
         $response->headers->set('Location', $evenementUrl);

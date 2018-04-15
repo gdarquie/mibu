@@ -13,12 +13,14 @@ class PersonnageHandler
         $description = $data['description'];
 
         $personnage = new Personnage($nom, $description);
-        $personnage->setAnneeNaissance($data['date_naissance']);
-        $personnage->setAnneeMort($data['date_mort']);
+        $personnage->setAnneeNaissance($data['annee_naissance']);
+        $personnage->setAnneeMort($data['annee_mort']);
         $personnage->setFiction($fiction);
 
         $em->persist($personnage);
         $em->flush();
+
+        return $personnage;
     }
 
 }
