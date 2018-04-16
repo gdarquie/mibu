@@ -46,10 +46,10 @@ class Personnage extends AbstractItem
      */
     private $genre;
 
-    public function __construct($nom, $description)
+    public function __construct($titre, $description)
     {
         parent::__construct();
-        $this->setTitre($nom);
+        $this->setTitre($titre);
         $this->setDescription($description);
     }
 

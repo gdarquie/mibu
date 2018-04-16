@@ -15,7 +15,16 @@
         <env name="APP_SECRET" value="s$cretf0rt3st" />
         <env name="SHELL_VERBOSITY" value="-1" />
         <!-- define your env variables for the test env here -->
-        <env name="TEST_BASE_URL" value="http://127.0.0.1:8000" />
+        <!--<env name="DATABASE_TEST_URL" value="http://127.0.0.1:8000" />-->
+        <env name="DATABASE_TEST_HOST" value="localhost" />
+        <env name="DATABASE_TEST_DBNAME" value="fictio" />
+        <env name="DATABASE_TEST_USER" value="postgres" />
+        <env name="DATABASE_TEST_PASSWORD" value="password" />
+        <env name="DATABASE_TEST_DRIVER" value="pdo_pgsql" />
+        <env name="DATABASE_TEST_PORT" value="5432" />
+        <env name="DATABASE_TEST_SERVER_VERSION" value="10.1" />
+        <env name="DATABASE_TEST_CHARSET" value="UTF8" />
+
         <!--<env name="DATABASE_URL" value="pdo_pgsql://postgres:password@127.0.0.1:5432/fictio_test" />-->
         <!-- ###+ nelmio/cors-bundle ### -->
         <env name="CORS_ALLOW_ORIGIN" value="^https?://localhost:?[0-9]*$"/>

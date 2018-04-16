@@ -6,14 +6,15 @@ parameters:
 
 doctrine:
     dbal:
-        dbname: '%env(DATABASE_DBNAME)%'
-        host: '%env(DATABASE_HOST)%'
-        user: '%env(DATABASE_USER)%'
-        password: '%env(DATABASE_PASSWORD)%'
-        driver: '%env(DATABASE_DRIVER)%'
-        port: '%env(DATABASE_PORT)%'
-        server_version: '%env(DATABASE_SERVER_VERSION)%'
-        charset: '%env(DATABASE_CHARSET)%'
+        # configure these for your database server
+        dbname: '%env(DATABASE_TEST_DBNAME)%'
+        host: '%env(DATABASE_TEST_HOST)%'
+        user: '%env(DATABASE_TEST_USER)%'
+        password: '%env(DATABASE_TEST_PASSWORD)%'
+        driver: '%env(DATABASE_TEST_DRIVER)%'
+        port: '%env(DATABASE_TEST_PORT)%'
+        server_version: '%env(DATABASE_TEST_SERVER_VERSION)%'
+        charset: '%env(DATABASE_TEST_CHARSET)%'
 
         # With Symfony 3.3, remove the `resolve:` prefix
 #        url: '%env(resolve:DATABASE_URL)%'
