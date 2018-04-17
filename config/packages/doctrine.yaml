@@ -4,16 +4,18 @@ parameters:
     # environment variables are not available yet.
     # You should not need to change this value.
 
+
 doctrine:
     dbal:
-        dbname: '%env(DATABASE_DBNAME)%'
-        host: '%env(DATABASE_HOST)%'
-        user: '%env(DATABASE_USER)%'
-        password: '%env(DATABASE_PASSWORD)%'
-        driver: '%env(DATABASE_DRIVER)%'
-        port: '%env(DATABASE_PORT)%'
-        server_version: '%env(DATABASE_SERVER_VERSION)%'
-        charset: '%env(DATABASE_CHARSET)%'
+        url: 'pgsql://postgres:password@127.0.0.1:5432/fictio'
+#        dbname: '%env(DATABASE_DBNAME)%'
+#        host: '%env(DATABASE_HOST)%'
+#        user: '%env(DATABASE_USER)%'
+#        password: '%env(DATABASE_PASSWORD)%'
+#        driver: '%env(DATABASE_DRIVER)%'
+#        port: '%env(DATABASE_PORT)%'
+#        server_version: '%env(DATABASE_SERVER_VERSION)%'
+#        charset: '%env(DATABASE_CHARSET)%'
 
         # With Symfony 3.3, remove the `resolve:` prefix
 #        url: '%env(resolve:DATABASE_URL)%'
