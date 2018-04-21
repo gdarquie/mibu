@@ -15,6 +15,10 @@ class FictionIO
 
     private $textes;
 
+    private $personnages;
+
+    private $evenements;
+
     /**
      * @return mixed
      */
@@ -95,5 +99,36 @@ class FictionIO
         $this->textes = $textes;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getPersonnages()
+    {
+        return $this->personnages;
+    }
+
+    /**
+     * @param mixed $personnages
+     */
+    public function setPersonnages($personnages)
+    {
+        $this->personnages = $personnages;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getEvenements()
+    {
+        return $this->evenements;
+    }
+
+    /**
+     * @param mixed $evenements
+     */
+    public function setEvenements($evenements)
+    {
+        $this->evenements = $evenements;
+    }
 
 }

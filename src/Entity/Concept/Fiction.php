@@ -5,8 +5,7 @@ namespace App\Entity\Concept;
 use Doctrine\ORM\Mapping as ORM;
 use App\Entity\Modele\AbstractConcept;
 use App\Entity\Element\Texte;
-use App\Entity\Element\Item;
-
+use App\Entity\Item\Personnage;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\FictionRepository")
@@ -18,6 +17,11 @@ class Fiction extends AbstractConcept
      * @ORM\OneToMany(targetEntity=Texte::class, mappedBy="fiction")
      */
     private $textes;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Personnage::class, mappedBy="fiction")
+     */
+    private $personnages;
 
     /**
      * @return mixed
@@ -33,6 +37,22 @@ class Fiction extends AbstractConcept
     public function setTextes($textes)
     {
         $this->textes = $textes;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPersonnages()
+    {
+        return $this->personnages;
+    }
+
+    /**
+     * @param mixed $personnages
+     */
+    public function setPersonnages($personnages)
+    {
+        $this->personnages = $personnages;
     }
 
     /**

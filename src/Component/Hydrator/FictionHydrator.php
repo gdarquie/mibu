@@ -19,7 +19,11 @@ class FictionHydrator
 
     public function createFiction($em, $fiction)
     {
-        $textesFiction = $em->getRepository('App:Concept\Fiction')->getTextesFiction($fiction->getId());
+        $fictionId = $fiction->getId();
+        $textes = $em->getRepository('App:Concept\Fiction')->getTextesFiction($fictionId);
+        $personnages = $em->getRepository('App:Concept\Fiction')->getPersonnagesFiction($fictionId);
+        $evenements = $em->getRepository('App:Concept\Fiction')->getEvenementsFiction($fictionId);
+
         $fictionIO = new FictionIO();
 
         $fictionIO->setId($fiction->getId());
@@ -28,10 +32,16 @@ class FictionHydrator
 
         //date de création et dernière update?
 
-        $promesse = 'A chercher parmi les textes';
-        $fictionIO->setPromesse($promesse);
-        if($textesFiction){
-            $fictionIO->setTextes($textesFiction);
+        if($textes){
+            $fictionIO->setTextes($textes);
+        }
+
+        if($personnages){
+            $fictionIO->setPersonnages($personnages);
+        }
+
+        if($evenements){
+            $fictionIO->setEvenements($evenements);
         }
 
         return $fictionIO;

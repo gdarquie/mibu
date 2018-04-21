@@ -37,15 +37,17 @@ class ApiTestCase extends KernelTestCase
 
     public static function setUpBeforeClass()
     {
+        $_SERVER['APP_ENV'] = 'test';
 
-        $baseUrl = getenv('DATABASE_TEST_HOST');
+        $baseUrl = getenv('DATABASE_HOST');
+
         self::$staticClient = new Client([
             'base_uri' => $baseUrl,
             'defaults' => [
                 'exceptions' => false
             ]
         ]);
-
+//dump(self::$staticClient);die;
         $handler = HandlerStack::create();
         $handler->push(Middleware::history(self::$history));
 
