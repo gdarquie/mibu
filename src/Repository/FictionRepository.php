@@ -17,24 +17,24 @@ class FictionRepository extends ServiceEntityRepository
     {
         $query = $this->getEntityManager()->createQuery('SELECT t.id, t.uuid, t.titre, t.description, t.type FROM App:Element\Texte t JOIN t.fiction f WHERE f.id = :id ORDER BY t.id');
         $query->setParameter('id', $id);
-        $textesFiction = $query->getResult();
+        $textes = $query->getResult();
 
-        return $textesFiction;
+        return $textes;
     }
 
-    public function getPersonnagesFiction($projetId)
+    public function getPersonnagesFiction($fictionId)
     {
-        $query = $this->getEntityManager()->createQuery('SELECT t FROM App:Item\Personnage t JOIN t.fiction p WHERE p.id = :projetId');
-        $query->setParameter('projetId', $projetId);
+        $query = $this->getEntityManager()->createQuery('SELECT p.id, p.titre, p.prenom, p.nom, p.description, p.genre, p.annee_naissance, p.annee_mort FROM App:Item\Personnage p JOIN p.fiction f WHERE f.id = :fictionId');
+        $query->setParameter('fictionId', $fictionId);
         $personnages = $query->getResult();
 
         return $personnages;
     }
 
-    public function getEvenementsFiction($projetId)
+    public function getEvenementsFiction($fictionId)
     {
-        $query = $this->getEntityManager()->createQuery('SELECT t FROM App:Item\Evenement t JOIN t.fiction p WHERE p.id = :projetId');
-        $query->setParameter('projetId', $projetId);
+        $query = $this->getEntityManager()->createQuery('SELECT e.id, e.uuid, e.titre, e.description, e.annee_debut, e.annee_fin FROM App:Item\Evenement e JOIN e.fiction f WHERE f.id = :fictionId');
+        $query->setParameter('fictionId', $fictionId);
         $evenements = $query->getResult();
 
         return $evenements;

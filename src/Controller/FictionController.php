@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Component\Handler\EvenementHandler;
 use App\Component\Handler\FictionHandler;
 
 use App\Component\Handler\TexteHandler;
@@ -30,6 +31,7 @@ class FictionController extends FOSRestController
 
         foreach ($fictions as $fiction){
             $fictionIO = $fictionHydrator->createFiction($em, $fiction);
+
             array_push($fictionsIO, $fictionIO);
         }
         $serializer = new CustomSerializer();
@@ -87,11 +89,18 @@ class FictionController extends FOSRestController
             $fictionHandler  = new FictionHandler();
             $fiction = $fictionHandler->createFiction($em, $data);
 
-            $texteHandler = new TexteHandler();
 
             if(isset($data['textes'])){
                 if($data['textes'] !== null){
+                    $texteHandler = new TexteHandler();
                     $texteHandler->createTextes($em, $data['textes'], $fiction);
+                }
+            }
+
+            if(isset($data['evenements'])){
+                if($data['evenements'] !== null){
+                    $evenementHandler = new EvenementHandler();
+                    $evenementHandler->createEvenements($em, $data['evenements'], $fiction);
                 }
             }
 

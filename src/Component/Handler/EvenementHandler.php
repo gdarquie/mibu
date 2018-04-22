@@ -26,4 +26,14 @@ class EvenementHandler
         return $evenement;
     }
 
+    public function createEvenements(EntityManager $em, $evenements, $fiction)
+    {
+        foreach ($evenements as $data)
+        {
+            $this->createEvenement($em, $data, $fiction);
+        }
+
+        return true;
+    }
+
 }
