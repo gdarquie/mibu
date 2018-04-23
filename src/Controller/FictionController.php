@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Component\Handler\EvenementHandler;
 use App\Component\Handler\FictionHandler;
 
+use App\Component\Handler\PersonnageHandler;
 use App\Component\Handler\TexteHandler;
 use App\Component\Hydrator\FictionHydrator;
 use App\Component\Serializer\CustomSerializer;
@@ -101,6 +102,13 @@ class FictionController extends FOSRestController
                 if($data['evenements'] !== null){
                     $evenementHandler = new EvenementHandler();
                     $evenementHandler->createEvenements($em, $data['evenements'], $fiction);
+                }
+            }
+
+            if(isset($data['personnages'])){
+                if($data['personnages'] !== null){
+                    $personnageHandler = new PersonnageHandler();
+                    $personnageHandler->createPersonnages($em, $data['personnages'], $fiction);
                 }
             }
 
