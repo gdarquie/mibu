@@ -17,6 +17,8 @@ use Symfony\Component\DomCrawler\Crawler;
 
 class ApiTestCase extends KernelTestCase
 {
+    CONST TEST_PREFIX = 'index_test.php';
+
     private static $staticClient;
 
     /**
@@ -33,7 +35,6 @@ class ApiTestCase extends KernelTestCase
      * @var ConsoleOutput
      */
     private $output;
-
 
     public static function setUpBeforeClass()
     {

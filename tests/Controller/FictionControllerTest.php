@@ -7,6 +7,7 @@ use App\Tests\ApiTestCase;
 
 class FictionControllerTest extends ApiTestCase
 {
+
     public function testGetFiction()
     {
         $fiction = new Fiction();
@@ -16,7 +17,7 @@ class FictionControllerTest extends ApiTestCase
         $this->getService('doctrine')->getManager()->persist($fiction);
         $this->getService('doctrine')->getManager()->flush();
 
-        $response = $this->client->get('/fictions/'.$fiction->getId());
+        $response = $this->client->get(ApiTestCase::TEST_PREFIX.'/fictions/'.$fiction->getId());
 
         $payload = json_decode($response->getBody(true), true);
         $this->assertArrayHasKey('titre', $payload, "Il n'y a pas de champ titre");
@@ -34,7 +35,7 @@ class FictionControllerTest extends ApiTestCase
             'description' => 'Une description de fiction comme exemple'
         );
 
-        $response = $this->client->post('/fictions', [
+        $response = $this->client->post(ApiTestCase::TEST_PREFIX.'/fictions', [
             'body' => json_encode($data)
         ]);
 
@@ -67,7 +68,7 @@ class FictionControllerTest extends ApiTestCase
         $data['textes'][0]['type'] = 'Contenu de la promesse';
 
 
-        $response = $this->client->post('/fictions', [
+        $response = $this->client->post(ApiTestCase::TEST_PREFIX.'/fictions', [
             'body' => json_encode($data)
         ]);
 
@@ -99,7 +100,7 @@ class FictionControllerTest extends ApiTestCase
             "description" => "Description test"
         );
 
-        $response = $this->client->put('/fictions/'.$fiction->getId(), [
+        $response = $this->client->put(ApiTestCase::TEST_PREFIX.'/fictions/'.$fiction->getId(), [
             'body' => json_encode($data)
         ]);
 
@@ -115,7 +116,7 @@ class FictionControllerTest extends ApiTestCase
         $this->getService('doctrine')->getManager()->persist($fiction);
         $this->getService('doctrine')->getManager()->flush();
 
-        $response = $this->client->delete('/fictions/'.$fiction->getId());
+        $response = $this->client->delete(ApiTestCase::TEST_PREFIX.'/fictions/'.$fiction->getId());
         $this->assertEquals(202, $response->getStatusCode());
 
     }
