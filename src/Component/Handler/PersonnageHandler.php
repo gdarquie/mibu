@@ -29,4 +29,14 @@ class PersonnageHandler
         return $personnage;
     }
 
+    public function createPersonnages(EntityManager $em, $personnages, $fiction)
+    {
+        foreach ($personnages as $data)
+        {
+            $this->createPersonnage($em, $data, $fiction);
+        }
+
+        return true;
+    }
+
 }
