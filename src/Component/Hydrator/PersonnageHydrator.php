@@ -9,7 +9,7 @@ use App\Entity\Item\Personnage;
 class PersonnageHydrator
 {
 
-    public function getTexte($em, $id)
+    public function getPersonnage($em, $id)
     {
         $personnage = $em->getRepository(Personnage::class)->getTexte($id);
         $personnageIO = $this->createPersonnage($em, $personnage);

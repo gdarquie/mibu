@@ -17,8 +17,38 @@ class EvenementController extends FOSRestController
     /**
      * @Rest\Get("evenements/{evenementId}", name="get_evenement")
      */
-    public function getEvenement($personnageId)
+    public function getEvenement($evenementId)
     {
+        $em = $this->getDoctrine()->getManager();
+        $evenement = $em->getRepository(Evenement::class)->findOneById($evenementId);
+
+        if (!$evenement) {
+            throw $this->createNotFoundException(sprintf(
+                'Aucun évènement avec l\'id "%s" n\'a été trouvé',
+                $evenementId
+            ));
+        }
+
+        $evenementHydrator = new EvenementHydrator();
+        $evenementIO = $evenementHydrator->createEvenement($em, $evenement);
+
+        $serializer = new CustomSerializer();
+        $evenementIO = $serializer->serialize($evenementIO);
+
+        //ajouter la fiction?
+
+        $response = new Response($evenementIO);
+        $response->headers->set('Content-Type', 'application/json', 201);
+
+        return $response;
+
+
+
+
+
+
+
+
         $em = $this->getDoctrine()->getManager();
 
         return new JsonResponse('Exemple d\'évènement', 201);
