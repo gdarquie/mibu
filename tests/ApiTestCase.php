@@ -2,6 +2,7 @@
 
 namespace App\Tests;
 
+use App\Entity\Concept\Fiction;
 use Doctrine\Common\DataFixtures\Purger\ORMPurger;
 use Exception;
 use GuzzleHttp\Client;
@@ -235,6 +236,18 @@ class ApiTestCase extends KernelTestCase
         $last = array_pop($history);
 
         return $last['response'];
+    }
+
+    protected function createFiction(){
+
+        $fiction = new Fiction();
+        $fiction->setTitre('Titre');
+        $fiction->setDescription('Description');
+
+        $this->getService('doctrine')->getManager()->persist($fiction);
+        $this->getService('doctrine')->getManager()->flush();
+
+        return $fiction;
     }
 
 }

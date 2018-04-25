@@ -10,12 +10,7 @@ class FictionControllerTest extends ApiTestCase
 
     public function testGetFiction()
     {
-        $fiction = new Fiction();
-        $fiction->setTitre('Titre');
-        $fiction->setDescription('Description');
-
-        $this->getService('doctrine')->getManager()->persist($fiction);
-        $this->getService('doctrine')->getManager()->flush();
+        $fiction = $this->createFiction();
 
         $response = $this->client->get(ApiTestCase::TEST_PREFIX.'/fictions/'.$fiction->getId());
 
@@ -41,15 +36,13 @@ class FictionControllerTest extends ApiTestCase
 
 
         $this->assertEquals(201, $response->getStatusCode());
-
         $this->assertTrue($response->hasHeader('Location'));
 
         $fictionUrl = $response->getHeader('Location');
-
         $response = $this->client->get($fictionUrl[0]);
 
-        $finishedData = json_decode($response->getBody(true), true);
-        $this->assertArrayHasKey('titre', $finishedData, "Il n'y a pas de champ titre");
+        $payload = json_decode($response->getBody(true), true);
+        $this->assertArrayHasKey('titre', $payload, "Il n'y a pas de champ titre");
 
         echo $response->getBody();
         echo "\n\n";

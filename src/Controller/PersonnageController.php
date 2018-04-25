@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Component\Handler\PersonnageHandler;
+use App\Component\Hydrator\PersonnageHydrator;
+use App\Component\Serializer\CustomSerializer;
 use App\Entity\Concept\Fiction;
 use App\Entity\Item\Personnage;
 use App\Form\PersonnageType;
@@ -11,6 +13,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\FOSRestController;
+use Symfony\Component\HttpFoundation\Response;
 
 
 class PersonnageController extends FOSRestController
@@ -19,7 +22,7 @@ class PersonnageController extends FOSRestController
     /**
      * @Rest\Get("personnages/{personnageId}", name="get_personnage")
      */
-    public function getTexte($personnageId)
+    public function getPersonnage($personnageId)
     {
         $em = $this->getDoctrine()->getManager();
         $personnage = $em->getRepository(Personnage::class)->findOneById($personnageId);
@@ -31,15 +34,24 @@ class PersonnageController extends FOSRestController
             ));
         }
 
-        $personnageIO = new PersonnageIO();
+        $personnageHydrator = new PersonnageHydrator();
+        $personnageIO = $personnageHydrator->createPersonnage($em, $personnage);
 
-        return new JsonResponse('Exemple de personnage', 201);
+        $serializer = new CustomSerializer();
+        $personnageIO = $serializer->serialize($personnageIO);
+
+        //ajouter la fiction?
+
+        $response = new Response($personnageIO);
+        $response->headers->set('Content-Type', 'application/json', 201);
+
+        return $response;
     }
 
     /**
      * @Rest\Post("personnages/fiction={fictionId}", name="post_personnage")
      */
-    public function postTexte(Request $request, $fictionId)
+    public function postPersonnage(Request $request, $fictionId)
     {
         $data = json_decode($request->getContent(), true);
 
@@ -47,9 +59,16 @@ class PersonnageController extends FOSRestController
         $fiction = $em->getRepository(Fiction::class)->findOneById($fictionId);
 
         $handlerPersonnage = new PersonnageHandler();
-        $handlerPersonnage->createPersonnage($em, $data, $fiction);
+        $personnage = $handlerPersonnage->createPersonnage($em, $data, $fiction);
 
         $response = new JsonResponse('Personnage sauvegardé', 201);
+
+        $texteUrl = $this->generateUrl(
+            'get_personnage', array(
+            'personnageId' => $personnage->getId()
+        ));
+
+        $response->headers->set('Location', $texteUrl);
 
         return $response;
 

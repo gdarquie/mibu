@@ -22,8 +22,10 @@ class PersonnageHydrator
     {
         $personnageIO = new PersonnageIO();
 
-        $personnageIO->setNom($personnage->getTitre());
-        $personnageIO->setContenu($personnage->getDescription());
+        $personnageIO->setSurnom($personnage->getTitre());
+        $personnageIO->setNom($personnage->getNom());
+        $personnageIO->setPrenom($personnageIO->getPrenom());
+        $personnageIO->setDescription($personnage->getDescription());
         $personnageIO->setAnneeNaissance($personnage->getAnneeNaissance());
         $personnageIO->setAnneeMort($personnage->getAnneeMort());
         

@@ -67,7 +67,7 @@ class FictionController extends FOSRestController
         $fictionIO = $serializer->serialize($fictionIO);
 
         $response = new Response($fictionIO);
-        $response->headers->set('Content-Type', 'application/json');
+        $response->headers->set('Content-Type', 'application/json', 201);
 
         return $response;
     }
