@@ -7,16 +7,6 @@ use App\Component\IO\TexteIO;
 
 class TexteHydrator
 {
-
-    public function getTexte($em, $id)
-    {
-        $texte = $em->getRepository('App:Concept\Texte')->getTexte($id);
-        $texteIO = $this->createTexte($em, $texte);
-        $texteIO = $this->serialize($texteIO);
-        return $texteIO;
-
-    }
-
     public function createTexte($em, $texte)
     {
         $texteIO = new TexteIO();

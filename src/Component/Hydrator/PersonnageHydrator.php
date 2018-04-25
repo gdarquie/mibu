@@ -8,17 +8,7 @@ use App\Entity\Item\Personnage;
 
 class PersonnageHydrator
 {
-
-    public function getPersonnage($em, $id)
-    {
-        $personnage = $em->getRepository(Personnage::class)->getTexte($id);
-        $personnageIO = $this->createPersonnage($em, $personnage);
-        $personnageIO = $this->serialize($personnageIO);
-        return $personnageIO;
-
-    }
-
-    public function createPersonnage($em, $personnage)
+    public function hydratePersonnage($em, $personnage)
     {
         $personnageIO = new PersonnageIO();
 

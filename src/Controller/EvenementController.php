@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Component\Handler\EvenementHandler;
+use App\Component\Hydrator\EvenementHydrator;
+use App\Component\Serializer\CustomSerializer;
 use App\Entity\Concept\Fiction;
 use App\Entity\Item\Evenement;
 use App\Form\EvenementType;
@@ -10,6 +12,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\FOSRestController;
+use Symfony\Component\HttpFoundation\Response;
 
 class EvenementController extends FOSRestController
 {
@@ -30,7 +33,7 @@ class EvenementController extends FOSRestController
         }
 
         $evenementHydrator = new EvenementHydrator();
-        $evenementIO = $evenementHydrator->createEvenement($em, $evenement);
+        $evenementIO = $evenementHydrator->hydrateEvenement($em, $evenement);
 
         $serializer = new CustomSerializer();
         $evenementIO = $serializer->serialize($evenementIO);
@@ -41,17 +44,6 @@ class EvenementController extends FOSRestController
         $response->headers->set('Content-Type', 'application/json', 201);
 
         return $response;
-
-
-
-
-
-
-
-
-        $em = $this->getDoctrine()->getManager();
-
-        return new JsonResponse('Exemple d\'évènement', 201);
     }
 
     /**

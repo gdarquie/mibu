@@ -35,7 +35,7 @@ class PersonnageController extends FOSRestController
         }
 
         $personnageHydrator = new PersonnageHydrator();
-        $personnageIO = $personnageHydrator->createPersonnage($em, $personnage);
+        $personnageIO = $personnageHydrator->hydratePersonnage($em, $personnage);
 
         $serializer = new CustomSerializer();
         $personnageIO = $serializer->serialize($personnageIO);

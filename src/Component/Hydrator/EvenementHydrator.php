@@ -2,32 +2,19 @@
 
 namespace App\Component\Hydrator;
 
-use App\Component\IO\PersonnageIO;
-use App\Entity\Item\Personnage;
+use App\Component\IO\EvenementIO;
+use App\Entity\Item\Evenement;
 
-
-class PersonnageHydrator
+class EvenementHydrator
 {
-
-    public function getEvenement($em, $id)
+    public function hydrateEvenement($em, $evenement)
     {
-        $evenement = $em->getRepository(Personnage::class)->getTexte($id);
-        $evenementIO = $this->createPersonnage($em, $evenement);
-        $evenementIO = $this->serialize($evenementIO);
-        return $evenementIO;
-
-    }
-
-    public function createEvenement($em, $evenement)
-    {
-        $evenementIO = new PersonnageIO();
+        $evenementIO = new EvenementIO();
 
         $evenementIO->setTitre($evenement->getTitre());
-        $evenementIO->setNom($evenement->getNom());
-        $evenementIO->setPrenom($evenementIO->getPrenom());
         $evenementIO->setDescription($evenement->getDescription());
-        $evenementIO->setAnneeNaissance($evenement->getAnneeNaissance());
-        $evenementIO->setAnneeMort($evenement->getAnneeMort());
+        $evenementIO->setAnneeDebut($evenement->getAnneeDebut());
+        $evenementIO->setAnneeFin($evenement->getAnneeFin());
         
         return $evenementIO;
     }

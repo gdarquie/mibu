@@ -31,7 +31,7 @@ class FictionController extends FOSRestController
         $fictionsIO = [];
 
         foreach ($fictions as $fiction){
-            $fictionIO = $fictionHydrator->createFiction($em, $fiction);
+            $fictionIO = $fictionHydrator->hydrateFiction($em, $fiction);
 
             array_push($fictionsIO, $fictionIO);
         }
@@ -61,7 +61,7 @@ class FictionController extends FOSRestController
         }
 
         $fictionHydrator = new FictionHydrator();
-        $fictionIO = $fictionHydrator->createFiction($em, $fiction);
+        $fictionIO = $fictionHydrator->hydrateFiction($em, $fiction);
 
         $serializer = new CustomSerializer();
         $fictionIO = $serializer->serialize($fictionIO);

@@ -7,17 +7,7 @@ use App\Component\IO\FictionIO;
 
 class FictionHydrator
 {
-
-    public function getFiction($em, $id)
-    {
-        $fiction = $em->getRepository('App:Concept\Fiction')->getFiction($id);
-        $fictionIO = $this->createFiction($em, $fiction);
-        $fictionIO = $this->serialize($fictionIO);
-        return $fictionIO;
-
-    }
-
-    public function createFiction($em, $fiction)
+    public function hydrateFiction($em, $fiction)
     {
         $fictionId = $fiction->getId();
         $textes = $em->getRepository('App:Concept\Fiction')->getTextesFiction($fictionId);

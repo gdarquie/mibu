@@ -6,17 +6,11 @@ class FictionIO
 {
 
     private $id;
-
     private $titre;
-
     private $promesse;
-
     private $resume;
-
     private $textes;
-
     private $personnages;
-
     private $evenements;
 
     /**
