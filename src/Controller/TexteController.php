@@ -14,10 +14,8 @@ use Symfony\Component\HttpFoundation\Response;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\FOSRestController;
 
-
 class TexteController extends FOSRestController
 {
-
     /**
      * @Rest\Get("textes/{texteId}", name="get_texte")
      */
