@@ -7,22 +7,6 @@ use App\Tests\ApiTestCase;
 
 class FictionControllerTest extends ApiTestCase
 {
-
-    public function testGetFiction()
-    {
-        $fiction = $this->createFiction();
-
-        $response = $this->client->get(ApiTestCase::TEST_PREFIX.'/fictions/'.$fiction->getId());
-
-        $payload = json_decode($response->getBody(true), true);
-        $this->assertArrayHasKey('titre', $payload, "Il n'y a pas de champ titre");
-        $this->assertEquals($fiction->getId(), $payload['id']);
-        $this->assertEquals(200, $response->getStatusCode());
-
-        echo $response->getBody();
-        echo "\n\n";
-    }
-
     public function testPostFiction()
     {
         $data = array(
@@ -74,6 +58,21 @@ class FictionControllerTest extends ApiTestCase
 
         $payload = json_decode($response->getBody(true), true);
         $this->assertArrayHasKey('titre', $payload, "Il n'y a pas de champ titre");
+
+        echo $response->getBody();
+        echo "\n\n";
+    }
+
+    public function testGetFiction()
+    {
+        $fiction = $this->createFiction();
+
+        $response = $this->client->get(ApiTestCase::TEST_PREFIX.'/fictions/'.$fiction->getId());
+
+        $payload = json_decode($response->getBody(true), true);
+        $this->assertArrayHasKey('titre', $payload, "Il n'y a pas de champ titre");
+        $this->assertEquals($fiction->getId(), $payload['id']);
+        $this->assertEquals(200, $response->getStatusCode());
 
         echo $response->getBody();
         echo "\n\n";

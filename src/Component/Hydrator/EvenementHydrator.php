@@ -11,6 +11,7 @@ class EvenementHydrator
     {
         $evenementIO = new EvenementIO();
 
+        $evenementIO->setId($evenement->getId());
         $evenementIO->setTitre($evenement->getTitre());
         $evenementIO->setDescription($evenement->getDescription());
         $evenementIO->setAnneeDebut($evenement->getAnneeDebut());

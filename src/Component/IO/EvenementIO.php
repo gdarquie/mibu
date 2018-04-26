@@ -4,10 +4,27 @@ namespace App\Component\IO;
 
 class EvenementIO
 {
+    private $id;
     private $titre;
     private $description;
     private $annee_debut;
     private $annee_fin;
+
+    /**
+     * @return mixed
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param mixed $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
 
     /**
      * @return mixed

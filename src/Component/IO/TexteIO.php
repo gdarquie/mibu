@@ -11,10 +11,27 @@ namespace App\Component\IO;
 
 class TexteIO
 {
+    private $id;
     private $titre;
     private $contenu;
     private $type;
     private $fiction;
+
+    /**
+     * @return mixed
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param mixed $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
 
     /**
      * @return mixed

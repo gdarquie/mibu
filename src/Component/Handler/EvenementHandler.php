@@ -14,6 +14,7 @@ class EvenementHandler
     public function createEvenement(EntityManager $em, $data, $fiction)
     {
         $evenement = new Evenement();
+
         $evenement->setTitre($data['titre']);
         $evenement->setDescription($data['description']);
         $evenement->setAnneeDebut($data['annee_debut']);

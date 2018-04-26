@@ -11,6 +11,7 @@ class TexteHydrator
     {
         $texteIO = new TexteIO();
 
+        $texteIO->setId($texte->getId());
         $texteIO->setTitre($texte->getTitre());
         $texteIO->setContenu($texte->getDescription());
 

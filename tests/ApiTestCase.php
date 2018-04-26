@@ -3,6 +3,7 @@
 namespace App\Tests;
 
 use App\Entity\Concept\Fiction;
+use App\Entity\Item\Evenement;
 use Doctrine\Common\DataFixtures\Purger\ORMPurger;
 use Exception;
 use GuzzleHttp\Client;
@@ -238,7 +239,7 @@ class ApiTestCase extends KernelTestCase
         return $last['response'];
     }
 
-    protected function createFiction(){
+    protected function createFiction() {
 
         $fiction = new Fiction();
         $fiction->setTitre('Titre');
@@ -248,6 +249,29 @@ class ApiTestCase extends KernelTestCase
         $this->getService('doctrine')->getManager()->flush();
 
         return $fiction;
+    }
+
+    protected function createEvenementFiction($fiction) {
+
+        $evenement = new Evenement();
+        $evenement->setTitre('Titre');
+        $evenement->setDescription('Description');
+        $evenement->setAnneeDebut('0');
+        $evenement->setAnneeFin('100');
+        $evenement->setFiction($fiction);
+
+        $this->getService('doctrine')->getManager()->persist($evenement);
+        $this->getService('doctrine')->getManager()->flush();
+
+        return $evenement;
+    }
+
+    protected function createPersonnageFiction($fictionId) {
+
+    }
+
+    protected function createTexteFiction($fictionId) {
+
     }
 
 }

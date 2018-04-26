@@ -15,7 +15,7 @@ class TexteControllerTest extends ApiTestCase
             'description' => 'Un contenu de texte',
             'type' => 'promesse'
         );
-        
+
         $response = $this->client->post(ApiTestCase::TEST_PREFIX.'/textes/fiction='.$fiction->getId(), [
             'body' => json_encode($data)
         ]);

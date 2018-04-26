@@ -10,7 +10,7 @@ namespace App\Component\IO;
 
 class PersonnageIO
 {
-
+    private $id;
     private $surnom;
     private $prenom;
     private $nom;
@@ -18,6 +18,22 @@ class PersonnageIO
     private $description;
     private $annee_naissance;
     private $annee_mort;
+
+    /**
+     * @return mixed
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param mixed $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
 
     /**
      * @return mixed
