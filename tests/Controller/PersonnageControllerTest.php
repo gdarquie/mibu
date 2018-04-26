@@ -13,7 +13,6 @@ class PersonnageControllerTest extends ApiTestCase
         $data = array(
             "titre" => "Barius",
             "description" => "Le Sage",
-            "discriminateur" => "personnage",
             "annee_naissance" => 0,
             "annee_mort" => 120
         );
@@ -37,7 +36,18 @@ class PersonnageControllerTest extends ApiTestCase
 
     public function testGetPersonnage()
     {
+        $fiction = $this->createFiction();
+        $personnage = $this->createPersonnageFiction($fiction);
 
+        $response = $this->client->get(ApiTestCase::TEST_PREFIX.'/personnages/'.$personnage->getId());
+
+        $payload = json_decode($response->getBody(true), true);
+        $this->assertArrayHasKey('surnom', $payload, "Il n'y a pas de champ surnom");
+        $this->assertEquals($personnage->getId(), $payload['id']);
+        $this->assertEquals(200, $response->getStatusCode());
+
+        echo $response->getBody();
+        echo "\n\n";
     }
 
     public function testPatchPersonnage()

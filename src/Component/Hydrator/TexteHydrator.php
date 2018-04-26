@@ -7,7 +7,7 @@ use App\Component\IO\TexteIO;
 
 class TexteHydrator
 {
-    public function createTexte($em, $texte)
+    public function hydrateTexte($texte)
     {
         $texteIO = new TexteIO();
 

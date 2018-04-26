@@ -32,7 +32,7 @@ class TexteController extends FOSRestController
         }
 
         $texteHydrator = new TexteHydrator();
-        $texteIO = $texteHydrator->createTexte($em, $texte);
+        $texteIO = $texteHydrator->hydrateTexte($texte);
         $serializer = new CustomSerializer();
         $texteIO = $serializer->serialize($texteIO);
 

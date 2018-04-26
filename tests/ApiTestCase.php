@@ -3,7 +3,9 @@
 namespace App\Tests;
 
 use App\Entity\Concept\Fiction;
+use App\Entity\Element\Texte;
 use App\Entity\Item\Evenement;
+use App\Entity\Item\Personnage;
 use Doctrine\Common\DataFixtures\Purger\ORMPurger;
 use Exception;
 use GuzzleHttp\Client;
@@ -266,12 +268,27 @@ class ApiTestCase extends KernelTestCase
         return $evenement;
     }
 
-    protected function createPersonnageFiction($fictionId) {
+    protected function createPersonnageFiction($fiction) {
 
+        $personnage = new Personnage('Barius', 'Le Sage');
+        $personnage->setAnneeNaissance(0);
+        $personnage->setAnneeMort(120);
+        $personnage->setFiction($fiction);
+
+        $this->getService('doctrine')->getManager()->persist($personnage);
+        $this->getService('doctrine')->getManager()->flush();
+
+        return $personnage;
     }
 
-    protected function createTexteFiction($fictionId) {
+    protected function createTexteFiction($fiction) {
 
+        $texte = new Texte('Titre de texte', 'Un contenu de texte', 'promesse',$fiction );
+
+        $this->getService('doctrine')->getManager()->persist($texte);
+        $this->getService('doctrine')->getManager()->flush();
+
+        return $texte;
     }
 
 }

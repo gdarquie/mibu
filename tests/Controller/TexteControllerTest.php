@@ -36,9 +36,17 @@ class TexteControllerTest extends ApiTestCase
 
     public function testGetTexte()
     {
-        $texteId = 1;
+        $fiction = $this->createFiction();
+        $texte = $this->createTexteFiction($fiction);
 
-        $response = $this->client->get('/textes/'.$texteId);
+        $response = $this->client->get(ApiTestCase::TEST_PREFIX.'/textes/'.$texte->getId());
+
+        $payload = json_decode($response->getBody(true), true);
+        $this->assertArrayHasKey('titre', $payload, "Il n'y a pas de champ titre");
+        $this->assertEquals($texte->getId(), $payload['id']);
         $this->assertEquals(200, $response->getStatusCode());
+
+        echo $response->getBody();
+        echo "\n\n";
     }
 }
