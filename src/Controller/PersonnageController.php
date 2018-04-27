@@ -115,7 +115,7 @@ class PersonnageController extends FOSRestController
     }
 
     /**
-     * @Rest\Delete("/personnages/{texteId}",name="delete_personnage")
+     * @Rest\Delete("/personnages/{personnageId}",name="delete_personnage")
      */
     public function deletePersonnage($personnageId)
     {
@@ -133,6 +133,6 @@ class PersonnageController extends FOSRestController
         $em->remove($personnage);
         $em->flush();
 
-        return new JsonResponse('Suppression du personnage '.$personnageId.'.');
+        return new JsonResponse('Suppression du personnage '.$personnageId.'.', 202);
     }
 }
