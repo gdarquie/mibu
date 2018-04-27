@@ -63,12 +63,12 @@ class PersonnageController extends FOSRestController
 
         $response = new JsonResponse('Personnage sauvegardé', 201);
 
-        $texteUrl = $this->generateUrl(
+        $personnageUrl = $this->generateUrl(
             'get_personnage', array(
             'personnageId' => $personnage->getId()
         ));
 
-        $response->headers->set('Location', $texteUrl);
+        $response->headers->set('Location', $personnageUrl);
 
         return $response;
 
@@ -101,7 +101,16 @@ class PersonnageController extends FOSRestController
             $em->persist($personnage);
             $em->flush();
 
-            return new JsonResponse("Mise à jour du personnage", 200);
+            $response = new JsonResponse("Mise à jour du personnage", 202);
+
+            $personnageUrl = $this->generateUrl(
+                'get_personnage', array(
+                'personnageId' => $personnage->getId()
+            ));
+
+            $response->headers->set('Location', $personnageUrl);
+
+            return $response;
         }
 
         return new JsonResponse("Echec de la mise à jour");

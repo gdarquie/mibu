@@ -50,8 +50,28 @@ class PersonnageControllerTest extends ApiTestCase
         echo "\n\n";
     }
 
-    public function testPatchPersonnage()
+    public function testPutPersonnage()
     {
+        $fiction = $this->createFiction();
+        $personnage = $this->createPersonnageFiction($fiction);
+
+        $data = array(
+            "titre" => "Okita",
+            "description" => "Du Shinsen Gumi",
+            "annee_naissance" => 0,
+            "annee_mort" => 120
+        );
+
+        $response = $this->client->put(ApiTestCase::TEST_PREFIX.'/personnages/'.$personnage->getId(), [
+            'body' => json_encode($data)
+        ]);
+        $this->assertEquals(202, $response->getStatusCode());
+
+        $response = $this->client->get(ApiTestCase::TEST_PREFIX.'/personnages/'.$personnage->getId());
+        $payload = json_decode($response->getBody(true), true);
+        $this->assertArrayHasKey('surnom', $payload, "Il n'y a pas de champ surnom");
+        $this->assertEquals( $data['description'], $payload['description']);
+        $this->assertEquals(200, $response->getStatusCode());
 
     }
 
