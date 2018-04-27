@@ -94,6 +94,7 @@ class FictionControllerTest extends ApiTestCase
         $this->assertEquals(202, $response->getStatusCode());
 
         $response = $this->client->get(ApiTestCase::TEST_PREFIX.'/fictions/'.$fiction->getId());
+
         $payload = json_decode($response->getBody(true), true);
         $this->assertArrayHasKey('titre', $payload, "Il n'y a pas de champ surnom");
         $this->assertEquals( $data['titre'], $payload['titre']);
@@ -103,15 +104,9 @@ class FictionControllerTest extends ApiTestCase
 
     public function testDeleteFiction()
     {
-        $fiction = new Fiction();
-        $fiction->setTitre('Titre');
-        $fiction->setDescription('Description');
-
-        $this->getService('doctrine')->getManager()->persist($fiction);
-        $this->getService('doctrine')->getManager()->flush();
+        $fiction = $this->createFiction();
 
         $response = $this->client->delete(ApiTestCase::TEST_PREFIX.'/fictions/'.$fiction->getId());
         $this->assertEquals(202, $response->getStatusCode());
-
     }
 }

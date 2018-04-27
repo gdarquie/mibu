@@ -78,7 +78,7 @@ class EvenementController extends FOSRestController
     }
 
     /**
-     * @Rest\Put("/evenement/{evenementId}",name="delete_evenement")
+     * @Rest\Put("/evenements/{evenementId}",name="put_evenement")
      */
     public function putEvenement(Request $request,$evenementId)
     {
@@ -104,7 +104,15 @@ class EvenementController extends FOSRestController
             $em->persist($evenement);
             $em->flush();
 
-            return new JsonResponse("Mise à jour de l\'évènement ".$evenementId, 200);
+            $response = new JsonResponse("Mise à jour de l\'évènement ".$evenementId, 202);
+
+            $evenementUrl = $this->generateUrl(
+                'get_evenement', array(
+                'evenementId' => $evenement->getId()
+            ));
+
+            $response->headers->set('Location', $evenementUrl);
+        return $response;
         }
 
         return new JsonResponse("Echec de la mise à jour");
@@ -129,7 +137,7 @@ class EvenementController extends FOSRestController
         $em->remove($evenement);
         $em->flush();
 
-        return new JsonResponse('Suppression de l\'évènement ' . $evenementId . '.');
+        return new JsonResponse('Suppression de l\'évènement ' . $evenementId . '.', 202);
     }
 
 }

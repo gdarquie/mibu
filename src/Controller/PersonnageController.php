@@ -8,7 +8,6 @@ use App\Component\Serializer\CustomSerializer;
 use App\Entity\Concept\Fiction;
 use App\Entity\Item\Personnage;
 use App\Form\PersonnageType;
-use App\Component\IO\PersonnageIO;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\Controller\Annotations as Rest;
@@ -18,7 +17,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 class PersonnageController extends FOSRestController
 {
-
     /**
      * @Rest\Get("personnages/{personnageId}", name="get_personnage")
      */

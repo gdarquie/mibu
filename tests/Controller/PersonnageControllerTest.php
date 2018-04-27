@@ -68,6 +68,7 @@ class PersonnageControllerTest extends ApiTestCase
         $this->assertEquals(202, $response->getStatusCode());
 
         $response = $this->client->get(ApiTestCase::TEST_PREFIX.'/personnages/'.$personnage->getId());
+
         $payload = json_decode($response->getBody(true), true);
         $this->assertArrayHasKey('surnom', $payload, "Il n'y a pas de champ surnom");
         $this->assertEquals( $data['description'], $payload['description']);
@@ -77,6 +78,10 @@ class PersonnageControllerTest extends ApiTestCase
 
     public function testDeletePersonnage()
     {
+        $fiction = $this->createFiction();
+        $personnage = $this->createPersonnageFiction($fiction);
 
+        $response = $this->client->delete(ApiTestCase::TEST_PREFIX.'/personnages/'.$personnage->getId());
+        $this->assertEquals(202, $response->getStatusCode());
     }
 }

@@ -101,7 +101,16 @@ class TexteController extends FOSRestController
             $em->persist($texte);
             $em->flush();
 
-            return new JsonResponse("Mise à jour du texte", 200);
+            $response = new JsonResponse("Mise à jour du texte", 202);
+            $texteUrl = $this->generateUrl(
+                'get_texte', array(
+                'texteId' => $texte->getId()
+            ));
+
+            $response->headers->set('Location', $texteUrl);
+
+            return $response;
+
         }
 
         return new JsonResponse("Echec de la mise à jour");
@@ -126,6 +135,6 @@ class TexteController extends FOSRestController
         $em->remove($texte);
         $em->flush();
 
-        return new JsonResponse('Suppression du texte '.$texteId.'.');
+        return new JsonResponse('Suppression du texte '.$texteId.'.', 202);
     }
 }
