@@ -119,7 +119,7 @@ class EvenementController extends FOSRestController
     }
 
     /**
-     * @Rest\Delete("/evenement/{evenementId}",name="delete_evenement")
+     * @Rest\Delete("/evenements/{evenementId}",name="delete_evenement")
      */
     public function deleteEvenement($evenementId)
     {
