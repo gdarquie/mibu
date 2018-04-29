@@ -27,6 +27,8 @@ class SaveDBCommand extends Command
             '',
         ]);
 
+        //export de toutes les tables
+
         // outputs a message followed by a "\n"
         $output->writeln("Attention, le script va être lancé.");
 

@@ -7,7 +7,6 @@ class FictionIO
 
     private $id;
     private $titre;
-    private $promesse;
     private $resume;
     private $textes;
     private $personnages;
@@ -44,23 +43,7 @@ class FictionIO
     {
         $this->titre = $titre;
     }
-
-    /**
-     * @return mixed
-     */
-    public function getPromesse()
-    {
-        return $this->promesse;
-    }
-
-    /**
-     * @param mixed $promesse
-     */
-    public function setPromesse($promesse)
-    {
-        $this->promesse = $promesse;
-    }
-
+    
     /**
      * @return mixed
      */
