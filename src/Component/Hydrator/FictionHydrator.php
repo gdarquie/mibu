@@ -18,7 +18,7 @@ class FictionHydrator
 
         $fictionIO->setId($fiction->getId());
         $fictionIO->setTitre($fiction->getTitre());
-        $fictionIO->setResume($fiction->getDescription());
+        $fictionIO->setDescription($fiction->getDescription());
         $fictionIO->setUuid($fiction->getUuid());
         //travailler les dates
         $fictionIO->setDateCreation($fiction->getDateCreation());

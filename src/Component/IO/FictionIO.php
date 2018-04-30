@@ -7,7 +7,7 @@ class FictionIO
 
     private $id;
     private $titre;
-    private $resume;
+    private $description;
     private $textes;
     private $personnages;
     private $evenements;
@@ -58,17 +58,17 @@ class FictionIO
     /**
      * @return mixed
      */
-    public function getResume()
+    public function getDescription()
     {
-        return $this->resume;
+        return $this->description;
     }
 
     /**
-     * @param mixed $resume
+     * @param mixed $description
      */
-    public function setResume($resume)
+    public function setDescription($description)
     {
-        $this->resume = $resume;
+        $this->description = $description;
     }
 
     /**
