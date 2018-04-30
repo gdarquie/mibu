@@ -11,6 +11,17 @@ class FictionIO
     private $textes;
     private $personnages;
     private $evenements;
+    private $uuid;
+
+    /**
+     * @var \DateTime
+     */
+    private $date_creation;
+
+    /**
+     * @var \DateTime
+     */
+    private $date_modification;
 
     /**
      * @return mixed
@@ -43,7 +54,7 @@ class FictionIO
     {
         $this->titre = $titre;
     }
-    
+
     /**
      * @return mixed
      */
@@ -106,6 +117,54 @@ class FictionIO
     public function setEvenements($evenements)
     {
         $this->evenements = $evenements;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUuid()
+    {
+        return $this->uuid;
+    }
+
+    /**
+     * @param mixed $uuid
+     */
+    public function setUuid($uuid)
+    {
+        $this->uuid = $uuid;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDateCreation()
+    {
+        return $this->date_creation;
+    }
+
+    /**
+     * @param mixed $date_creation
+     */
+    public function setDateCreation($date_creation)
+    {
+        $this->date_creation = $date_creation;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDateModification()
+    {
+        return $this->date_modification;
+    }
+
+    /**
+     * @param mixed $date_modification
+     */
+    public function setDateModification($date_modification)
+    {
+        $this->date_modification = $date_modification;
     }
 
 }
