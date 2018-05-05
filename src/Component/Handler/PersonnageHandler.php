@@ -19,8 +19,12 @@ class PersonnageHandler
         $description = $data['description'];
 
         $personnage = new Personnage($titre, $description);
-        $personnage->setAnneeNaissance($data['annee_naissance']);
-        $personnage->setAnneeMort($data['annee_mort']);
+        (isset($data['nom'])) ? $personnage->setNom($data['nom']) : $personnage->setNom(null);
+        (isset($data['prenom'])) ? $personnage->setPrenom($data['prenom']) : $personnage->setPrenom(null);
+        (isset($data['annee_naissance'])) ? $personnage->setAnneeNaissance($data['annee_naissance']) : $personnage->setAnneeNaissance(null);
+        (isset($data['annee_mort'])) ? $personnage->setAnneeMort($data['annee_mort']) : $personnage->setAnneeMort(null);
+        (isset($data['genre'])) ? $personnage->setGenre($data['genre']) : $personnage->setGenre(null);
+
         $personnage->setFiction($fiction);
 
         $em->persist($personnage);
