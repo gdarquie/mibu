@@ -2,10 +2,12 @@
 
 namespace App\Controller;
 
-use App\Entity\Concept\Partie;
+use App\Component\Handler\PartieHandler;
+use App\Entity\Concept\Fiction;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 
@@ -17,42 +19,28 @@ class PartieController extends FOSRestController
     }
 
     /**
-     * @Rest\Post("partie", name="post_partie")
+     * @Rest\Post("parties/fiction={fictionId}", name="post_partie")
      */
-    public function postPartie()
+    public function postPartie(Request $request, $fictionId)
     {
+        $data = json_decode($request->getContent(), true);
+
         $em = $this->getDoctrine()->getManager();
+        $fiction = $em->getRepository(Fiction::class)->findOneById($fictionId);
 
-        $partie = new Partie();
-        $partie->setTitre('Première partie');
-        $partie->setDescription('Une partie qui contient un chapitre');
+        $handlerPartie = new PartieHandler();
+        $partie = $handlerPartie->createPartie($em, $data, $fiction);
+        $response = new JsonResponse('Partie sauvegardée', 201);
 
-        $chapitre1 = new Partie();
-        $chapitre1->setTitre('Chapitre 1');
-        $chapitre1->setDescription('Premier chapitre');
-        $chapitre1->setParent($partie);
+        $partieUrl = '/partie/1';
+//        $partieUrl = $this->generateUrl(
+//            'get_partie', array(
+//            'partieId' => $partie->getId()
+//        ));
 
-        $chapitre2 = new Partie();
-        $chapitre2->setTitre('Chapitre 2');
-        $chapitre2->setDescription('Second chapitre');
-        $chapitre2->setParent($partie);
+        $response->headers->set('Location', $partieUrl);
 
-        $section = new Partie();
-        $section->setTitre('Section 1');
-        $section->setDescription('Section 1');
-        $section->setParent($partie);
-
-        $em->persist($partie);
-        $em->persist($chapitre1);
-        $em->persist($chapitre2);
-        $em->persist($section);
-
-        $em->flush();
-
-        $result = 'Hello';
-
-        return new JsonResponse("Mission accomplie", 200);
-
+        return $response;
 
     }
 

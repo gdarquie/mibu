@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Entity\Concept;
+namespace App\Entity\Element;
 
+use App\Entity\Modele\AbstractElement;
 use Doctrine\ORM\Mapping as ORM;
-use App\Entity\Modele\AbstractConcept;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
@@ -11,7 +11,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @ORM\Table(name="partie")
  * @ORM\Entity(repositoryClass="Gedmo\Tree\Entity\Repository\NestedTreeRepository")
  */
-class Partie extends AbstractConcept
+class Partie extends AbstractElement
 {
     /**
      * @Gedmo\TreeLeft
@@ -50,6 +50,13 @@ class Partie extends AbstractConcept
      * @ORM\OrderBy({"lft" = "ASC"})
      */
     private $children;
+
+    public function __construct($titre, $description)
+    {
+        parent::__construct();
+        $this->setTitre($titre);
+        $this->setDescription($description);
+    }
 
     /**
      * @return mixed
