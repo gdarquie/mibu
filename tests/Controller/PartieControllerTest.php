@@ -3,7 +3,7 @@
 namespace App\tests\Controller;
 
 
-use App\Entity\Concept\Partie;
+use App\Entity\Element\Partie;
 use App\Tests\ApiTestCase;
 
 class PartieControllerTest extends ApiTestCase

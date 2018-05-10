@@ -4,7 +4,6 @@ namespace App\Component\Hydrator;
 
 use App\Component\IO\TexteIO;
 
-
 class TexteHydrator
 {
     public function hydrateTexte($texte)
