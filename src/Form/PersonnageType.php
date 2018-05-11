@@ -2,7 +2,7 @@
 
 namespace App\Form;
 
-use App\Entity\Item\Personnage;
+use App\Entity\Element\Personnage;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;

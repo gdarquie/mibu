@@ -6,7 +6,7 @@ use App\Component\Handler\EvenementHandler;
 use App\Component\Hydrator\EvenementHydrator;
 use App\Component\Serializer\CustomSerializer;
 use App\Entity\Concept\Fiction;
-use App\Entity\Item\Evenement;
+use App\Entity\Element\Evenement;
 use App\Form\EvenementType;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;

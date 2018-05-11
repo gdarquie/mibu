@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Entity\Item;
+namespace App\Entity\Element;
 
 use App\Entity\Modele\AbstractElement;
 use Doctrine\ORM\Mapping as ORM;

@@ -3,8 +3,6 @@
 namespace App\Component\Hydrator;
 
 use App\Component\IO\PersonnageIO;
-use App\Entity\Item\Personnage;
-
 
 class PersonnageHydrator
 {

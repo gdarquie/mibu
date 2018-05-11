@@ -2,12 +2,12 @@
 
 namespace App\Form;
 
-use App\Entity\Element\Evenement;
+use App\Entity\Element\Partie;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class EvenementType extends AbstractType
+class PartieType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -24,7 +24,7 @@ class EvenementType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => Evenement::class
+            'data_class' => Partie::class
         ));
     }
 

@@ -2,52 +2,81 @@
 
 namespace App\tests\Controller;
 
-
-use App\Entity\Element\Partie;
 use App\Tests\ApiTestCase;
 
 class PartieControllerTest extends ApiTestCase
 {
-
     public function testPostPartie()
     {
+        $fiction = $this->createFiction();
 
-        $partie = new Partie();
-        $partie->setTitre('Première partie');
-        $partie->setDescription('Une partie qui contient un chapitre');
+        $data = array(
+            'titre' => 'Titre de partie via les tests unitaires',
+            'description' => 'Un contenu de partie',
+        );
 
-        $chapitre1 = new Partie();
-        $chapitre1->setTitre('Chapitre 1');
-        $chapitre1->setDescription('Premier chapitre');
+        $response = $this->client->post(ApiTestCase::TEST_PREFIX.'/parties/fiction='.$fiction->getId(), [
+            'body' => json_encode($data)
+        ]);
 
-        $chapitre2 = new Partie();
-        $chapitre2->setTitre('Chapitre 2');
-        $chapitre2->setDescription('Second chapitre');
+        $this->assertEquals(201, $response->getStatusCode());
+        $this->assertTrue($response->hasHeader('Location'));
 
+        $partieUrl = $response->getHeader('Location');
+        $response = $this->client->get($partieUrl[0]);
 
-        /////////
+        $payload = json_decode($response->getBody(true), true);
+        $this->assertArrayHasKey('titre', $payload, "Il n'y a pas de champ titre");
 
-//        $data = array(
-//            'titre' => 'Partie 1',
-//            'description' => 'Partie qui contient des chapitres'
-//        );
-//
-//        $response = $this->client->post(ApiTestCase::TEST_PREFIX.'/fictions', [
-//            'body' => json_encode($data)
-//        ]);
-//
-//
-//        $this->assertEquals(201, $response->getStatusCode());
-//        $this->assertTrue($response->hasHeader('Location'));
-//
-//        $fictionUrl = $response->getHeader('Location');
-//        $response = $this->client->get($fictionUrl[0]);
-//
-//        $payload = json_decode($response->getBody(true), true);
-//        $this->assertArrayHasKey('titre', $payload, "Il n'y a pas de champ titre");
-//
-//        echo $response->getBody();
-//        echo "\n\n";
+        echo $response->getBody();
+        echo "\n\n";
+    }
 
+    public function testGetPartie()
+    {
+        $fiction = $this->createFiction();
+        $partie = $this->createPartieFiction($fiction);
+
+        $response = $this->client->get(ApiTestCase::TEST_PREFIX.'/parties/'.$partie->getId());
+
+        $payload = json_decode($response->getBody(true), true);
+        $this->assertArrayHasKey('titre', $payload, "Il n'y a pas de champ titre");
+        $this->assertEquals($partie->getId(), $payload['id']);
+        $this->assertEquals(200, $response->getStatusCode());
+
+        echo $response->getBody();
+        echo "\n\n";
+    }
+
+    public function testPutPartie()
+    {
+        $fiction = $this->createFiction();
+        $partie = $this->createPartieFiction($fiction);
+
+        $data = array(
+            'titre' => 'Titre de partie modifié',
+            'description' => 'Un contenu de partie modifié'
+        );
+
+        $response = $this->client->put(ApiTestCase::TEST_PREFIX.'/parties/'.$partie->getId(), [
+            'body' => json_encode($data)
+        ]);
+        $this->assertEquals(202, $response->getStatusCode());
+
+        $response = $this->client->get(ApiTestCase::TEST_PREFIX.'/parties/'.$partie->getId());
+
+        $payload = json_decode($response->getBody(true), true);
+        $this->assertArrayHasKey('titre', $payload, "Il n'y a pas de champ titre");
+        $this->assertEquals( $data['titre'], $payload['titre']);
+        $this->assertEquals(200, $response->getStatusCode());
+    }
+
+    public function testDeletePartie()
+    {
+        $fiction = $this->createFiction();
+        $partie = $this->createPartieFiction($fiction);
+
+        $response = $this->client->delete(ApiTestCase::TEST_PREFIX.'/parties/'.$partie->getId());
+        $this->assertEquals(202, $response->getStatusCode());
     }
 }

@@ -18,8 +18,7 @@ class PartieHandler
         $titre = $data['titre'];
         $description = $data['description'];
 
-        $partie = new Partie($titre, $description);
-        $partie->setFiction($fiction);
+        $partie = new Partie($titre, $description, $fiction);
         $em->persist($partie);
         $em->flush();
 

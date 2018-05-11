@@ -3,7 +3,6 @@
 namespace App\Component\Hydrator;
 
 use App\Component\IO\EvenementIO;
-use App\Entity\Item\Evenement;
 
 class EvenementHydrator
 {

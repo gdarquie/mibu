@@ -5,7 +5,7 @@ namespace App\Entity\Concept;
 use Doctrine\ORM\Mapping as ORM;
 use App\Entity\Modele\AbstractConcept;
 use App\Entity\Element\Texte;
-use App\Entity\Item\Personnage;
+use App\Entity\Element\Personnage;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\FictionRepository")

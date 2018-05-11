@@ -2,11 +2,7 @@
 
 namespace App\Component\Handler;
 
-use App\Component\IO\TexteIO;
-use App\Entity\Element\Texte;
-use App\Entity\Item\Evenement;
-use App\Entity\Item\Personnage;
-use App\Entity\Modele\AbstractElement;
+use App\Entity\Element\Evenement;
 use Doctrine\ORM\EntityManager;
 
 class EvenementHandler

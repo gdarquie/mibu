@@ -24,7 +24,7 @@ class FictionRepository extends ServiceEntityRepository
 
     public function getPersonnagesFiction($fictionId)
     {
-        $query = $this->getEntityManager()->createQuery('SELECT p.id, p.titre, p.prenom, p.nom, p.description, p.genre, p.annee_naissance, p.annee_mort FROM App:Item\Personnage p JOIN p.fiction f WHERE f.id = :fictionId');
+        $query = $this->getEntityManager()->createQuery('SELECT p.id, p.titre, p.prenom, p.nom, p.description, p.genre, p.annee_naissance, p.annee_mort FROM App:Element\Personnage p JOIN p.fiction f WHERE f.id = :fictionId');
         $query->setParameter('fictionId', $fictionId);
         $personnages = $query->getResult();
 
@@ -33,7 +33,7 @@ class FictionRepository extends ServiceEntityRepository
 
     public function getEvenementsFiction($fictionId)
     {
-        $query = $this->getEntityManager()->createQuery('SELECT e.id, e.uuid, e.titre, e.description, e.annee_debut, e.annee_fin FROM App:Item\Evenement e JOIN e.fiction f WHERE f.id = :fictionId');
+        $query = $this->getEntityManager()->createQuery('SELECT e.id, e.uuid, e.titre, e.description, e.annee_debut, e.annee_fin FROM App:Element\Evenement e JOIN e.fiction f WHERE f.id = :fictionId');
         $query->setParameter('fictionId', $fictionId);
         $evenements = $query->getResult();
 

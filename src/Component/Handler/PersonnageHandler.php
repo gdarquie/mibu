@@ -2,7 +2,7 @@
 
 namespace App\Component\Handler;
 
-use App\Entity\Item\Personnage;
+use App\Entity\Element\Personnage;
 use Doctrine\ORM\EntityManager;
 
 class PersonnageHandler

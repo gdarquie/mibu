@@ -51,11 +51,12 @@ class Partie extends AbstractElement
      */
     private $children;
 
-    public function __construct($titre, $description)
+    public function __construct($titre, $description, $fiction)
     {
         parent::__construct();
         $this->setTitre($titre);
         $this->setDescription($description);
+        $this->setFiction($fiction);
     }
 
     /**

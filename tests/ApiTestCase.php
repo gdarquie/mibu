@@ -3,11 +3,11 @@
 namespace App\Tests;
 
 use App\Entity\Concept\Fiction;
+use App\Entity\Element\Partie;
 use App\Entity\Element\Texte;
-use App\Entity\Item\Evenement;
-use App\Entity\Item\Personnage;
+use App\Entity\Element\Evenement;
+use App\Entity\Element\Personnage;
 use Doctrine\Common\DataFixtures\Purger\ORMPurger;
-use Exception;
 use GuzzleHttp\Client;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -16,8 +16,6 @@ use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Middleware;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\DomCrawler\Crawler;
-
-
 
 class ApiTestCase extends KernelTestCase
 {
@@ -289,6 +287,16 @@ class ApiTestCase extends KernelTestCase
         $this->getService('doctrine')->getManager()->flush();
 
         return $texte;
+    }
+
+    protected function createPartieFiction($fiction) {
+
+        $partie = new Partie('Titre de texte','Un exemple de contenu de partie', $fiction);
+
+        $this->getService('doctrine')->getManager()->persist($partie);
+        $this->getService('doctrine')->getManager()->flush();
+
+        return $partie;
     }
 
 }

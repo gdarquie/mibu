@@ -6,7 +6,7 @@ use App\Component\Handler\PersonnageHandler;
 use App\Component\Hydrator\PersonnageHydrator;
 use App\Component\Serializer\CustomSerializer;
 use App\Entity\Concept\Fiction;
-use App\Entity\Item\Personnage;
+use App\Entity\Element\Personnage;
 use App\Form\PersonnageType;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
