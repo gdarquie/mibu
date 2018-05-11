@@ -7,7 +7,6 @@ class PartieIO
     private $id;
     private $titre;
     private $contenu;
-    private $fiction;
 
     /**
      * @return mixed
@@ -56,22 +55,5 @@ class PartieIO
     {
         $this->contenu = $contenu;
     }
-
-    /**
-     * @return mixed
-     */
-    public function getFiction()
-    {
-        return $this->fiction;
-    }
-
-    /**
-     * @param mixed $fiction
-     */
-    public function setFiction($fiction)
-    {
-        $this->fiction = $fiction;
-    }
-
 
 }
