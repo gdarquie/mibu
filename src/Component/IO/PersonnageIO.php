@@ -1,55 +1,14 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: gaetan
- * Date: 20/03/2018
- * Time: 09:27
- */
 
 namespace App\Component\IO;
 
-class PersonnageIO
+class PersonnageIO extends ElementIO
 {
-    private $id;
-    private $surnom;
     private $prenom;
     private $nom;
     private $genre;
-    private $description;
     private $annee_naissance;
     private $annee_mort;
-
-    /**
-     * @return mixed
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * @param mixed $id
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getSurnom()
-    {
-        return $this->surnom;
-    }
-
-    /**
-     * @param mixed $surnom
-     */
-    public function setSurnom($surnom)
-    {
-        $this->surnom = $surnom;
-    }
 
     /**
      * @return mixed
@@ -102,22 +61,6 @@ class PersonnageIO
     /**
      * @return mixed
      */
-    public function getDescription()
-    {
-        return $this->description;
-    }
-
-    /**
-     * @param mixed $description
-     */
-    public function setDescription($description)
-    {
-        $this->description = $description;
-    }
-
-    /**
-     * @return mixed
-     */
     public function getAnneeNaissance()
     {
         return $this->annee_naissance;
@@ -146,7 +89,5 @@ class PersonnageIO
     {
         $this->annee_mort = $annee_mort;
     }
-
-
 
 }

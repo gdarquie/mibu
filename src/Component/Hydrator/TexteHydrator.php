@@ -12,7 +12,7 @@ class TexteHydrator
 
         $texteIO->setId($texte->getId());
         $texteIO->setTitre($texte->getTitre());
-        $texteIO->setContenu($texte->getDescription());
+        $texteIO->setDescription($texte->getDescription());
 
         return $texteIO;
     }

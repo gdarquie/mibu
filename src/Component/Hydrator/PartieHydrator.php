@@ -12,7 +12,7 @@ class PartieHydrator
 
         $partieIO->setId($partie->getId());
         $partieIO->setTitre($partie->getTitre());
-        $partieIO->setContenu($partie->getDescription());
+        $partieIO->setDescription($partie->getDescription());
 
         return $partieIO;
     }

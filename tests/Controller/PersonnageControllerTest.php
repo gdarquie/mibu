@@ -42,7 +42,7 @@ class PersonnageControllerTest extends ApiTestCase
         $response = $this->client->get(ApiTestCase::TEST_PREFIX.'/personnages/'.$personnage->getId());
 
         $payload = json_decode($response->getBody(true), true);
-        $this->assertArrayHasKey('surnom', $payload, "Il n'y a pas de champ surnom");
+        $this->assertArrayHasKey('titre', $payload, "Il n'y a pas de champ titre");
         $this->assertEquals($personnage->getId(), $payload['id']);
         $this->assertEquals(200, $response->getStatusCode());
 
@@ -70,7 +70,7 @@ class PersonnageControllerTest extends ApiTestCase
         $response = $this->client->get(ApiTestCase::TEST_PREFIX.'/personnages/'.$personnage->getId());
 
         $payload = json_decode($response->getBody(true), true);
-        $this->assertArrayHasKey('surnom', $payload, "Il n'y a pas de champ surnom");
+        $this->assertArrayHasKey('titre', $payload, "Il n'y a pas de champ titre");
         $this->assertEquals( $data['description'], $payload['description']);
         $this->assertEquals(200, $response->getStatusCode());
 
