@@ -4,15 +4,13 @@ namespace App\Component\Hydrator;
 
 use App\Component\IO\EvenementIO;
 
-class EvenementHydrator
+class EvenementHydrator extends ElementHydrator
 {
-    public function hydrateEvenement($em, $evenement)
+    public function hydrateEvenement($evenement)
     {
         $evenementIO = new EvenementIO();
+        $evenementIO = $this->hydrateElement($evenement, $evenementIO);
 
-        $evenementIO->setId($evenement->getId());
-        $evenementIO->setTitre($evenement->getTitre());
-        $evenementIO->setDescription($evenement->getDescription());
         $evenementIO->setAnneeDebut($evenement->getAnneeDebut());
         $evenementIO->setAnneeFin($evenement->getAnneeFin());
         

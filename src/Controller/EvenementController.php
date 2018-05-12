@@ -33,7 +33,7 @@ class EvenementController extends FOSRestController
         }
 
         $evenementHydrator = new EvenementHydrator();
-        $evenementIO = $evenementHydrator->hydrateEvenement($em, $evenement);
+        $evenementIO = $evenementHydrator->hydrateEvenement($evenement);
 
         $serializer = new CustomSerializer();
         $evenementIO = $serializer->serialize($evenementIO);
