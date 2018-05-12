@@ -21,6 +21,8 @@ class Texte extends AbstractElement
      */
     private $type;
 
+    //element
+
     public function __construct($titre, $description, $type, $fiction)
     {
         parent::__construct();

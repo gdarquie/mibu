@@ -33,12 +33,10 @@ class PersonnageController extends FOSRestController
         }
 
         $personnageHydrator = new PersonnageHydrator();
-        $personnageIO = $personnageHydrator->hydratePersonnage($em, $personnage);
+        $personnageIO = $personnageHydrator->hydratePersonnage($personnage);
 
         $serializer = new CustomSerializer();
         $personnageIO = $serializer->serialize($personnageIO);
-
-        //ajouter la fiction?
 
         $response = new Response($personnageIO);
         $response->headers->set('Content-Type', 'application/json', 201);

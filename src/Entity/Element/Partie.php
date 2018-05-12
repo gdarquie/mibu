@@ -51,6 +51,8 @@ class Partie extends AbstractElement
      */
     private $children;
 
+    private $textes; //uuid ?
+
     public function __construct($titre, $description, $fiction)
     {
         parent::__construct();

@@ -4,16 +4,15 @@ namespace App\Component\Hydrator;
 
 use App\Component\IO\PartieIO;
 
-class PartieHydrator
+class PartieHydrator extends ElementHydrator
 {
     public function hydratePartie($partie)
     {
         $partieIO = new PartieIO();
-
-        $partieIO->setId($partie->getId());
-        $partieIO->setTitre($partie->getTitre());
-        $partieIO->setDescription($partie->getDescription());
+        $partieIO = $this->hydrateElement($partie, $partieIO);
+        //textes
 
         return $partieIO;
     }
+
 }

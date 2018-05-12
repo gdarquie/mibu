@@ -4,23 +4,25 @@ namespace App\Component\IO;
 
 class ElementIO extends AbstractConceptIO
 {
-    private $fiction;
+    /**
+     * @var string
+     */
+    private $fiction_id;
 
     /**
      * @return mixed
      */
-    public function getFiction()
+    public function getFictionId()
     {
-        return $this->fiction;
+        return $this->fiction_id;
     }
 
     /**
-     * @param mixed $fiction
+     * @param mixed $fiction_id
      */
-    public function setFiction($fiction)
+    public function setFictionId($fiction_id)
     {
-        $this->fiction = $fiction;
+        $this->fiction_id = $fiction_id;
     }
-
 
 }

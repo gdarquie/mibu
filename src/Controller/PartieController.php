@@ -8,24 +8,30 @@ use App\Component\Serializer\CustomSerializer;
 use App\Entity\Concept\Fiction;
 use App\Entity\Element\Partie;
 use App\Form\PartieType;
+use Doctrine\ORM\EntityManager;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-
 class PartieController extends FOSRestController
 {
+
+    /**
+     * @var EntityManager
+     */
+    protected $em;
 
     /**
      * @Rest\Get("parties", name="get_parties")
      */
     public function getParties()
     {
-        $em = $this->getDoctrine()->getManager();
+        $this->em = $this->getDoctrine()->getManager();
+
         $partieHydrator = new PartieHydrator();
-        $parties = $em->getRepository(Partie::class)->findAll();
+        $parties = $this->em->getRepository(Partie::class)->findAll();
         $partiesIO = [];
 
         foreach ($parties as $partie){
@@ -46,8 +52,9 @@ class PartieController extends FOSRestController
      */
     public function getPartie($id)
     {
-        $em = $this->getDoctrine()->getManager();
-        $partie = $em->getRepository('App:Element\Partie')->findOneById($id);
+        $this->em = $this->getDoctrine()->getManager();
+
+        $partie = $this->em->getRepository('App:Element\Partie')->findOneById($id);
 
         if (!$partie) {
             throw $this->createNotFoundException(sprintf(
@@ -74,13 +81,14 @@ class PartieController extends FOSRestController
      */
     public function postPartie(Request $request, $fictionId)
     {
+        $this->em = $this->getDoctrine()->getManager();
+
         $data = json_decode($request->getContent(), true);
 
-        $em = $this->getDoctrine()->getManager();
-        $fiction = $em->getRepository(Fiction::class)->findOneById($fictionId);
+        $fiction = $this->em->getRepository(Fiction::class)->findOneById($fictionId);
 
         $handlerPartie = new PartieHandler();
-        $partie = $handlerPartie->createPartie($em, $data, $fiction);
+        $partie = $handlerPartie->createPartie($this->em, $data, $fiction);
         $response = new JsonResponse('Partie sauvegardée', 201);
 
         $partieUrl = $this->generateUrl(
@@ -99,7 +107,7 @@ class PartieController extends FOSRestController
      */
     public function putPartie(Request $request, $partieId)
     {
-        $em = $this->getDoctrine()->getManager();
+        $this->em = $this->getDoctrine()->getManager();
 
         $partie = $this->getDoctrine()
             ->getRepository(Partie::class)
@@ -118,8 +126,8 @@ class PartieController extends FOSRestController
         $form->submit($data);
 
         if($form->isSubmitted()){
-            $em->persist($partie);
-            $em->flush();
+            $this->em->persist($partie);
+            $this->em->flush();
 
             $response = new JsonResponse("Mise à jour de la partie", 202);
             $partieUrl = $this->generateUrl(
@@ -141,7 +149,7 @@ class PartieController extends FOSRestController
      */
     public function deletePartie($partieId)
     {
-        $em = $this->getDoctrine()->getManager();
+        $this->em = $this->getDoctrine()->getManager();
 
         $partie = $this->getDoctrine()->getRepository(Partie::class)->findOneById($partieId);
 
@@ -152,8 +160,8 @@ class PartieController extends FOSRestController
             ));
         }
 
-        $em->remove($partie);
-        $em->flush();
+        $this->em->remove($partie);
+        $this->em->flush();
 
         return new JsonResponse('Suppression de la partie '.$partieId.'.', 202);
     }

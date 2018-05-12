@@ -2,18 +2,18 @@
 
 namespace App\Component\Hydrator;
 
-use App\Component\IO\ElementIO;
-
 class ElementHydrator
 {
-    public function hydrate($element)
+    public function hydrateElement($element, $io)
     {
-        $elmentIO = new ElementIO();
+        $io->setId($element->getId());
+        $io->setTitre($element->getTitre());
+        $io->setDescription($element->getDescription());
+        ($element->getFiction()) ? $io->setFictionId($element->getFiction()->getId()) : $io->setFictionId(null); //faut-il forcer l'ajout d'une fiction pour la création d'un élément?
+        $io->setUuid($element->getUuid());
+        $io->setDateCreation($element->getDateCreation());
+        $io->setDateModification($element->getDateModification());
 
-        $elmentIO->setId($element->getId());
-        $elmentIO->setTitre($element->getTitre());
-        $elmentIO->setDescription($element->getDescription());
-
-        return $elmentIO;
+        return $io;
     }
 }
