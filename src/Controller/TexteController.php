@@ -7,6 +7,7 @@ use App\Entity\Concept\Fiction;
 use App\Entity\Element\Texte;
 use App\Component\Hydrator\TexteHydrator;
 use App\Component\Serializer\CustomSerializer;
+use App\Entity\Modele\AbstractItem;
 use App\Form\TexteType;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -48,6 +49,7 @@ class TexteController extends FOSRestController
     public function postTexte(Request $request, $fictionId)
     {
         $em = $this->getDoctrine()->getManager();
+
         $fiction = $em->getRepository(Fiction::class)->findOneById($fictionId);
 
         if(!$fiction) {
@@ -60,7 +62,8 @@ class TexteController extends FOSRestController
         $data = json_decode($request->getContent(), true);
 
         $handlerTexte = new TexteHandler();
-        $texte = $handlerTexte->createTexte($em, $data, $fiction);
+        $item = (isset($data['item'])) ? $em->getRepository(AbstractItem::class)->findOneById($data['item']) : $data['item'] = null ;
+        $texte = $handlerTexte->createTexte($em, $data, $fiction, $item);
 
         $response = new JsonResponse('Texte sauvegardé', 201);
         $texteUrl = $this->generateUrl(

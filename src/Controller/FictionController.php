@@ -10,6 +10,7 @@ use App\Component\Handler\TexteHandler;
 use App\Component\Hydrator\FictionHydrator;
 use App\Component\Serializer\CustomSerializer;
 use App\Entity\Concept\Fiction;
+use App\Entity\Modele\AbstractItem;
 use App\Form\FictionType;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -92,9 +93,11 @@ class FictionController extends FOSRestController
 
 
             if(isset($data['textes'])){
+
                 if($data['textes'] !== null){
+                    $item = (isset($data['textes'][0]['item'])) ? $em->getRepository(AbstractItem::class)->findOneById($data['textes'][0]['item']) : $data['textes'][0]['item'] = null ;
                     $texteHandler = new TexteHandler();
-                    $texteHandler->createTextes($em, $data['textes'], $fiction);
+                    $texteHandler->createTextes($em, $data['textes'], $fiction, $item);
                 }
             }
 
