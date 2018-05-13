@@ -2,7 +2,7 @@
 
 namespace App\Entity\Element;
 
-use App\Entity\Modele\AbstractElement;
+use App\Entity\Modele\AbstractItem;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
@@ -11,7 +11,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @ORM\Table(name="partie")
  * @ORM\Entity(repositoryClass="Gedmo\Tree\Entity\Repository\NestedTreeRepository")
  */
-class Partie extends AbstractElement
+class Partie extends AbstractItem
 {
     /**
      * @Gedmo\TreeLeft

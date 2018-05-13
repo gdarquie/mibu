@@ -2,14 +2,14 @@
 
 namespace App\Entity\Element;
 
-use App\Entity\Modele\AbstractElement;
+use App\Entity\Modele\AbstractItem;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity
  * @ORM\Table(name="evenement")
  */
-class Evenement extends AbstractElement
+class Evenement extends AbstractItem
 {
     /**
      * @ORM\Column(type="integer")

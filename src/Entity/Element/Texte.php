@@ -21,8 +21,19 @@ class Texte extends AbstractElement
      */
     private $type;
 
-    //element
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Modele\AbstractItem")
+     * @ORM\JoinColumn(name="item_id", referencedColumnName="id", onDelete="CASCADE", nullable=true)
+     */
+    private $item;
 
+    /**
+     * Texte constructor.
+     * @param $titre
+     * @param $description
+     * @param $type
+     * @param $fiction
+     */
     public function __construct($titre, $description, $type, $fiction)
     {
         parent::__construct();
@@ -48,6 +59,20 @@ class Texte extends AbstractElement
         $this->type = $type;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getItem()
+    {
+        return $this->item;
+    }
 
+    /**
+     * @param mixed $item
+     */
+    public function setItem($item)
+    {
+        $this->item = $item;
+    }
 
 }
