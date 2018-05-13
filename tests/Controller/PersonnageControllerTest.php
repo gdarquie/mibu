@@ -14,10 +14,11 @@ class PersonnageControllerTest extends ApiTestCase
             "titre" => "Barius",
             "description" => "Le Sage",
             "annee_naissance" => 0,
-            "annee_mort" => 120
+            "annee_mort" => 120,
+            "fiction" => $fiction->getId()
         );
 
-        $response = $this->client->post(ApiTestCase::TEST_PREFIX.'/personnages/fiction='.$fiction->getId(), [
+        $response = $this->client->post(ApiTestCase::TEST_PREFIX.'/personnages', [
             'body' => json_encode($data)
         ]);
 

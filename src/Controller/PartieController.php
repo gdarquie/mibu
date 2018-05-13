@@ -75,20 +75,21 @@ class PartieController extends FOSRestController
         return $response;
     }
 
-    
+
     /**
-     * @Rest\Post("parties/fiction={fictionId}", name="post_partie")
+     * @Rest\Post("parties", name="post_partie")
+     *
+     * @param Request $request
+     * @return JsonResponse
      */
-    public function postPartie(Request $request, $fictionId)
+    public function postPartie(Request $request)
     {
         $this->em = $this->getDoctrine()->getManager();
 
         $data = json_decode($request->getContent(), true);
 
-        $fiction = $this->em->getRepository(Fiction::class)->findOneById($fictionId);
-
         $handlerPartie = new PartieHandler();
-        $partie = $handlerPartie->createPartie($this->em, $data, $fiction);
+        $partie = $handlerPartie->createPartie($this->em, $data);
         $response = new JsonResponse('Partie sauvegardée', 201);
 
         $partieUrl = $this->generateUrl(

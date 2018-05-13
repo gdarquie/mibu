@@ -51,8 +51,12 @@ class Partie extends AbstractItem
      */
     private $children;
 
-    private $textes; //uuid ?
-
+    /**
+     * Partie constructor.
+     * @param $titre
+     * @param $description
+     * @param $fiction
+     */
     public function __construct($titre, $description, $fiction)
     {
         parent::__construct();

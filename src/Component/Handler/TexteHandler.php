@@ -5,7 +5,6 @@ namespace App\Component\Handler;
 use App\Entity\Concept\Fiction;
 use App\Entity\Element\Texte;
 use App\Entity\Modele\AbstractItem;
-use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 

@@ -2,12 +2,15 @@
 
 namespace App\Component\Handler;
 
+use App\Entity\Concept\Fiction;
 use App\Entity\Element\Personnage;
 use Doctrine\ORM\EntityManager;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class PersonnageHandler
 {
-    public function createPersonnage(EntityManager $em, $data, $fiction)
+    public function createPersonnage(EntityManager $em, $data)
     {
         if(!isset($data['titre']) && !isset($data['description'])){
             throw $this->createNotFoundException(sprintf(
@@ -17,6 +20,21 @@ class PersonnageHandler
 
         $titre = $data['titre'];
         $description = $data['description'];
+
+        if(!isset ($data['fiction'])) {
+            throw new BadRequestHttpException(sprintf(
+                'Aucune fiction renseignée!'
+            ));
+        }
+
+        if(!$data['fiction']) {
+            throw new NotFoundHttpException(sprintf(
+                'Aucune fiction avec l\'id "%s" n\'a été trouvé',
+                $data['fiction']
+            ));
+        }
+
+        $fiction = $em->getRepository(Fiction::class)->findOneById($data['fiction']);
 
         $personnage = new Personnage($titre, $description);
         (isset($data['nom'])) ? $personnage->setNom($data['nom']) : $personnage->setNom(null);
@@ -33,11 +51,11 @@ class PersonnageHandler
         return $personnage;
     }
 
-    public function createPersonnages(EntityManager $em, $personnages, $fiction)
+    public function createPersonnages(EntityManager $em, $personnages)
     {
         foreach ($personnages as $data)
         {
-            $this->createPersonnage($em, $data, $fiction);
+            $this->createPersonnage($em, $data);
         }
 
         return true;

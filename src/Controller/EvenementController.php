@@ -47,24 +47,19 @@ class EvenementController extends FOSRestController
     }
 
     /**
-     * @Rest\Post("evenements/fiction={fictionId}", name="post_evemement")
+     * @Rest\Post("evenements", name="post_evemement")
+     *
+     * @param Request $request
+     * @return JsonResponse
      */
-    public function postEvenement(Request $request, $fictionId)
+    public function postEvenement(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-        $fiction = $em->getRepository(Fiction::class)->findOneById($fictionId);
-
-        if(!$fiction) {
-            throw $this->createNotFoundException(sprintf(
-                'Aucune fiction avec l\'id "%s" n\'a été trouvé',
-                $fictionId
-            ));
-        }
 
         $data = json_decode($request->getContent(), true);
 
         $handlerEvenement = new EvenementHandler();
-        $evenement = $handlerEvenement->createEvenement($em, $data, $fiction);
+        $evenement = $handlerEvenement->createEvenement($em, $data);
 
         $response = new JsonResponse('Evènement sauvegardé', 201);
         $evenementUrl = $this->generateUrl(

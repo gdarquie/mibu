@@ -45,17 +45,16 @@ class PersonnageController extends FOSRestController
     }
 
     /**
-     * @Rest\Post("personnages/fiction={fictionId}", name="post_personnage")
+     * @Rest\Post("personnages", name="post_personnage")
      */
-    public function postPersonnage(Request $request, $fictionId)
+    public function postPersonnage(Request $request)
     {
         $data = json_decode($request->getContent(), true);
 
         $em = $this->getDoctrine()->getManager();
-        $fiction = $em->getRepository(Fiction::class)->findOneById($fictionId);
 
         $handlerPersonnage = new PersonnageHandler();
-        $personnage = $handlerPersonnage->createPersonnage($em, $data, $fiction);
+        $personnage = $handlerPersonnage->createPersonnage($em, $data);
 
         $response = new JsonResponse('Personnage sauvegardé', 201);
 
