@@ -91,13 +91,17 @@ class FictionController extends FOSRestController
             $fictionHandler  = new FictionHandler();
             $fiction = $fictionHandler->createFiction($em, $data);
 
+            $fictionUrl = $this->generateUrl(
+                'get_fiction', array(
+                'id' => $fiction->getId()
+            ));
 
             if(isset($data['textes'])){
 
                 if($data['textes'] !== null){
-                    $item = (isset($data['textes'][0]['item'])) ? $em->getRepository(AbstractItem::class)->findOneById($data['textes'][0]['item']) : $data['textes'][0]['item'] = null ;
+                    $data['textes'][0]['fiction'] = $fiction->getId();
                     $texteHandler = new TexteHandler();
-                    $texteHandler->createTextes($em, $data['textes'], $fiction, $item);
+                    $texteHandler->createTextes($em, $data['textes']);
                 }
             }
 
@@ -116,11 +120,6 @@ class FictionController extends FOSRestController
             }
 
             $response = new JsonResponse('Fiction sauvegardée', 201);
-            $fictionUrl = $this->generateUrl(
-                'get_fiction', array(
-                'id' => $fiction->getId()
-            ));
-
             $response->headers->set('Location', $fictionUrl);
 
             return $response;

@@ -4,7 +4,6 @@ namespace App\tests\Controller;
 
 use App\Tests\ApiTestCase;
 use GuzzleHttp\Exception\RequestException;
-use PHPUnit\Runner\Exception;
 
 class TexteControllerTest extends ApiTestCase
 {
@@ -15,10 +14,11 @@ class TexteControllerTest extends ApiTestCase
         $data = array(
             'titre' => 'Titre de texte',
             'description' => 'Un contenu de texte',
-            'type' => 'promesse'
+            'type' => 'promesse',
+            'fiction' => $fiction->getId()
         );
 
-        $response = $this->client->post(ApiTestCase::TEST_PREFIX.'/textes/fiction='.$fiction->getId(), [
+        $response = $this->client->post(ApiTestCase::TEST_PREFIX.'/textes', [
             'body' => json_encode($data)
         ]);
 

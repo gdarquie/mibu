@@ -13,7 +13,7 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 class TexteHandler
 {
     /**
-     * @param EntityManager $em
+     * @param $em
      * @param $data
      * @return Texte
      */
@@ -46,16 +46,15 @@ class TexteHandler
     }
 
     /**
-     * @param EntityManager $em
+     * @param $em
      * @param $textes
-     * @param $fiction
      * @return bool
      */
-    public function createTextes(EntityManager $em, $textes, $fiction, $item)
+    public function createTextes($em, $textes)
     {
         foreach ($textes as $data)
         {
-            $this->createTexte($em, $data, $fiction, $item);
+            $this->createTexte($em, $data);
         }
 
         return true;
