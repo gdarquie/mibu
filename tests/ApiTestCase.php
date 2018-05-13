@@ -50,13 +50,9 @@ class ApiTestCase extends KernelTestCase
                 'exceptions' => false
             ]
         ]);
-//dump(self::$staticClient);die;
+
         $handler = HandlerStack::create();
         $handler->push(Middleware::history(self::$history));
-
-        //à changer ---
-//        self::$staticClient->getEmitter()
-//            ->attach(self::$history);
 
         self::bootKernel();
 

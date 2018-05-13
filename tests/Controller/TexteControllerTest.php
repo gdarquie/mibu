@@ -3,6 +3,8 @@
 namespace App\tests\Controller;
 
 use App\Tests\ApiTestCase;
+use GuzzleHttp\Exception\RequestException;
+use PHPUnit\Runner\Exception;
 
 class TexteControllerTest extends ApiTestCase
 {
@@ -32,6 +34,30 @@ class TexteControllerTest extends ApiTestCase
         echo $response->getBody();
         echo "\n\n";
 
+    }
+
+    public function testPostTexteWithoutFiction()
+    {
+        $data = array(
+            'titre' => 'Titre de texte',
+            'description' => 'Un contenu de texte',
+            'type' => 'promesse'
+        );
+
+        try {
+            $this->client->post(ApiTestCase::TEST_PREFIX . '/textes', [
+                'body' => json_encode($data)
+            ]);
+            $status = 200;
+
+        } catch (RequestException $e ) {
+
+            if ($e->getResponse()->getStatusCode() == '400') {
+                $status = 400;
+            }
+        }
+
+        $this->assertEquals(400, $status, "Créer un texte sans indiquer de fiction devrait produire une erreur 400.");
     }
 
     public function testGetTexte()

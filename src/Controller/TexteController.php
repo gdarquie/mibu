@@ -3,12 +3,11 @@
 namespace App\Controller;
 
 use App\Component\Handler\TexteHandler;
-use App\Entity\Concept\Fiction;
 use App\Entity\Element\Texte;
 use App\Component\Hydrator\TexteHydrator;
 use App\Component\Serializer\CustomSerializer;
-use App\Entity\Modele\AbstractItem;
 use App\Form\TexteType;
+use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,6 +16,7 @@ use FOS\RestBundle\Controller\FOSRestController;
 
 class TexteController extends FOSRestController
 {
+
     /**
      * @Rest\Get("textes/{texteId}", name="get_texte")
      */
@@ -44,26 +44,15 @@ class TexteController extends FOSRestController
     }
 
     /**
-     * @Rest\Post("textes/fiction={fictionId}", name="post_texte")
+     * @Rest\Post("textes", name="post_texte")
      */
-    public function postTexte(Request $request, $fictionId)
+    public function postTexte(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $fiction = $em->getRepository(Fiction::class)->findOneById($fictionId);
-
-        if(!$fiction) {
-            throw $this->createNotFoundException(sprintf(
-                'Aucune fiction avec l\'id "%s" n\'a été trouvé',
-                $fictionId
-            ));
-        }
-
         $data = json_decode($request->getContent(), true);
-
         $handlerTexte = new TexteHandler();
-        $item = (isset($data['item'])) ? $em->getRepository(AbstractItem::class)->findOneById($data['item']) : $data['item'] = null ;
-        $texte = $handlerTexte->createTexte($em, $data, $fiction, $item);
+        $texte = $handlerTexte->createTexte($em, $data);
 
         $response = new JsonResponse('Texte sauvegardé', 201);
         $texteUrl = $this->generateUrl(
