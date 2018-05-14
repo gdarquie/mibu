@@ -2,7 +2,6 @@
 
 namespace App\Component\Handler;
 
-use App\Component\IO\FictionIO;
 use App\Entity\Concept\Fiction;
 use Doctrine\ORM\EntityManager;
 

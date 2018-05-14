@@ -2,39 +2,19 @@
 
 namespace App\Component\Handler;
 
-use App\Entity\Concept\Fiction;
 use App\Entity\Element\Personnage;
 use Doctrine\ORM\EntityManager;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class PersonnageHandler
 {
     public function createPersonnage(EntityManager $em, $data)
     {
-        if(!isset($data['titre']) && !isset($data['description'])){
-            throw $this->createNotFoundException(sprintf(
-                'Il manque un champ surnom ou de description'
-            ));
-        }
+        $helper = new HelperHandler($data);
+        $helper->checkElement($data);
+        $fiction = $helper->checkFiction($em, $data);
 
         $titre = $data['titre'];
         $description = $data['description'];
-
-        if(!isset ($data['fiction'])) {
-            throw new BadRequestHttpException(sprintf(
-                'Aucune fiction renseignée!'
-            ));
-        }
-
-        if(!$data['fiction']) {
-            throw new NotFoundHttpException(sprintf(
-                'Aucune fiction avec l\'id "%s" n\'a été trouvé',
-                $data['fiction']
-            ));
-        }
-
-        $fiction = $em->getRepository(Fiction::class)->findOneById($data['fiction']);
 
         $personnage = new Personnage($titre, $description);
         (isset($data['nom'])) ? $personnage->setNom($data['nom']) : $personnage->setNom(null);

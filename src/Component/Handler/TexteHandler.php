@@ -2,12 +2,8 @@
 
 namespace App\Component\Handler;
 
-use App\Entity\Concept\Fiction;
 use App\Entity\Element\Texte;
 use App\Entity\Modele\AbstractItem;
-
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 
 class TexteHandler
@@ -19,20 +15,10 @@ class TexteHandler
      */
     public function createTexte($em, $data)
     {
-        if(!isset ($data['fiction'])) {
-            throw new BadRequestHttpException(sprintf(
-                'Aucune fiction renseignée!'
-            ));
-        }
+        $helper = new HelperHandler($data);
+        $helper->checkElement($data);
+        $fiction = $helper->checkFiction($em, $data);
 
-        if(!$data['fiction']) {
-            throw new NotFoundHttpException(sprintf(
-                'Aucune fiction avec l\'id "%s" n\'a été trouvé',
-                $data['fiction']
-            ));
-        }
-
-        $fiction = $em->getRepository(Fiction::class)->findOneById($data['fiction']);
         $titre = $data['titre'];
         $description = $data['description'];
         $type = $data['type'];
