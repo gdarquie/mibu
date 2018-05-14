@@ -140,4 +140,69 @@ class TexteControllerTest extends ApiTestCase
         echo $response->getBody();
         echo "\n\n";
     }
+
+    public function testPostTexteForPersonnage()
+    {
+        $fiction = $this->createFiction();
+        $partie = $this->createPersonnageFiction($fiction);
+
+        $data = array(
+            'titre' => 'Titre de texte',
+            'description' => 'Un contenu de texte',
+            'type' => 'promesse',
+            'fiction' => $fiction->getId(),
+            'item' => $partie->getId()
+        );
+
+        $response = $this->client->post(ApiTestCase::TEST_PREFIX.'/textes', [
+            'body' => json_encode($data)
+        ]);
+
+        $this->assertEquals(201, $response->getStatusCode());
+        $this->assertTrue($response->hasHeader('Location'));
+
+        $texteUrl = $response->getHeader('Location');
+        $response = $this->client->get($texteUrl[0]);
+
+        $payload = json_decode($response->getBody(true), true);
+        $this->assertArrayHasKey('titre', $payload, "Il n'y a pas de champ titre");
+        $this->assertArrayHasKey('itemId', $payload, "Il n'y a pas de champ item");
+        $this->assertEquals( $data['item'], $payload['itemId'], "L'id item ne correspond pas");
+
+        echo $response->getBody();
+        echo "\n\n";
+    }
+
+    public function testPostTexteForEvenement()
+    {
+        $fiction = $this->createFiction();
+        $partie = $this->createEvenementFiction($fiction);
+
+        $data = array(
+            'titre' => 'Titre de texte',
+            'description' => 'Un contenu de texte',
+            'type' => 'promesse',
+            'fiction' => $fiction->getId(),
+            'item' => $partie->getId()
+        );
+
+        $response = $this->client->post(ApiTestCase::TEST_PREFIX.'/textes', [
+            'body' => json_encode($data)
+        ]);
+
+        $this->assertEquals(201, $response->getStatusCode());
+        $this->assertTrue($response->hasHeader('Location'));
+
+        $texteUrl = $response->getHeader('Location');
+        $response = $this->client->get($texteUrl[0]);
+
+        $payload = json_decode($response->getBody(true), true);
+        $this->assertArrayHasKey('titre', $payload, "Il n'y a pas de champ titre");
+        $this->assertArrayHasKey('itemId', $payload, "Il n'y a pas de champ item");
+        $this->assertEquals( $data['item'], $payload['itemId'], "L'id item ne correspond pas");
+
+        echo $response->getBody();
+        echo "\n\n";
+    }
+
 }
