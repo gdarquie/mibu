@@ -84,7 +84,8 @@ class TexteControllerTest extends ApiTestCase
         $data = array(
             'titre' => 'Titre de texte modifié',
             'description' => 'Un contenu de texte',
-            'type' => 'promesse'
+            'type' => 'promesse',
+            'fiction' => $fiction->getId()
         );
 
         $response = $this->client->put(ApiTestCase::TEST_PREFIX.'/textes/'.$texte->getId(), [

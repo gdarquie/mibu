@@ -60,7 +60,8 @@ class PersonnageControllerTest extends ApiTestCase
             "titre" => "Okita",
             "description" => "Du Shinsen Gumi",
             "annee_naissance" => 0,
-            "annee_mort" => 120
+            "annee_mort" => 120,
+            "fiction" => $fiction->getId()
         );
 
         $response = $this->client->put(ApiTestCase::TEST_PREFIX.'/personnages/'.$personnage->getId(), [

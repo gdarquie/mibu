@@ -14,7 +14,7 @@ class TexteHydrator extends ElementHydrator
         if($texte->getItem()) {
             $texteIO->setItemId($texte->getItem()->getId());
         }
-        
+
         $texteIO->setType($texte->getType());
 
         return $texteIO;
