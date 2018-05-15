@@ -12,6 +12,8 @@ use App\Component\Serializer\CustomSerializer;
 use App\Entity\Concept\Fiction;
 use App\Entity\Modele\AbstractItem;
 use App\Form\FictionType;
+use Pagerfanta\Adapter\ArrayAdapter;
+use Pagerfanta\Pagerfanta;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,14 +26,22 @@ class FictionController extends FOSRestController
     /**
      * @Rest\Get("fictions", name="get_fictions")
      */
-    public function getFictions()
+    public function getFictions(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
         $fictionHydrator = new FictionHydrator();
+
         $fictions = $em->getRepository(Fiction::class)->findAll();
         $fictionsIO = [];
 
-        foreach ($fictions as $fiction){
+        $page = $request->query->get('page', 1);
+        $maxPerPage = 10;
+        $adapter = new ArrayAdapter($fictions);
+        $pagerfanta = new Pagerfanta($adapter);
+        $pagerfanta->setMaxPerPage($maxPerPage); // 10 by default
+        $pagerfanta->setCurrentPage($page);
+
+        foreach ($pagerfanta as $fiction){
             $fictionIO = $fictionHydrator->hydrateFiction($em, $fiction);
 
             array_push($fictionsIO, $fictionIO);
