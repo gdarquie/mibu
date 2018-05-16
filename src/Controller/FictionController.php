@@ -26,7 +26,7 @@ class FictionController extends FOSRestController
     /**
      * @Rest\Get("fictions", name="get_fictions")
      */
-    public function getFictions(Request $request)
+    public function getFictions(Request $request,$page = 1, $maxPerPage = 10)
     {
         $em = $this->getDoctrine()->getManager();
         $fictionHydrator = new FictionHydrator();
@@ -34,11 +34,9 @@ class FictionController extends FOSRestController
         $fictions = $em->getRepository(Fiction::class)->findAll();
         $fictionsIO = [];
 
-        $page = $request->query->get('page', 1);
-        $maxPerPage = 10;
         $adapter = new ArrayAdapter($fictions);
         $pagerfanta = new Pagerfanta($adapter);
-        $pagerfanta->setMaxPerPage($maxPerPage); // 10 by default
+        $pagerfanta->setMaxPerPage($maxPerPage);
         $pagerfanta->setCurrentPage($page);
 
         foreach ($pagerfanta as $fiction){
@@ -46,10 +44,15 @@ class FictionController extends FOSRestController
 
             array_push($fictionsIO, $fictionIO);
         }
+
+        $total = $pagerfanta->getNbResults();
+        $count = count($fictionsIO);
+
         $serializer = new CustomSerializer();
         $fictionsIO = $serializer->serialize($fictionsIO);
 
         $response = new Response($fictionsIO);
+
         $response->headers->set('Content-Type', 'application/json');
 
         return $response;

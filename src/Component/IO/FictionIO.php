@@ -7,6 +7,8 @@ class FictionIO extends AbstractConceptIO
     private $textes;
     private $personnages;
     private $evenements;
+    private $count;
+    private $total;
 
     /**
      * @return mixed
