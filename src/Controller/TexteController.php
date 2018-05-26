@@ -52,8 +52,6 @@ class TexteController extends FOSRestController
     public function getTextes($fictionId, $page = 1, $maxPerPage = 10)
     {
         $em = $this->getDoctrine()->getManager();
-        $texteHydrator = new TexteHydrator();
-
         $textes = $em->getRepository(Fiction::class)->getTextesFiction($fictionId);
 
         if (!$textes) {
@@ -63,8 +61,8 @@ class TexteController extends FOSRestController
             ));
         }
 
+        $texteHydrator = new TexteHydrator();
         $textesIO = [];
-
         $adapter = new ArrayAdapter($textes);
         $pagerfanta = new Pagerfanta($adapter);
         $pagerfanta->setMaxPerPage($maxPerPage);
@@ -100,12 +98,7 @@ class TexteController extends FOSRestController
         $handlerTexte = new TexteHandler();
         $texte = $handlerTexte->createTexte($em, $data);
 
-        $texteHydrator = new TexteHydrator();
-        $texteIO = $texteHydrator->hydrateTexte($texte);
-        $serializer = new CustomSerializer();
-        $texteIO = $serializer->serialize($texteIO);
-
-        $response = new Response($texteIO, 201);
+        $response = $this->getTexte($texte->getId());
         $texteUrl = $this->generateUrl(
             'get_texte', array(
             'texteId' => $texte->getId()
@@ -178,28 +171,6 @@ class TexteController extends FOSRestController
         $em->remove($texte);
         $em->flush();
 
-        $em = $this->getDoctrine()->getManager();
-        $textes = $em->getRepository(Fiction::class)->getTextesFiction($texte->getFiction()->getId());
-
-        $textesIO = [];
-
-        $texteHydrator = new TexteHydrator();
-
-        $adapter = new ArrayAdapter($textes);
-        $pagerfanta = new Pagerfanta($adapter);
-
-        foreach ($pagerfanta as $texte){
-            $texteIO = $texteHydrator->hydrateTexte($texte);
-
-            array_push($textesIO, $texteIO);
-        }
-
-        $serializer = new CustomSerializer();
-        $textesIO = $serializer->serialize($textesIO);
-
-        $response = new Response($textesIO);
-        $response->headers->set('Content-Type', 'application/json');
-        return $response;
-//        return new JsonResponse(['Suppression du texte '.$texteId.'.'], 202);
+        return $this->getTextes($texte->getFiction()->getId());
     }
 }

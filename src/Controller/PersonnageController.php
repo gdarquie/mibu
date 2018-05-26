@@ -52,19 +52,17 @@ class PersonnageController extends FOSRestController
     public function getPersonnages($fictionId, $page = 1, $maxPerPage = 10)
     {
         $em = $this->getDoctrine()->getManager();
-        $personnageHydrator = new PersonnageHydrator();
-
         $personnages = $em->getRepository(Fiction::class)->getPersonnagesFiction($fictionId);
 
         if (!$personnages) {
             throw $this->createNotFoundException(sprintf(
-                'La fiction \'id "%s" n\'a été trouvée',
+                'Aucun personnage n\'a été trouvé pour la fiction "%s"',
                 $fictionId
             ));
         }
 
+        $personnageHydrator = new PersonnageHydrator();
         $personnagesIO = [];
-
         $adapter = new ArrayAdapter($personnages);
         $pagerfanta = new Pagerfanta($adapter);
         $pagerfanta->setMaxPerPage($maxPerPage);
@@ -75,9 +73,6 @@ class PersonnageController extends FOSRestController
 
             array_push($personnagesIO, $personnageIO);
         }
-
-        $total = $pagerfanta->getNbResults();
-        $count = count($personnagesIO);
 
         $serializer = new CustomSerializer();
         $personnagesIO = $serializer->serialize($personnagesIO);
@@ -101,7 +96,7 @@ class PersonnageController extends FOSRestController
         $handlerPersonnage = new PersonnageHandler();
         $personnage = $handlerPersonnage->createPersonnage($em, $data);
 
-        $response = new JsonResponse('Personnage sauvegardé', 201);
+        $response = $this->getPersonnage($personnage->getId());
 
         $personnageUrl = $this->generateUrl(
             'get_personnage', array(
@@ -175,6 +170,6 @@ class PersonnageController extends FOSRestController
         $em->remove($personnage);
         $em->flush();
 
-        return new JsonResponse('Suppression du personnage '.$personnageId.'.', 202);
+        return $this->getPersonnages($personnage->getFiction()->getId());
     }
 }
