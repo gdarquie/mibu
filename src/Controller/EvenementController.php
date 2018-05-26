@@ -8,6 +8,8 @@ use App\Component\Serializer\CustomSerializer;
 use App\Entity\Concept\Fiction;
 use App\Entity\Element\Evenement;
 use App\Form\EvenementType;
+use Pagerfanta\Adapter\ArrayAdapter;
+use Pagerfanta\Pagerfanta;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\Controller\Annotations as Rest;
@@ -42,6 +44,50 @@ class EvenementController extends FOSRestController
 
         $response = new Response($evenementIO);
         $response->headers->set('Content-Type', 'application/json', 201);
+
+        return $response;
+    }
+
+
+    /**
+     * @Rest\Get("evenements/fiction/{fictionId}", name="get_evenements")
+     */
+    public function getEvenements($fictionId, $page = 1, $maxPerPage = 10)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $evenementHydrator = new EvenementHydrator();
+
+        $evenements = $em->getRepository(Fiction::class)->getEvenementsFiction($fictionId);
+
+        if (!$evenements) {
+            throw $this->createNotFoundException(sprintf(
+                'Il n\'y a pas d\'èvenements pour la fiction dont l\'id est "%s" ',
+                $fictionId
+            ));
+        }
+
+        $evenementsIO = [];
+
+        $adapter = new ArrayAdapter($evenements);
+        $pagerfanta = new Pagerfanta($adapter);
+        $pagerfanta->setMaxPerPage($maxPerPage);
+        $pagerfanta->setCurrentPage($page);
+
+        foreach ($pagerfanta as $evenement){
+            $evenementIO = $evenementHydrator->hydrateEvenement($evenement);
+
+            array_push($evenementsIO, $evenementIO);
+        }
+
+        $total = $pagerfanta->getNbResults();
+        $count = count($evenementsIO);
+
+        $serializer = new CustomSerializer();
+        $evenementsIO = $serializer->serialize($evenementsIO);
+
+        $response = new Response($evenementsIO);
+
+        $response->headers->set('Content-Type', 'application/json');
 
         return $response;
     }

@@ -24,17 +24,17 @@ class FictionHydrator
         $fictionIO->setDateCreation($fiction->getDateCreation());
         $fictionIO->setDateModification($fiction->getDateModification());
 
-        if($textes){
-            $fictionIO->setTextes($textes);
-        }
-
-        if($personnages){
-            $fictionIO->setPersonnages($personnages);
-        }
-
-        if($evenements){
-            $fictionIO->setEvenements($evenements);
-        }
+//        if($textes){
+//            $fictionIO->setTextes($textes);
+//        }
+//
+//        if($personnages){
+//            $fictionIO->setPersonnages($personnages);
+//        }
+//
+//        if($evenements){
+//            $fictionIO->setEvenements($evenements);
+//        }
 
         return $fictionIO;
     }

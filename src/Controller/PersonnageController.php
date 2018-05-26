@@ -8,6 +8,8 @@ use App\Component\Serializer\CustomSerializer;
 use App\Entity\Concept\Fiction;
 use App\Entity\Element\Personnage;
 use App\Form\PersonnageType;
+use Pagerfanta\Adapter\ArrayAdapter;
+use Pagerfanta\Pagerfanta;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\Controller\Annotations as Rest;
@@ -40,6 +42,49 @@ class PersonnageController extends FOSRestController
 
         $response = new Response($personnageIO);
         $response->headers->set('Content-Type', 'application/json', 201);
+
+        return $response;
+    }
+
+    /**
+     * @Rest\Get("personnages/fiction/{fictionId}", name="get_personnages")
+     */
+    public function getPersonnages($fictionId, $page = 1, $maxPerPage = 10)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $personnageHydrator = new PersonnageHydrator();
+
+        $personnages = $em->getRepository(Fiction::class)->getPersonnagesFiction($fictionId);
+
+        if (!$personnages) {
+            throw $this->createNotFoundException(sprintf(
+                'La fiction \'id "%s" n\'a été trouvée',
+                $fictionId
+            ));
+        }
+
+        $personnagesIO = [];
+
+        $adapter = new ArrayAdapter($personnages);
+        $pagerfanta = new Pagerfanta($adapter);
+        $pagerfanta->setMaxPerPage($maxPerPage);
+        $pagerfanta->setCurrentPage($page);
+
+        foreach ($pagerfanta as $personnage){
+            $personnageIO = $personnageHydrator->hydratePersonnage($personnage);
+
+            array_push($personnagesIO, $personnageIO);
+        }
+
+        $total = $pagerfanta->getNbResults();
+        $count = count($personnagesIO);
+
+        $serializer = new CustomSerializer();
+        $personnagesIO = $serializer->serialize($personnagesIO);
+
+        $response = new Response($personnagesIO);
+
+        $response->headers->set('Content-Type', 'application/json');
 
         return $response;
     }

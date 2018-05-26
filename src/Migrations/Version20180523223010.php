@@ -1,4 +1,4 @@
-<?php declare(strict_types = 1);
+<?php declare(strict_types=1);
 
 namespace DoctrineMigrations;
 
@@ -8,9 +8,9 @@ use Doctrine\DBAL\Schema\Schema;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-class Version20180513102118 extends AbstractMigration
+final class Version20180523223010 extends AbstractMigration
 {
-    public function up(Schema $schema)
+    public function up(Schema $schema) : void
     {
         // this up() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'postgresql', 'Migration can only be executed safely on \'postgresql\'.');
@@ -19,15 +19,16 @@ class Version20180513102118 extends AbstractMigration
         $this->addSql('CREATE SEQUENCE texte_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE SEQUENCE fiction_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE SEQUENCE ext_log_entries_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
-        $this->addSql('CREATE TABLE item (id INT NOT NULL, fiction_id INT DEFAULT NULL, date_creation TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, date_modification TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, uuid UUID NOT NULL, titre VARCHAR(255) NOT NULL, description TEXT NOT NULL, discr VARCHAR(255) NOT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE TABLE item (id INT NOT NULL, fiction_id INT NOT NULL, date_creation TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, date_modification TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, uuid UUID NOT NULL, titre VARCHAR(255) NOT NULL, description TEXT NOT NULL, discr VARCHAR(255) NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX IDX_1F1B251EFF905AC2 ON item (fiction_id)');
         $this->addSql('CREATE TABLE partie (id INT NOT NULL, tree_root INT DEFAULT NULL, parent_id INT DEFAULT NULL, lft INT NOT NULL, rgt INT NOT NULL, lvl INT NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX IDX_59B1F3DA977936C ON partie (tree_root)');
         $this->addSql('CREATE INDEX IDX_59B1F3D727ACA70 ON partie (parent_id)');
         $this->addSql('CREATE TABLE evenement (id INT NOT NULL, annee_debut INT NOT NULL, annee_fin INT NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE TABLE personnage (id INT NOT NULL, annee_naissance INT DEFAULT NULL, annee_mort INT DEFAULT NULL, nom VARCHAR(255) DEFAULT NULL, prenom VARCHAR(255) DEFAULT NULL, genre VARCHAR(255) DEFAULT NULL, PRIMARY KEY(id))');
-        $this->addSql('CREATE TABLE texte (id INT NOT NULL, fiction_id INT DEFAULT NULL, type VARCHAR(255) NOT NULL, date_creation TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, date_modification TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, uuid UUID NOT NULL, titre VARCHAR(255) NOT NULL, description TEXT NOT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE TABLE texte (id INT NOT NULL, fiction_id INT NOT NULL, item_id INT DEFAULT NULL, type VARCHAR(255) NOT NULL, date_creation TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, date_modification TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, uuid UUID NOT NULL, titre VARCHAR(255) NOT NULL, description TEXT NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX IDX_EAE1A6EEFF905AC2 ON texte (fiction_id)');
+        $this->addSql('CREATE INDEX IDX_EAE1A6EE126F525E ON texte (item_id)');
         $this->addSql('CREATE TABLE fiction (id INT NOT NULL, date_creation TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, date_modification TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, uuid UUID NOT NULL, titre VARCHAR(255) NOT NULL, description TEXT NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE TABLE ext_translations (id SERIAL NOT NULL, locale VARCHAR(8) NOT NULL, object_class VARCHAR(255) NOT NULL, field VARCHAR(32) NOT NULL, foreign_key VARCHAR(64) NOT NULL, content TEXT DEFAULT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX translations_lookup_idx ON ext_translations (locale, object_class, foreign_key)');
@@ -45,9 +46,10 @@ class Version20180513102118 extends AbstractMigration
         $this->addSql('ALTER TABLE evenement ADD CONSTRAINT FK_B26681EBF396750 FOREIGN KEY (id) REFERENCES item (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE personnage ADD CONSTRAINT FK_6AEA486DBF396750 FOREIGN KEY (id) REFERENCES item (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE texte ADD CONSTRAINT FK_EAE1A6EEFF905AC2 FOREIGN KEY (fiction_id) REFERENCES fiction (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
+        $this->addSql('ALTER TABLE texte ADD CONSTRAINT FK_EAE1A6EE126F525E FOREIGN KEY (item_id) REFERENCES item (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE');
     }
 
-    public function down(Schema $schema)
+    public function down(Schema $schema) : void
     {
         // this down() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'postgresql', 'Migration can only be executed safely on \'postgresql\'.');
@@ -56,6 +58,7 @@ class Version20180513102118 extends AbstractMigration
         $this->addSql('ALTER TABLE partie DROP CONSTRAINT FK_59B1F3DBF396750');
         $this->addSql('ALTER TABLE evenement DROP CONSTRAINT FK_B26681EBF396750');
         $this->addSql('ALTER TABLE personnage DROP CONSTRAINT FK_6AEA486DBF396750');
+        $this->addSql('ALTER TABLE texte DROP CONSTRAINT FK_EAE1A6EE126F525E');
         $this->addSql('ALTER TABLE partie DROP CONSTRAINT FK_59B1F3DA977936C');
         $this->addSql('ALTER TABLE partie DROP CONSTRAINT FK_59B1F3D727ACA70');
         $this->addSql('ALTER TABLE item DROP CONSTRAINT FK_1F1B251EFF905AC2');

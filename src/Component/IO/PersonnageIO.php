@@ -4,10 +4,29 @@ namespace App\Component\IO;
 
 class PersonnageIO extends ElementIO
 {
+    /**
+     * @var string
+     */
     private $prenom;
+
+    /**
+     * @var string
+     */
     private $nom;
+
+    /**
+     * @var string
+     */
     private $genre;
+
+    /**
+     * @var int
+     */
     private $annee_naissance;
+
+    /**
+     * @var int
+     */
     private $annee_mort;
 
     /**
