@@ -16,9 +16,11 @@ class EvenementHandler
         $evenement = new Evenement();
         $evenement->setTitre($data['titre']);
         $evenement->setDescription($data['description']);
-        $evenement->setAnneeDebut($data['annee_debut']);
-        $evenement->setAnneeFin($data['annee_fin']);
+        (isset($data['annee_debut'])) ? $evenement->setAnneeDebut($data['annee_debut']) : $evenement->setAnneeDebut(null);
+        (isset($data['annee_fin'])) ? $evenement->setAnneeFin($data['annee_fin']) : $evenement->setAnneeFin(null);
         $evenement->setFiction($fiction);
+
+
 
         $em->persist($evenement);
         $em->flush();

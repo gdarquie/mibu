@@ -12,12 +12,12 @@ use Doctrine\ORM\Mapping as ORM;
 class Evenement extends AbstractItem
 {
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", nullable=true)
      */
     private $annee_debut;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", nullable=true)
      */
     private $annee_fin;
 
