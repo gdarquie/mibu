@@ -18,9 +18,8 @@ class EvenementHandler
         $evenement->setDescription($data['description']);
         (isset($data['annee_debut'])) ? $evenement->setAnneeDebut($data['annee_debut']) : $evenement->setAnneeDebut(null);
         (isset($data['annee_fin'])) ? $evenement->setAnneeFin($data['annee_fin']) : $evenement->setAnneeFin(null);
+
         $evenement->setFiction($fiction);
-
-
 
         $em->persist($evenement);
         $em->flush();
@@ -32,7 +31,7 @@ class EvenementHandler
     {
         foreach ($evenements as $data)
         {
-            $this->createEvenement($em, $data, $fiction);
+            $this->createEvenement($em, $data);
         }
 
         return true;

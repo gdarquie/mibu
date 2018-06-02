@@ -100,22 +100,23 @@ class EvenementController extends FOSRestController
      */
     public function postEvenement(Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
-
         $data = json_decode($request->getContent(), true);
+
+        $em = $this->getDoctrine()->getManager();
 
         $handlerEvenement = new EvenementHandler();
         $evenement = $handlerEvenement->createEvenement($em, $data);
 
-        $response = new JsonResponse('Evènement sauvegardé', 201);
+        $response = $this->getEvenement($evenement->getId());
+
         $evenementUrl = $this->generateUrl(
             'get_evenement', array(
             'evenementId' => $evenement->getId()
         ));
 
         $response->headers->set('Location', $evenementUrl);
-        return $response;
 
+        return $response;
     }
 
     /**
@@ -178,7 +179,30 @@ class EvenementController extends FOSRestController
         $em->remove($evenement);
         $em->flush();
 
-        return new JsonResponse('Suppression de l\'évènement ' . $evenementId . '.', 202);
+        return $this->getEvenements($evenement->getFiction()->getId());
+//        return new JsonResponse('Suppression de l\'évènement ' . $evenementId . '.', 202);
+    }
+
+    /**
+     * @Rest\Delete("/personnages/{personnageId}",name="delete_personnage")
+     */
+    public function deletePersonnage($personnageId)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $personnage = $this->getDoctrine()->getRepository(Personnage::class)->findOneById($personnageId);
+
+        if (!$personnage) {
+            throw $this->createNotFoundException(sprintf(
+                'Pas de personnage trouvé avec l\'id "%s"',
+                $personnageId
+            ));
+        }
+
+        $em->remove($personnage);
+        $em->flush();
+
+        return $this->getPersonnages($personnage->getFiction()->getId());
     }
 
 }
