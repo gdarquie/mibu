@@ -22,7 +22,7 @@ class PersonnageControllerTest extends ApiTestCase
             'body' => json_encode($data)
         ]);
 
-        $this->assertEquals(201, $response->getStatusCode());
+        $this->assertEquals(200, $response->getStatusCode());
         $this->assertTrue($response->hasHeader('Location'));
 
         $personnageUrl = $response->getHeader('Location');
@@ -82,8 +82,16 @@ class PersonnageControllerTest extends ApiTestCase
     {
         $fiction = $this->createFiction();
         $personnage = $this->createPersonnageFiction($fiction);
+        $personnage2 = $this->createPersonnageFiction($fiction);
+
+        $response = $this->client->get(ApiTestCase::TEST_PREFIX.'/personnages/'.$personnage->getId());
+
+        $payload = json_decode($response->getBody(true), true);
+        $this->assertArrayHasKey('titre', $payload, "Il n'y a pas de champ titre");
+        $this->assertEquals($personnage->getId(), $payload['id']);
+        $this->assertEquals(200, $response->getStatusCode());
 
         $response = $this->client->delete(ApiTestCase::TEST_PREFIX.'/personnages/'.$personnage->getId());
-        $this->assertEquals(202, $response->getStatusCode());
+        $this->assertEquals(200, $response->getStatusCode());
     }
 }

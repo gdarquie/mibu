@@ -23,7 +23,7 @@ class EvenementControllerTest extends ApiTestCase
         ]);
 
 
-        $this->assertEquals(201, $response->getStatusCode());
+        $this->assertEquals(200, $response->getStatusCode());
         $this->assertTrue($response->hasHeader('Location'));
 
         $evenementUrl = $response->getHeader('Location');
@@ -82,9 +82,10 @@ class EvenementControllerTest extends ApiTestCase
     {
         $fiction = $this->createFiction();
         $evenement = $this->createEvenementFiction($fiction);
+        $evenement2 = $this->createEvenementFiction($fiction);
 
         $response = $this->client->delete(ApiTestCase::TEST_PREFIX.'/evenements/'.$evenement->getId());
-        $this->assertEquals(202, $response->getStatusCode());
+        $this->assertEquals(200, $response->getStatusCode());
     }
 
 }

@@ -152,7 +152,7 @@ class PersonnageController extends FOSRestController
     }
 
     /**
-     * @Rest\Delete("/personnages/{personnageId}",name="delete_personnage")
+     * @Rest\Delete("/personnages/{personnageId}", name="delete_personnage")
      */
     public function deletePersonnage($personnageId)
     {
@@ -167,9 +167,11 @@ class PersonnageController extends FOSRestController
             ));
         }
 
+        $fictionId = $personnage->getFiction()->getId();
+
         $em->remove($personnage);
         $em->flush();
 
-        return $this->getPersonnages($personnage->getFiction()->getId());
+        return $this->getPersonnages($fictionId);
     }
 }

@@ -22,7 +22,7 @@ class TexteControllerTest extends ApiTestCase
             'body' => json_encode($data)
         ]);
 
-        $this->assertEquals(201, $response->getStatusCode());
+        $this->assertEquals(200, $response->getStatusCode());
         $this->assertTrue($response->hasHeader('Location'));
 
         $texteUrl = $response->getHeader('Location');
@@ -105,9 +105,10 @@ class TexteControllerTest extends ApiTestCase
     {
         $fiction = $this->createFiction();
         $texte = $this->createTexteFiction($fiction);
+        $texte2 = $this->createTexteFiction($fiction);
 
         $response = $this->client->delete(ApiTestCase::TEST_PREFIX.'/textes/'.$texte->getId());
-        $this->assertEquals(202, $response->getStatusCode());
+        $this->assertEquals(200, $response->getStatusCode());
     }
 
     public function testPostTexteForPartie()
@@ -127,7 +128,7 @@ class TexteControllerTest extends ApiTestCase
             'body' => json_encode($data)
         ]);
 
-        $this->assertEquals(201, $response->getStatusCode());
+        $this->assertEquals(200, $response->getStatusCode());
         $this->assertTrue($response->hasHeader('Location'));
 
         $texteUrl = $response->getHeader('Location');
@@ -159,7 +160,7 @@ class TexteControllerTest extends ApiTestCase
             'body' => json_encode($data)
         ]);
 
-        $this->assertEquals(201, $response->getStatusCode());
+        $this->assertEquals(200, $response->getStatusCode());
         $this->assertTrue($response->hasHeader('Location'));
 
         $texteUrl = $response->getHeader('Location');
@@ -191,7 +192,7 @@ class TexteControllerTest extends ApiTestCase
             'body' => json_encode($data)
         ]);
 
-        $this->assertEquals(201, $response->getStatusCode());
+        $this->assertEquals(200, $response->getStatusCode());
         $this->assertTrue($response->hasHeader('Location'));
 
         $texteUrl = $response->getHeader('Location');
