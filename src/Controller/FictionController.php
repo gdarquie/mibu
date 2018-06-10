@@ -101,41 +101,58 @@ class FictionController extends FOSRestController
 
             $em = $this->getDoctrine()->getManager();
 
+            $data = json_decode($request->getContent(), true);
             $fictionHandler  = new FictionHandler();
             $fiction = $fictionHandler->createFiction($em, $data);
-
-            $fictionUrl = $this->generateUrl(
-                'get_fiction', array(
-                'id' => $fiction->getId()
-            ));
 
             if(isset($data['textes'])){
 
                 if($data['textes'] !== null){
-                    $data['textes'][0]['fiction'] = $fiction->getId();
+                    for ($i = 0; $i < count($data['textes']); $i++) {
+                        $data['textes'][0]['fiction'] =  $fiction->getId();
+                    }
+
                     $texteHandler = new TexteHandler();
                     $texteHandler->createTextes($em, $data['textes']);
+
                 }
             }
 
             if(isset($data['evenements'])){
+
                 if($data['evenements'] !== null){
+                    for ($i = 0; $i < count($data['evenements']); $i++) {
+                        $data['evenements'][$i]['fiction'] =  $fiction->getId();
+                    }
+
                     $evenementHandler = new EvenementHandler();
-                    $evenementHandler->createEvenements($em, $data['evenements'], $fiction);
+                    $evenementHandler->createEvenements($em, $data['evenements']);
                 }
             }
 
             if(isset($data['personnages'])){
+
                 if($data['personnages'] !== null){
+                    for ($i = 0; $i < count($data['personnages']); $i++) {
+                        $data['personnages'][$i]['fiction'] =  $fiction->getId();
+                    }
+                    $data['personnages'][0]['fiction'] =  $fiction->getId();
                     $personnageHandler = new PersonnageHandler();
                     $personnageHandler->createPersonnages($em, $data['personnages'], $fiction);
                 }
             }
 
-            $response = new JsonResponse('Fiction sauvegardée', 201);
+            $response = $this->getFiction($fiction->getId());
+            $fictionUrl = $this->generateUrl(
+                'get_fiction', array(
+                'id' => $fiction->getId()
+            ));
+
+            $response->headers->set('Content-Type', 'application/json');
             $response->headers->set('Location', $fictionUrl);
 
             return $response;
+
         }
 
         return new JsonResponse("Echec de l'insertion", 500);

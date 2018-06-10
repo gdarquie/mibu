@@ -15,7 +15,7 @@ abstract class AbstractElement extends AbstractConcept
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Concept\Fiction")
-     * @ORM\JoinColumn(name="fiction_id", referencedColumnName="id", nullable=false)
+     * @ORM\JoinColumn(name="fiction_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */
     private $fiction;
 
