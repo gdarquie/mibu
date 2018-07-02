@@ -186,7 +186,18 @@ class FictionController extends FOSRestController
             $em->persist($fiction);
             $em->flush();
 
-            return new JsonResponse("Mise à jour de la fiction", 202);
+            $response = $this->getFiction($fiction->getId());
+
+            $fictionUrl = $this->generateUrl(
+                'get_fiction', array(
+                'id' => $fiction->getId()
+            ));
+
+            $response->headers->set('Content-Type', 'application/json');
+            $response->headers->set('Location', $fictionUrl);
+
+            return $response;
+
         }
 
         return new JsonResponse("Echec de la mise à jour");
