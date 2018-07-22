@@ -46,11 +46,12 @@ class Personnage extends AbstractItem
      */
     private $genre;
 
-    public function __construct($titre, $description)
+    public function __construct($titre, $description, $item = null)
     {
         parent::__construct();
         $this->setTitre($titre);
         $this->setDescription($description);
+        $this->setItem($item);
     }
 
     /**
@@ -131,6 +132,22 @@ class Personnage extends AbstractItem
     public function setGenre($genre)
     {
         $this->genre = $genre;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getItem()
+    {
+        return $this->item;
+    }
+
+    /**
+     * @param mixed $item
+     */
+    public function setItem($item)
+    {
+        $this->item = $item;
     }
 
 }

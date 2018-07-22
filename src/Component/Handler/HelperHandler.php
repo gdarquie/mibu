@@ -62,9 +62,11 @@ class HelperHandler
     {
         $element->setTitre($data['titre']);
         $element->setDescription($data['description']);
-        $element->setType($data['type']);
         $element->setFiction($data['fiction']);
         $element->setItem($data['itemId']);
+
+        (isset($data['type'])) ? $element->setType($data['type']) : null;
+
 
         return $element;
     }

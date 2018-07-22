@@ -24,7 +24,6 @@ class PersonnageHandler
     {
         $data = $this->getData($em, $data);
         $personnage = $this->setData($data);
-        $personnage = $this->setPersonnageData($personnage, $data);
 
         $em->persist($personnage);
         $em->flush();
@@ -45,6 +44,23 @@ class PersonnageHandler
         }
 
         return true;
+    }
+
+    /**
+     * @param $em
+     * @param $personnage
+     * @param $data
+     * @return Personnage|mixed
+     */
+    public function updatePersonnage($em, $personnage, $data)
+    {
+        $data = $this->getData($em, $data);
+        $personnage = $this->setData($data, $personnage);
+
+        $em->persist($personnage);
+        $em->flush();
+
+        return $personnage;
     }
 
     /**

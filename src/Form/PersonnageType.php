@@ -2,7 +2,7 @@
 
 namespace App\Form;
 
-use App\Entity\Element\Personnage;
+use App\Component\IO\PersonnageIO;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -14,7 +14,7 @@ class PersonnageType extends AbstractType
         $builder
             ->add('titre')
             ->add('description')
-            ->add('fiction')
+            ->add('fictionId')
             ;
     }
 
@@ -24,7 +24,7 @@ class PersonnageType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => Personnage::class
+            'data_class' => PersonnageIO::class
         ));
     }
 
