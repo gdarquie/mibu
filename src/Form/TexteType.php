@@ -2,7 +2,7 @@
 
 namespace App\Form;
 
-use App\Entity\Element\Texte;
+use App\Component\IO\TexteIO;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -15,7 +15,7 @@ class TexteType extends AbstractType
             ->add('titre')
             ->add('description')
             ->add('type')
-            ->add('fiction')
+            ->add('fictionId')
             ;
     }
 
@@ -25,7 +25,7 @@ class TexteType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => Texte::class
+            'data_class' => TexteIO::class
         ));
     }
 

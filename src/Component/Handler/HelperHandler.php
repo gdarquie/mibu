@@ -21,18 +21,18 @@ class HelperHandler
     public function checkFiction($em, $data)
     {
 
-        if(!isset ($data['fiction'])) {
+        if(!isset ($data['fictionId'])) {
             throw new BadRequestHttpException(sprintf(
                 'Aucune fiction renseignée!'
             ));
         }
 
-        $fiction = $em->getRepository(Fiction::class)->findOneById($data['fiction']);
+        $fiction = $em->getRepository(Fiction::class)->findOneById($data['fictionId']);
 
         if(!$fiction) {
             throw new NotFoundHttpException(sprintf(
                 'Aucune fiction avec l\'id "%s" n\'a été trouvé',
-                $data['fiction']
+                $data['fictionId']
             ));
         }
 

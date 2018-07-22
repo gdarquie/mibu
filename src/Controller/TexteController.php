@@ -2,13 +2,13 @@
 
 namespace App\Controller;
 
+use App\Component\Fetcher\TexteFetcher;
 use App\Component\Handler\TexteHandler;
-use App\Entity\Concept\Fiction;
+use App\Component\IO\TexteIO;
 use App\Entity\Element\Texte;
 use App\Component\Hydrator\TexteHydrator;
 use App\Component\Serializer\CustomSerializer;
 use App\Form\TexteType;
-use Doctrine\ORM\EntityManager;
 use Pagerfanta\Adapter\ArrayAdapter;
 use Pagerfanta\Pagerfanta;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -26,17 +26,16 @@ class TexteController extends FOSRestController
     public function getTexte($texteId)
     {
         $em = $this->getDoctrine()->getManager();
-        $texte = $em->getRepository(Texte::class)->findOneById($texteId);
 
-        if (!$texte) {
-            throw $this->createNotFoundException(sprintf(
-                'Aucun texte avec l\'id "%s" n\'a été trouvé',
-                $texteId
-            ));
-        }
+        //fetch
+        $texteFetcher = new TexteFetcher();
+        $texte = $texteFetcher->fetchTexte($em, $texteId);
 
+        //hydrate
         $texteHydrator = new TexteHydrator();
         $texteIO = $texteHydrator->hydrateTexte($texte);
+
+        //serializer
         $serializer = new CustomSerializer();
         $texteIO = $serializer->serialize($texteIO);
 
@@ -52,15 +51,12 @@ class TexteController extends FOSRestController
     public function getTextes($fictionId, $page = 1, $maxPerPage = 10)
     {
         $em = $this->getDoctrine()->getManager();
-        $textes = $em->getRepository(Fiction::class)->getTextesFiction($fictionId);
 
-        if (!$textes) {
-            throw $this->createNotFoundException(sprintf(
-                'Aucun texte avec l\'id "%s" n\'a été trouvé pour la fiction',
-                $fictionId
-            ));
-        }
+        //fetcher
+        $texteFetcher = new TexteFetcher();
+        $textes = $texteFetcher->fetchTextes($em, $fictionId);
 
+        //hydrator
         $texteHydrator = new TexteHydrator();
         $textesIO = [];
         $adapter = new ArrayAdapter($textes);
@@ -77,6 +73,7 @@ class TexteController extends FOSRestController
         $total = $pagerfanta->getNbResults();
         $count = count($textesIO);
 
+        //serializer
         $serializer = new CustomSerializer();
         $textesIO = $serializer->serialize($textesIO);
 
@@ -117,23 +114,22 @@ class TexteController extends FOSRestController
     {
         $em = $this->getDoctrine()->getManager();
 
-        $texte = $this->getDoctrine()
-            ->getRepository(Texte::class)
-            ->findOneById($texteId);
+        $texteFetcher = new TexteFetcher();
+        $texte = $texteFetcher->fetchTexte($em, $texteId);
 
-        if (!$texte) {
-            throw $this->createNotFoundException(sprintf(
-                'Pas de texte trouvé avec l\'id "%s"',
-                $texteId
-            ));
-        }
+        $texteHydrator = new TexteHydrator();
+        $texteIO = $texteHydrator->hydrateTexte($texte);
 
         $data = json_decode($request->getContent(), true);
 
-        $form = $this->createForm(TexteType::class, $texte);
+        $form = $this->createForm(TexteType::class, $texteIO);
         $form->submit($data);
 
-        if($form->isSubmitted()){
+        if($form->isSubmitted()){ //why not valid?
+
+            $handlerTexte = new TexteHandler();
+            $texte = $handlerTexte->updateTexte($em, $texte, $data);
+
             $em->persist($texte);
             $em->flush();
 
@@ -159,14 +155,8 @@ class TexteController extends FOSRestController
     {
         $em = $this->getDoctrine()->getManager();
 
-        $texte = $this->getDoctrine()->getRepository(Texte::class)->findOneById($texteId);
-
-        if (!$texte) {
-            throw $this->createNotFoundException(sprintf(
-                'Pas de texte trouvé avec l\'id "%s"',
-                $texteId
-            ));
-        }
+        $texteFetcher = new TexteFetcher();
+        $texte = $texteFetcher->fetchTexte($em, $texteId);
 
         $em->remove($texte);
         $em->flush();
