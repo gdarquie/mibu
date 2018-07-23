@@ -27,15 +27,12 @@ class TexteController extends FOSRestController
     {
         $em = $this->getDoctrine()->getManager();
 
-        //fetch
         $texteFetcher = new TexteFetcher();
         $texte = $texteFetcher->fetchTexte($em, $texteId);
 
-        //hydrate
         $texteHydrator = new TexteHydrator();
         $texteIO = $texteHydrator->hydrateTexte($texte);
 
-        //serializer
         $serializer = new CustomSerializer();
         $texteIO = $serializer->serialize($texteIO);
 
@@ -125,7 +122,7 @@ class TexteController extends FOSRestController
         $form = $this->createForm(TexteType::class, $texteIO);
         $form->submit($data);
 
-        if($form->isSubmitted()){ //why not valid?
+        if($form->isSubmitted()){
 
             $handlerTexte = new TexteHandler();
             $texte = $handlerTexte->updateTexte($em, $texte, $data);

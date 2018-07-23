@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Component\Fetcher\PersonnageFetcher;
 use App\Component\Handler\PersonnageHandler;
 use App\Component\Hydrator\PersonnageHydrator;
 use App\Component\Serializer\CustomSerializer;
@@ -116,28 +117,26 @@ class PersonnageController extends FOSRestController
     {
         $em = $this->getDoctrine()->getManager();
 
-        $personnage = $this->getDoctrine()
-            ->getRepository(Personnage::class)
-            ->findOneById($personnageId);
+        $personnageFetcher = new PersonnageFetcher();
+        $personnage = $personnageFetcher->fetchPersonnage($em, $personnageId);
 
-        if (!$personnage) {
-            throw $this->createNotFoundException(sprintf(
-                'Pas de personnage trouvé avec l\'id "%s"',
-                $personnageId
-            ));
-        }
+        $personnageHydrator = new personnageHydrator();
+        $personnageIO = $personnageHydrator->hydratePersonnage($personnage);
 
         $data = json_decode($request->getContent(), true);
 
-        $form = $this->createForm(PersonnageType::class, $personnage);
+        $form = $this->createForm(PersonnageType::class, $personnageIO);
         $form->submit($data);
 
         if($form->isSubmitted()){
+
+            $handlerPersonnage = new PersonnageHandler();
+            $personnage = $handlerPersonnage->updatePersonnage($em, $personnage, $data);
+
             $em->persist($personnage);
             $em->flush();
 
             $response = new JsonResponse("Mise à jour du personnage", 202);
-
             $personnageUrl = $this->generateUrl(
                 'get_personnage', array(
                 'personnageId' => $personnage->getId()

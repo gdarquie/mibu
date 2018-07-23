@@ -8,6 +8,12 @@ use App\Entity\Modele\AbstractItem;
 
 class TexteHandler
 {
+
+    public function __construct()
+    {
+        $this->helper = new HelperHandler();
+    }
+
     /**
      * @param $em
      * @param $data
@@ -63,32 +69,22 @@ class TexteHandler
      */
     public function getData($em, $data)
     {
-        $helper = new HelperHandler($data);
-        $helper->checkElement($data);
-        $data['fiction'] = $helper->checkFiction($em, $data);
-        $data['itemId'] = (isset($data['itemId'])) ? $em->getRepository(AbstractItem::class)->findOneById($data['itemId']) : $data['itemId'] = null ;
-
-        return $data;
+        return $data = $this->helper->getData($em, $data);
     }
 
     /**
      * @param $data
-     * @param null $texte
-     * @return Texte|null
+     * @param Texte|null $texte
+     * @return Texte
      */
-    public function setData($data, $texte = null)
+    public function setData($data, Texte $texte = null)
     {
         if(!$texte) {
             return $texte = new Texte($data['titre'],$data['description'],$data['type'],$data['fiction'],$data['itemId']);
         }
 
-        $texte->setTitre($data['titre']);
-        $texte->setDescription($data['description']);
-        $texte->setType($data['type']);
-        $texte->setFiction($data['fiction']);
-        $texte->setItem($data['itemId']);
+        return $texte = $this->helper->setData($data, $texte);
 
-        return $texte;
     }
 
 
