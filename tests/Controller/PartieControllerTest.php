@@ -13,7 +13,7 @@ class PartieControllerTest extends ApiTestCase
         $data = array(
             'titre' => 'Titre de partie via les tests unitaires',
             'description' => 'Un contenu de partie',
-            'fiction' => $fiction->getId()
+            'fictionId' => $fiction->getId()
         );
 
         $response = $this->client->post(ApiTestCase::TEST_PREFIX.'/parties', [

@@ -15,7 +15,7 @@ class TexteControllerTest extends ApiTestCase
             'titre' => 'Titre de texte',
             'description' => 'Un contenu de texte',
             'type' => 'promesse',
-            'fiction' => $fiction->getId()
+            'fictionId' => $fiction->getId()
         );
 
         $response = $this->client->post(ApiTestCase::TEST_PREFIX.'/textes', [
@@ -85,7 +85,7 @@ class TexteControllerTest extends ApiTestCase
             'titre' => 'Titre de texte modifié',
             'description' => 'Un contenu de texte',
             'type' => 'promesse',
-            'fiction' => $fiction->getId()
+            'fictionId' => $fiction->getId()
         );
 
         $response = $this->client->put(ApiTestCase::TEST_PREFIX.'/textes/'.$texte->getId(), [
@@ -120,7 +120,7 @@ class TexteControllerTest extends ApiTestCase
             'titre' => 'Titre de texte',
             'description' => 'Un contenu de texte',
             'type' => 'promesse',
-            'fiction' => $fiction->getId(),
+            'fictionId' => $fiction->getId(),
             'item' => $partie->getId()
         );
 
@@ -152,7 +152,7 @@ class TexteControllerTest extends ApiTestCase
             'titre' => 'Titre de texte',
             'description' => 'Un contenu de texte',
             'type' => 'promesse',
-            'fiction' => $fiction->getId(),
+            'fictionId' => $fiction->getId(),
             'item' => $partie->getId()
         );
 
@@ -184,7 +184,7 @@ class TexteControllerTest extends ApiTestCase
             'titre' => 'Titre de texte',
             'description' => 'Un contenu de texte',
             'type' => 'promesse',
-            'fiction' => $fiction->getId(),
+            'fictionId' => $fiction->getId(),
             'item' => $partie->getId()
         );
 

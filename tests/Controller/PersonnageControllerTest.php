@@ -15,7 +15,7 @@ class PersonnageControllerTest extends ApiTestCase
             "description" => "Le Sage",
             "annee_naissance" => 0,
             "annee_mort" => 120,
-            "fiction" => $fiction->getId()
+            "fictionId" => $fiction->getId()
         );
 
         $response = $this->client->post(ApiTestCase::TEST_PREFIX.'/personnages', [
@@ -61,7 +61,7 @@ class PersonnageControllerTest extends ApiTestCase
             "description" => "Du Shinsen Gumi",
             "annee_naissance" => 0,
             "annee_mort" => 120,
-            "fiction" => $fiction->getId()
+            "fictionId" => $fiction->getId()
         );
 
         $response = $this->client->put(ApiTestCase::TEST_PREFIX.'/personnages/'.$personnage->getId(), [
