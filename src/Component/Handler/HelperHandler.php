@@ -4,6 +4,7 @@ namespace App\Component\Handler;
 
 
 use App\Entity\Concept\Fiction;
+use App\Entity\Modele\AbstractItem;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -29,7 +30,6 @@ class HelperHandler
      */
     public function checkFiction($em, $data)
     {
-
         if(!isset ($data['fictionId'])) {
             throw new BadRequestHttpException(sprintf(
                 'Aucune fiction renseignée!'
@@ -52,8 +52,11 @@ class HelperHandler
     public function getData($em, $data)
     {
         $this->checkElement($data);
-        $data['fiction'] = $this->checkFiction($em, $data);
+
+        $data['fictionId'] = $this->checkFiction($em, $data);
         $data['itemId'] = (isset($data['itemId'])) ? $em->getRepository(AbstractItem::class)->findOneById($data['itemId']) : $data['itemId'] = null ;
+
+//        dump($data['itemId']);die; //il faut probablement créer l'item d'abord
 
         return $data;
     }
@@ -62,12 +65,17 @@ class HelperHandler
     {
         $element->setTitre($data['titre']);
         $element->setDescription($data['description']);
-        $element->setFiction($data['fiction']);
+        $element->setFiction($data['fictionId']);
         $element->setItem($data['itemId']);
 
         (isset($data['type'])) ? $element->setType($data['type']) : null;
 
 
         return $element;
+    }
+
+    public function createItem()
+    {
+
     }
 }

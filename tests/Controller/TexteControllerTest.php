@@ -121,7 +121,7 @@ class TexteControllerTest extends ApiTestCase
             'description' => 'Un contenu de texte',
             'type' => 'promesse',
             'fictionId' => $fiction->getId(),
-            'item' => $partie->getId()
+            'itemId' => $partie->getId()
         );
 
         $response = $this->client->post(ApiTestCase::TEST_PREFIX.'/textes', [
@@ -137,7 +137,8 @@ class TexteControllerTest extends ApiTestCase
         $payload = json_decode($response->getBody(true), true);
         $this->assertArrayHasKey('titre', $payload, "Il n'y a pas de champ titre");
         $this->assertArrayHasKey('itemId', $payload, "Il n'y a pas de champ item");
-        $this->assertEquals( $data['item'], $payload['itemId'], "L'id item ne correspond pas");
+
+        $this->assertEquals( $data['itemId'], $payload['itemId'], "L'id item ne correspond pas");
 
         echo $response->getBody();
         echo "\n\n";
@@ -146,14 +147,14 @@ class TexteControllerTest extends ApiTestCase
     public function testPostTexteForPersonnage()
     {
         $fiction = $this->createFiction();
-        $partie = $this->createPersonnageFiction($fiction);
+        $personnage = $this->createPersonnageFiction($fiction);
 
         $data = array(
             'titre' => 'Titre de texte',
             'description' => 'Un contenu de texte',
             'type' => 'promesse',
             'fictionId' => $fiction->getId(),
-            'item' => $partie->getId()
+            'itemId' => $personnage->getId()
         );
 
         $response = $this->client->post(ApiTestCase::TEST_PREFIX.'/textes', [
@@ -169,7 +170,7 @@ class TexteControllerTest extends ApiTestCase
         $payload = json_decode($response->getBody(true), true);
         $this->assertArrayHasKey('titre', $payload, "Il n'y a pas de champ titre");
         $this->assertArrayHasKey('itemId', $payload, "Il n'y a pas de champ item");
-        $this->assertEquals( $data['item'], $payload['itemId'], "L'id item ne correspond pas");
+        $this->assertEquals( $data['itemId'], $payload['itemId'], "L'id item ne correspond pas");
 
         echo $response->getBody();
         echo "\n\n";
@@ -185,7 +186,7 @@ class TexteControllerTest extends ApiTestCase
             'description' => 'Un contenu de texte',
             'type' => 'promesse',
             'fictionId' => $fiction->getId(),
-            'item' => $partie->getId()
+            'itemId' => $partie->getId()
         );
 
         $response = $this->client->post(ApiTestCase::TEST_PREFIX.'/textes', [
@@ -201,7 +202,7 @@ class TexteControllerTest extends ApiTestCase
         $payload = json_decode($response->getBody(true), true);
         $this->assertArrayHasKey('titre', $payload, "Il n'y a pas de champ titre");
         $this->assertArrayHasKey('itemId', $payload, "Il n'y a pas de champ item");
-        $this->assertEquals( $data['item'], $payload['itemId'], "L'id item ne correspond pas");
+        $this->assertEquals( $data['itemId'], $payload['itemId'], "L'id item ne correspond pas");
 
         echo $response->getBody();
         echo "\n\n";

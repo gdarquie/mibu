@@ -99,7 +99,7 @@ class PersonnageHandler
         (isset($data['annee_mort'])) ? $personnage->setAnneeMort($data['annee_mort']) : $personnage->setAnneeMort(null);
         (isset($data['genre'])) ? $personnage->setGenre($data['genre']) : $personnage->setGenre(null);
 
-        $personnage->setFiction($data['fiction']);
+        $personnage->setFiction($data['fictionId']);
 
         return $personnage;
     }

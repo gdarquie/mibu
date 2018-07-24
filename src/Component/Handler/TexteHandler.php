@@ -80,7 +80,7 @@ class TexteHandler
     public function setData($data, Texte $texte = null)
     {
         if(!$texte) {
-            return $texte = new Texte($data['titre'],$data['description'],$data['type'],$data['fiction'],$data['itemId']);
+            return $texte = new Texte($data['titre'],$data['description'],$data['type'],$data['fictionId'],$data['itemId']);
         }
 
         return $texte = $this->helper->setData($data, $texte);

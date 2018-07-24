@@ -33,7 +33,7 @@ class FictionControllerTest extends ApiTestCase
 
     }
 
-    public function testPostFictionWithTextes() // fonction ok!!
+    public function testPostFictionWithTextes()
     {
         $data = array(
             'titre' => 'Nouvel exemple de titre de fiction',
@@ -42,8 +42,7 @@ class FictionControllerTest extends ApiTestCase
 
         $data['textes'][0]['titre'] = 'Test 1';
         $data['textes'][0]['description'] = 'Description 1';
-        $data['textes'][0]['type'] = 'Contenu de la promesse';
-
+        $data['textes'][0]['type'] = 'promesse';
 
         $response = $this->client->post(ApiTestCase::TEST_PREFIX.'/fictions', [
             'body' => json_encode($data)
