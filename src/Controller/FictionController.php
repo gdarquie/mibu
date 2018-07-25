@@ -109,7 +109,7 @@ class FictionController extends FOSRestController
 
                 if($data['textes'] !== null){
                     for ($i = 0; $i < count($data['textes']); $i++) {
-                        $data['textes'][0]['fiction'] =  $fiction->getId();
+                        $data['textes'][0]['fictionId'] =  $fiction->getId();
                     }
 
                     $texteHandler = new TexteHandler();
