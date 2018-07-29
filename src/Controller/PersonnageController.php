@@ -193,6 +193,7 @@ class PersonnageController extends FOSRestController
             $clone->setDescription('Un clone');
             $genre = (rand(0,1)>0) ?$genre = 'M' :$genre = 'F';
             $clone->setGenre($genre);
+            $clone->setAuto(TRUE);
 
 
             array_push($personnages, $clone);
@@ -206,5 +207,11 @@ class PersonnageController extends FOSRestController
 
         //convert into json
         return $personnages;
+    }
+
+    //new function for deleting all the generating characters for a fiction
+    public function deleteGenerated()
+    {
+        return 'Deleted';
     }
 }

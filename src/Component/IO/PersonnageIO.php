@@ -30,6 +30,11 @@ class PersonnageIO extends ElementIO
     private $anneeMort;
 
     /**
+     * @var bool
+     */
+    private $auto = false;
+
+    /**
      * @return mixed
      */
     public function getPrenom()
@@ -107,6 +112,22 @@ class PersonnageIO extends ElementIO
     public function setAnneeMort($anneeMort)
     {
         $this->anneeMort = $anneeMort;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAuto(): bool
+    {
+        return $this->auto;
+    }
+
+    /**
+     * @param bool $auto
+     */
+    public function setAuto(bool $auto): void
+    {
+        $this->auto = $auto;
     }
 
 }

@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Form;
-use App\Entity\Concept\Fiction;
+use App\Component\IO\FictionIO;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -23,7 +23,7 @@ class FictionType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => Fiction::class
+            'data_class' => FictionIO::class
         ));
     }
 

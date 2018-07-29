@@ -10,14 +10,13 @@ class FictionControllerTest extends ApiTestCase
     public function testPostFiction()
     {
         $data = array(
-            'titre' => 'Ajout de titre de texte',
-            'description' => 'Une description de fiction comme exemple'
+            "titre" => "Ajout de titre de texte",
+            "description" => "Une description de fiction comme exemple"
         );
 
         $response = $this->client->post(ApiTestCase::TEST_PREFIX.'/fictions', [
             'body' => json_encode($data)
         ]);
-
 
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertTrue($response->hasHeader('Location'));

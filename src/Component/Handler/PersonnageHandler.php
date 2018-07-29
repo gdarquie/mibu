@@ -15,10 +15,13 @@ class PersonnageHandler
         $this->helper = new HelperHandler();
     }
 
+
     /**
      * @param EntityManager $em
      * @param $data
      * @return Personnage|mixed
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function createPersonnage(EntityManager $em, $data)
     {
@@ -35,6 +38,8 @@ class PersonnageHandler
      * @param EntityManager $em
      * @param $personnages
      * @return bool
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function createPersonnages(EntityManager $em, $personnages)
     {

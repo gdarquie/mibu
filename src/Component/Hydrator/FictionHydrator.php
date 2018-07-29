@@ -38,4 +38,5 @@ class FictionHydrator
 
         return $fictionIO;
     }
+
 }
