@@ -20,4 +20,6 @@
 .web-server-pid
 ###< symfony/web-server-bundle ###
 
+#php storm
 .idea/
+.idea/*
