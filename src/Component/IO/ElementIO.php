@@ -7,27 +7,27 @@ class ElementIO extends AbstractConceptIO
     /**
      * @var string
      */
-    private $fiction_id;
+    private $fictionId;
 
     /**
      * @var string
      */
-    private $item_id;
+    private $itemId;
 
     /**
      * @return mixed
      */
     public function getFictionId(): string
     {
-        return $this->fiction_id;
+        return $this->fictionId;
     }
 
     /**
-     * @param mixed $fiction_id
+     * @param mixed $fictionId
      */
-    public function setFictionId($fiction_id)
+    public function setFictionId($fictionId)
     {
-        $this->fiction_id = $fiction_id;
+        $this->fictionId = $fictionId;
     }
 
     /**
@@ -35,15 +35,15 @@ class ElementIO extends AbstractConceptIO
      */
     public function getItemId(): ?string
     {
-        return $this->item_id;
+        return $this->itemId;
     }
 
     /**
-     * @param string $item_id
+     * @param string $itemId
      */
-    public function setItemId(string $item_id)
+    public function setItemId(string $itemId)
     {
-        $this->item_id = $item_id;
+        $this->itemId = $itemId;
     }
 
 }

@@ -14,27 +14,27 @@ class Evenement extends AbstractItem
     /**
      * @ORM\Column(type="integer", nullable=true)
      */
-    private $annee_debut;
+    private $anneeDebut;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
      */
-    private $annee_fin;
+    private $anneeFin;
 
     /**
      * @return mixed
      */
     public function getAnneeDebut()
     {
-        return $this->annee_debut;
+        return $this->anneeDebut;
     }
 
     /**
-     * @param mixed $annee_debut
+     * @param mixed $anneeDebut
      */
-    public function setAnneeDebut($annee_debut)
+    public function setAnneeDebut($anneeDebut)
     {
-        $this->annee_debut = $annee_debut;
+        $this->anneeDebut = $anneeDebut;
     }
 
     /**
@@ -42,15 +42,15 @@ class Evenement extends AbstractItem
      */
     public function getAnneeFin()
     {
-        return $this->annee_fin;
+        return $this->anneeFin;
     }
 
     /**
-     * @param mixed $annee_fin
+     * @param mixed $anneeFin
      */
-    public function setAnneeFin($annee_fin)
+    public function setAnneeFin($anneeFin)
     {
-        $this->annee_fin = $annee_fin;
+        $this->anneeFin = $anneeFin;
     }
 
 }

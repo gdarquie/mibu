@@ -22,12 +22,12 @@ abstract class AbstractConceptIO extends AbstractIdIO
     /**
      * @var \DateTime
      */
-    private $date_creation;
+    private $dateCreation;
 
     /**
      * @var \DateTime
      */
-    private $date_modification;
+    private $dateModification;
 
     /**
      * @return mixed
@@ -82,15 +82,15 @@ abstract class AbstractConceptIO extends AbstractIdIO
      */
     public function getDateCreation()
     {
-        return $this->date_creation;
+        return $this->dateCreation;
     }
 
     /**
-     * @param mixed $date_creation
+     * @param mixed $dateCreation
      */
-    public function setDateCreation($date_creation)
+    public function setDateCreation($dateCreation)
     {
-        $this->date_creation = $date_creation;
+        $this->dateCreation = $dateCreation;
     }
 
     /**
@@ -98,15 +98,15 @@ abstract class AbstractConceptIO extends AbstractIdIO
      */
     public function getDateModification()
     {
-        return $this->date_modification;
+        return $this->dateModification;
     }
 
     /**
-     * @param mixed $date_modification
+     * @param mixed $dateModification
      */
-    public function setDateModification($date_modification)
+    public function setDateModification($dateModification)
     {
-        $this->date_modification = $date_modification;
+        $this->dateModification = $dateModification;
     }
 
 }

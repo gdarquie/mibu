@@ -28,14 +28,14 @@ abstract class AbstractConcept
      *
      * @ORM\Column(type="datetime")
      */
-    protected $date_creation;
+    protected $dateCreation;
 
     /**
      * @var datetime $created
      *
      * @ORM\Column(type="datetime")
      */
-    protected $date_modification;
+    protected $dateModification;
 
     /**
      * @ORM\Column(type="guid")
@@ -72,15 +72,15 @@ abstract class AbstractConcept
      */
     public function getDateCreation()
     {
-        return $this->date_creation;
+        return $this->dateCreation;
     }
 
     /**
-     * @param datetime $date_creation
+     * @param datetime $dateCreation
      */
-    public function setDateCreation($date_creation)
+    public function setDateCreation($dateCreation)
     {
-        $this->date_creation = $date_creation;
+        $this->dateCreation = $dateCreation;
     }
 
     /**
@@ -88,15 +88,15 @@ abstract class AbstractConcept
      */
     public function getDateModification()
     {
-        return $this->date_modification;
+        return $this->dateModification;
     }
 
     /**
-     * @param datetime $date_modification
+     * @param datetime $dateModification
      */
-    public function setDateModification($date_modification)
+    public function setDateModification($dateModification)
     {
-        $this->date_modification = $date_modification;
+        $this->dateModification = $dateModification;
     }
 
     /**
