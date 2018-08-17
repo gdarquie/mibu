@@ -22,12 +22,12 @@ class PersonnageIO extends ElementIO
     /**
      * @var int
      */
-    private $annee_naissance;
+    private $anneeNaissance;
 
     /**
      * @var int
      */
-    private $annee_mort;
+    private $anneeMort;
 
     /**
      * @return mixed
@@ -82,15 +82,15 @@ class PersonnageIO extends ElementIO
      */
     public function getAnneeNaissance()
     {
-        return $this->annee_naissance;
+        return $this->anneeNaissance;
     }
 
     /**
-     * @param mixed $annee_naissance
+     * @param mixed $anneeNaissance
      */
-    public function setAnneeNaissance($annee_naissance)
+    public function setAnneeNaissance($anneeNaissance)
     {
-        $this->annee_naissance = $annee_naissance;
+        $this->anneeNaissance = $anneeNaissance;
     }
 
     /**
@@ -98,15 +98,15 @@ class PersonnageIO extends ElementIO
      */
     public function getAnneeMort()
     {
-        return $this->annee_mort;
+        return $this->anneeMort;
     }
 
     /**
-     * @param mixed $annee_mort
+     * @param mixed $anneeMort
      */
-    public function setAnneeMort($annee_mort)
+    public function setAnneeMort($anneeMort)
     {
-        $this->annee_mort = $annee_mort;
+        $this->anneeMort = $anneeMort;
     }
 
 }

@@ -16,14 +16,14 @@ class Personnage extends AbstractItem
      *
      * @ORM\Column(type="integer", nullable=true)
      */
-    private $annee_naissance;
+    private $anneeNaissance;
 
     /**
      * @var integer
      *
      * @ORM\Column(type="integer", nullable=true)
      */
-    private $annee_mort;
+    private $anneeMort;
 
     /**
      * @var string
@@ -46,6 +46,13 @@ class Personnage extends AbstractItem
      */
     private $genre;
 
+    /**
+     * @var bool
+     *
+     * généré automatiquement ?
+     */
+    private $genere;
+
     public function __construct($titre, $description, $item = null)
     {
         parent::__construct();
@@ -54,20 +61,22 @@ class Personnage extends AbstractItem
         $this->setItem($item);
     }
 
+    function __clone() {}
+
     /**
      * @return int
      */
     public function getAnneeNaissance()
     {
-        return $this->annee_naissance;
+        return $this->anneeNaissance;
     }
 
     /**
-     * @param int $annee_naissance
+     * @param int $anneeNaissance
      */
-    public function setAnneeNaissance($annee_naissance)
+    public function setAnneeNaissance($anneeNaissance)
     {
-        $this->annee_naissance = $annee_naissance;
+        $this->anneeNaissance = $anneeNaissance;
     }
 
     /**
@@ -75,15 +84,15 @@ class Personnage extends AbstractItem
      */
     public function getAnneeMort()
     {
-        return $this->annee_mort;
+        return $this->anneeMort;
     }
 
     /**
-     * @param int $annee_mort
+     * @param int $anneeMort
      */
-    public function setAnneeMort($annee_mort)
+    public function setAnneeMort($anneeMort)
     {
-        $this->annee_mort = $annee_mort;
+        $this->anneeMort = $anneeMort;
     }
 
     /**
@@ -148,6 +157,22 @@ class Personnage extends AbstractItem
     public function setItem($item)
     {
         $this->item = $item;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isGenere(): bool
+    {
+        return $this->genere;
+    }
+
+    /**
+     * @param bool $genere
+     */
+    public function setGenere(bool $genere): void
+    {
+        $this->genere = $genere;
     }
 
 }

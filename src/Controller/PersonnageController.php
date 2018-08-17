@@ -173,4 +173,38 @@ class PersonnageController extends FOSRestController
 
         return $this->getPersonnages($fictionId);
     }
+
+    /**
+     * @Rest\Post("personnages/generation", name="generate_personnages")
+     *
+     * @param $limite
+     * @return array
+     */
+    public function generatePersonnages($limite=10) :array
+    {
+        $personnages = [];
+
+        $personnage = new Personnage('Original', 'Le personnage original');
+
+        for($i= 0; $i < $limite; $i++) {
+            $clone = clone $personnage;
+            //changeId
+            $clone->setTitre('Clone n°'.($i+1));
+            $clone->setDescription('Un clone');
+            $genre = (rand(0,1)>0) ?$genre = 'M' :$genre = 'F';
+            $clone->setGenre($genre);
+
+
+            array_push($personnages, $clone);
+
+            //save every perso
+        }
+
+        dump($personnages);die;
+
+        //ajouter quelque chose dans la bd pour savoir si le perso a été générée?
+
+        //convert into json
+        return $personnages;
+    }
 }
