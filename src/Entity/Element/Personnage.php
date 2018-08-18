@@ -48,10 +48,11 @@ class Personnage extends AbstractItem
 
     /**
      * @var bool
-     *
      * généré automatiquement ?
+     *
+     * @ORM\Column(type="boolean")
      */
-    private $genere;
+    private $auto = false;
 
     public function __construct($titre, $description, $item = null)
     {
@@ -162,17 +163,17 @@ class Personnage extends AbstractItem
     /**
      * @return bool
      */
-    public function isGenere(): bool
+    public function isAuto(): bool
     {
-        return $this->genere;
+        return $this->auto;
     }
 
     /**
-     * @param bool $genere
+     * @param bool $auto
      */
-    public function setGenere(bool $genere): void
+    public function setAuto(bool $auto): void
     {
-        $this->genere = $genere;
+        $this->auto = $auto;
     }
 
 }
