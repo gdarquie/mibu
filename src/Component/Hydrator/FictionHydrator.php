@@ -3,16 +3,29 @@
 namespace App\Component\Hydrator;
 
 use App\Component\IO\FictionIO;
+use Doctrine\ORM\EntityManager;
 
 
 class FictionHydrator
 {
-    public function hydrateFiction($em, $fiction)
+    //récupérer l'em directement ici
+
+    /**
+     * @var EntityManager
+     */
+    protected $em;
+
+
+    public function __construct(EntityManager $em) {
+        $this->em = $em;
+    }
+
+    public function hydrateFiction($fiction)
     {
         $fictionId = $fiction->getId();
-        $textes = $em->getRepository('App:Concept\Fiction')->getTextesFiction($fictionId);
-        $personnages = $em->getRepository('App:Concept\Fiction')->getPersonnagesFiction($fictionId);
-        $evenements = $em->getRepository('App:Concept\Fiction')->getEvenementsFiction($fictionId);
+        $textes = $this->em->getRepository('App:Concept\Fiction')->getTextesFiction($fictionId);
+        $personnages = $this->em->getRepository('App:Concept\Fiction')->getPersonnagesFiction($fictionId);
+        $evenements = $this->em->getRepository('App:Concept\Fiction')->getEvenementsFiction($fictionId);
 
         $fictionIO = new FictionIO();
 
@@ -20,7 +33,7 @@ class FictionHydrator
         $fictionIO->setTitre($fiction->getTitre());
         $fictionIO->setDescription($fiction->getDescription());
         $fictionIO->setUuid($fiction->getUuid());
-        //travailler les dates
+        //todo : retravailler les dates - renvoyer dans un format compréhensible
         $fictionIO->setDateCreation($fiction->getDateCreation());
         $fictionIO->setDateModification($fiction->getDateModification());
 

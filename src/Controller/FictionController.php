@@ -2,13 +2,10 @@
 
 namespace App\Controller;
 
-use App\Component\Handler\EvenementHandler;
 use App\Component\Handler\FictionHandler;
-
-use App\Component\Handler\PersonnageHandler;
-use App\Component\Handler\TexteHandler;
 use App\Component\Hydrator\FictionHydrator;
 use App\Component\IO\FictionIO;
+use App\Component\Serializer\CustomSerializer;
 use App\Entity\Concept\Fiction;
 use App\Form\FictionType;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -20,6 +17,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class FictionController extends FOSRestController
 {
+
     /**
      * @Rest\Get("fictions", name="get_fictions")
      */
@@ -48,7 +46,6 @@ class FictionController extends FOSRestController
      */
     public function postFiction(Request $request)
     {
-//        $data = $request->request->all();
         $data = json_decode($request->getContent(), true);
 
         $fictionIO = new FictionIO();
@@ -77,7 +74,7 @@ class FictionController extends FOSRestController
      */
     public function putFiction(Request $request, $fictionId)
     {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getDoctrine()->getManager(); //récupérer directement
         $fiction = $em->getRepository('App:Concept\Fiction')->findOneById($fictionId);
 
         if (!$fiction) {
@@ -89,22 +86,38 @@ class FictionController extends FOSRestController
 
         $data = json_decode($request->getContent(), true);
 
-        $fictionIO = new FictionIO();
-        $fictionIO->setId($fictionId);
-        $data['id'] = $fictionId;
-//        $fictionIO->setTitre($data['titre']);
-//        $fictionIO->setDescription($data['description']);
+        $fiction->setTitre($data['titre']);
+        $fiction->setDescription($data['description']);
+        //autres changements?
 
+        //convert into IO
+        $fictionHydrator = new FictionHydrator($em);
+        $fictionIO = $fictionHydrator->hydrateFiction($fiction);
+
+        //form for validation
         $form = $this->createForm(FictionType::class, $fictionIO);
         $form->submit($data);
 
-        if($form->isSubmitted()){
-            return $this->getHandler()->putFiction($data);
+
+        if($form->isSubmitted()) {  //remplacer par isValidate
+
+            $em->persist($fiction);
+            $em->flush();
+
+            $url = $this->generateUrl(
+                'get_fiction', array(
+                'id' => $fiction->getId()
+            ));
+
+            $serializer = new CustomSerializer();
+            $fictionIO = $serializer->serialize($fictionIO);
+
+            $response = $this->getResponse($fictionIO, $url);
+
+            return $response;
         }
 
-        return new JsonResponse("Echec de la mise à jour");
-
-
+        return new JsonResponse("Echec de l'insertion", 500);
     }
 
     /**

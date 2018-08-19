@@ -24,7 +24,7 @@ class FictionHandler
 
     public function getFictions($page = 1, $maxPerPage = 10)
     {
-        $fictionHydrator = new FictionHydrator();
+        $fictionHydrator = new FictionHydrator($this->em);
         $fictions = $this->em->getRepository(Fiction::class)->findAll();
         $fictionsIO = [];
 
@@ -34,7 +34,7 @@ class FictionHandler
         $pagerfanta->setCurrentPage($page);
 
         foreach ($pagerfanta as $fiction){
-            $fictionIO = $fictionHydrator->hydrateFiction($this->em, $fiction);
+            $fictionIO = $fictionHydrator->hydrateFiction($fiction);
 
             array_push($fictionsIO, $fictionIO);
         }
@@ -60,8 +60,8 @@ class FictionHandler
             ));
         }
 
-        $fictionHydrator = new FictionHydrator();
-        $fictionIO = $fictionHydrator->hydrateFiction($this->em, $fiction);
+        $fictionHydrator = new FictionHydrator($this->em);
+        $fictionIO = $fictionHydrator->hydrateFiction($fiction);
 
         $serializer = new CustomSerializer();
 
@@ -70,7 +70,7 @@ class FictionHandler
 
     public function postFiction($data)
     {
-        $fiction = $this->createFiction($this->em, $data);
+        $fiction = $this->createFiction($data);
 
         if(isset($data['textes'])){
 
@@ -109,8 +109,8 @@ class FictionHandler
             }
         }
 
-        $fictionHydrator = new FictionHydrator();
-        $fictionIO = $fictionHydrator->hydrateFiction($this->em, $fiction);
+        $fictionHydrator = new FictionHydrator($this->em);
+        $fictionIO = $fictionHydrator->hydrateFiction($fiction);
 
         $serializer = new CustomSerializer();
 
@@ -119,20 +119,6 @@ class FictionHandler
 
     public function putFiction($data)
     {
-            $fiction = $this->createFiction($this->em, $data);
-            dump($fiction);die;
-            $this->em->persist($data);
-            $this->em->flush();
-            $response = $this->getFiction($data->getId());
-
-            $fictionUrl = $this->generateUrl(
-                'get_fiction', array(
-                'id' => $data->getId()
-            ));
-
-            $response->headers->set('Location', $fictionUrl);
-
-            return $response;
 
     }
 
@@ -141,13 +127,13 @@ class FictionHandler
         
     }
 
-    public function createFiction(EntityManager $em, $data)
+    public function createFiction($data)
     {
         $fiction = new Fiction();
         $fiction->setTitre($data['titre']);
         $fiction->setDescription($data['description']);
-        $em->persist($fiction);
-        $em->flush();
+        $this->em->persist($fiction);
+        $this->em->flush();
 
         return $fiction;
     }
