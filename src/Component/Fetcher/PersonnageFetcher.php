@@ -10,7 +10,6 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class PersonnageFetcher
 {
-
     public function fetchPersonnage($em, $personnageId) {
 
         $personnage = $em

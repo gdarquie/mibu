@@ -2,6 +2,7 @@
 
 namespace App\Component\Handler;
 
+use App\Component\Fetcher\FictionFetcher;
 use App\Component\Hydrator\FictionHydrator;
 use App\Component\Transformer\FictionTransformer;
 use App\Component\Serializer\CustomSerializer;
@@ -10,7 +11,6 @@ use Doctrine\ORM\EntityManager;
 use Pagerfanta\Adapter\ArrayAdapter;
 use Pagerfanta\Pagerfanta;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class FictionHandler
 {
@@ -21,9 +21,13 @@ class FictionHandler
         $this->em = $em;
     }
 
+    /**
+     * @param int $page
+     * @param int $maxPerPage
+     * @return array|bool|float|int|string
+     */
     public function getFictions($page = 1, $maxPerPage = 10)
     {
-        $fictionHydrator = new FictionTransformer($this->em);
         $fictions = $this->em->getRepository(Fiction::class)->findAll();
         $fictionsIO = [];
 
@@ -33,7 +37,7 @@ class FictionHandler
         $pagerfanta->setCurrentPage($page);
 
         foreach ($pagerfanta as $fiction){
-            $fictionIO = $fictionHydrator->convertEntityIntoIO($fiction);
+            $fictionIO = $this-$this->getTransformer()->convertEntityIntoIO($fiction);
 
             array_push($fictionsIO, $fictionIO);
         }
@@ -48,30 +52,29 @@ class FictionHandler
 
     }
 
+    /**
+     * @param $id
+     * @return bool|float|int|string
+     */
     public function getFiction($id)
     {
-        $fiction = $this->em->getRepository('App:Concept\Fiction')->findOneById($id);
+        $fiction = $this->getFetcher()->fetchFiction($id);
+        $fictionIO = $this->getTransformer()->convertEntityIntoIO($fiction);
 
-        if (!$fiction) {
-            throw new NotFoundHttpException(sprintf(
-                'Aucune fiction avec l\'id "%s" n\'a été trouvée',
-                $id
-            ));
-        }
-
-        $fictionHydrator = new FictionTransformer($this->em);
-        $fictionIO = $fictionHydrator->convertEntityIntoIO($fiction);
-
-        $serializer = new CustomSerializer();
-
-        return $serializer->serialize($fictionIO);
+        return $this->getSerializer()->serialize($fictionIO);
     }
 
+    /**
+     * @param $data
+     * @return bool|float|int|string
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
     public function postFiction($data)
     {
         $fiction = $this->createFiction($data);
 
-        //refacto?
+        //todo = refacto en une seule fonction
         if(isset($data['textes'])){
 
             if($data['textes'] !== null){
@@ -109,22 +112,26 @@ class FictionHandler
             }
         }
 
-        $fictionHydrator = new FictionTransformer($this->em);
-        $fictionIO = $fictionHydrator->convertEntityIntoIO($fiction);
+        $fictionIO = $this->getTransformer()->convertEntityIntoIO($fiction);
 
-        $serializer = new CustomSerializer();
-
-        return $serializer->serialize($fictionIO);
+        return $this->getSerializer()->serialize($fictionIO);
     }
 
+
+    /**
+     * @param $fictionId
+     * @param $data
+     * @return \App\Component\IO\FictionIO|bool|float|int|string
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
     public function putFiction($fictionId, $data)
     {
         //fetch fiction and check if exists
-        $fiction = $this->fetchFiction($fictionId);
+        $fiction = $this->getFetcher()->fetchFiction($fictionId);
 
         //change the data
-        $hydrator = new FictionHydrator();
-        $fiction = $hydrator->hydrateFiction($fiction, $data);
+        $fiction = $this->getHydrator()->hydrateFiction($fiction, $data);
 
         //save and create IO
         $fictionIO = $this->saveFiction($fiction);
@@ -134,14 +141,15 @@ class FictionHandler
 
     public function deleteFiction($fictionId)
     {
-        $fiction = $this->fetchFiction($fictionId);
+        $fiction = $this->getFetcher()->fetchFiction($fictionId);
         $this->em->remove($fiction);
         $this->em->flush();
 
         return new JsonResponse('Suppression de la fiction '.$fictionId.'.', 202);
     }
 
-    public function createFiction($data) // à revoir?
+    // todo : à revoir?
+    public function createFiction($data)
     {
         $fiction = new Fiction();
         $fiction->setTitre($data['titre']);
@@ -152,6 +160,12 @@ class FictionHandler
         return $fiction;
     }
 
+    /**
+     * @param $fiction
+     * @return \App\Component\IO\FictionIO|bool|float|int|string
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
     public function saveFiction($fiction)
     {
         //save
@@ -163,26 +177,41 @@ class FictionHandler
         $fictionIO = $transformer->convertEntityIntoIO($fiction);
 
         //serialize
-        $serializer = new CustomSerializer();
-        $fictionIO = $serializer->serialize($fictionIO);
+        $fictionIO = $this->getSerializer()->serialize($fictionIO);
 
         return $fictionIO;
     }
 
-    public function fetchFiction($fictionId)
+    /**
+     * @return FictionHydrator
+     */
+    public function getHydrator(): FictionHydrator
     {
-        //get fiction
-        $fiction = $this->em->getRepository('App:Concept\Fiction')->findOneById($fictionId);
+        return new FictionHydrator();
+    }
 
-        //check if fiction exists
-        if (!$fiction) {
-            throw new NotFoundHttpException(sprintf(
-                'Aucune fiction avec l\'id "%s" n\'a été trouvée',
-                $fictionId
-            ));
-        }
+    /**
+     * @return CustomSerializer
+     */
+    public function getSerializer(): CustomSerializer
+    {
+        return new CustomSerializer();
+    }
 
-        return $fiction;
+    /**
+     * @return FictionTransformer
+     */
+    public function getTransformer(): FictionTransformer
+    {
+        return new FictionTransformer($this->em);
+    }
+
+    /**
+     * @return FictionFetcher
+     */
+    public function getFetcher()
+    {
+        return new FictionFetcher($this->em);
     }
 
 }
