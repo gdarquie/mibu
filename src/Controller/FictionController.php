@@ -36,8 +36,11 @@ class FictionController extends FOSRestController
     /**
      * @Rest\Post("fictions", name="post_fiction")
      *
+     *
      * @param Request $request
      * @return JsonResponse|Response
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function postFiction(Request $request)
     {
