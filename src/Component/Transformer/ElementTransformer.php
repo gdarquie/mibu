@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Component\Hydrator;
+namespace App\Component\Transformer;
 
-class ElementHydrator
+class ElementTransformer
 {
     public function hydrateElement($element, $io)
     {

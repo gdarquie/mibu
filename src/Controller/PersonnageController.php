@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use App\Component\Fetcher\PersonnageFetcher;
 use App\Component\Handler\PersonnageHandler;
-use App\Component\Hydrator\PersonnageHydrator;
+use App\Component\Transformer\PersonnageTransformer;
 use App\Component\Serializer\CustomSerializer;
 use App\Entity\Concept\Fiction;
 use App\Entity\Element\Personnage;
@@ -35,7 +35,7 @@ class PersonnageController extends FOSRestController
             ));
         }
 
-        $personnageHydrator = new PersonnageHydrator();
+        $personnageHydrator = new PersonnageTransformer();
         $personnageIO = $personnageHydrator->hydratePersonnage($personnage);
 
         $serializer = new CustomSerializer();
@@ -62,7 +62,7 @@ class PersonnageController extends FOSRestController
             ));
         }
 
-        $personnageHydrator = new PersonnageHydrator();
+        $personnageHydrator = new PersonnageTransformer();
         $personnagesIO = [];
         $adapter = new ArrayAdapter($personnages);
         $pagerfanta = new Pagerfanta($adapter);
@@ -120,7 +120,7 @@ class PersonnageController extends FOSRestController
         $personnageFetcher = new PersonnageFetcher();
         $personnage = $personnageFetcher->fetchPersonnage($em, $personnageId);
 
-        $personnageHydrator = new personnageHydrator();
+        $personnageHydrator = new PersonnageTransformer();
         $personnageIO = $personnageHydrator->hydratePersonnage($personnage);
 
         $data = json_decode($request->getContent(), true);

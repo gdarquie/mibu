@@ -3,6 +3,7 @@
 namespace App\Component\Handler;
 
 use App\Component\Hydrator\FictionHydrator;
+use App\Component\Transformer\FictionTransformer;
 use App\Component\IO\FictionIO;
 use App\Component\Serializer\CustomSerializer;
 use App\Entity\Concept\Fiction;
@@ -24,7 +25,7 @@ class FictionHandler
 
     public function getFictions($page = 1, $maxPerPage = 10)
     {
-        $fictionHydrator = new FictionHydrator();
+        $fictionHydrator = new FictionTransformer($this->em);
         $fictions = $this->em->getRepository(Fiction::class)->findAll();
         $fictionsIO = [];
 
@@ -34,7 +35,7 @@ class FictionHandler
         $pagerfanta->setCurrentPage($page);
 
         foreach ($pagerfanta as $fiction){
-            $fictionIO = $fictionHydrator->hydrateFiction($this->em, $fiction);
+            $fictionIO = $fictionHydrator->convertEntityIntoIO($fiction);
 
             array_push($fictionsIO, $fictionIO);
         }
@@ -60,8 +61,8 @@ class FictionHandler
             ));
         }
 
-        $fictionHydrator = new FictionHydrator();
-        $fictionIO = $fictionHydrator->hydrateFiction($this->em, $fiction);
+        $fictionHydrator = new FictionTransformer($this->em);
+        $fictionIO = $fictionHydrator->convertEntityIntoIO($fiction);
 
         $serializer = new CustomSerializer();
 
@@ -70,7 +71,7 @@ class FictionHandler
 
     public function postFiction($data)
     {
-        $fiction = $this->createFiction($this->em, $data);
+        $fiction = $this->createFiction($data);
 
         if(isset($data['textes'])){
 
@@ -109,31 +110,27 @@ class FictionHandler
             }
         }
 
-        $fictionHydrator = new FictionHydrator();
-        $fictionIO = $fictionHydrator->hydrateFiction($this->em, $fiction);
+        $fictionHydrator = new FictionTransformer($this->em);
+        $fictionIO = $fictionHydrator->convertEntityIntoIO($fiction);
 
         $serializer = new CustomSerializer();
 
         return $serializer->serialize($fictionIO);
     }
 
-    public function putFiction($data)
+    public function putFiction($fictionId, $data)
     {
-            $fiction = $this->createFiction($this->em, $data);
-            dump($fiction);die;
-            $this->em->persist($data);
-            $this->em->flush();
-            $response = $this->getFiction($data->getId());
+        //fetch fiction and check if exists
+        $fiction = $this->fetchFiction($fictionId);
 
-            $fictionUrl = $this->generateUrl(
-                'get_fiction', array(
-                'id' => $data->getId()
-            ));
+        //change the data
+        $hydrator = new FictionHydrator();
+        $fiction = $hydrator->hydrateFiction($fiction, $data);
 
-            $response->headers->set('Location', $fictionUrl);
+        //save and create IO
+        $fictionIO = $this->saveFiction($fiction);
 
-            return $response;
-
+        return $fictionIO;
     }
 
     public function deleteFiction()
@@ -141,14 +138,48 @@ class FictionHandler
         
     }
 
-    public function createFiction(EntityManager $em, $data)
+    public function createFiction($data) // à revoir?
     {
         $fiction = new Fiction();
         $fiction->setTitre($data['titre']);
         $fiction->setDescription($data['description']);
-        $em->persist($fiction);
-        $em->flush();
+        $this->em->persist($fiction);
+        $this->em->flush();
 
         return $fiction;
     }
+
+    public function saveFiction($fiction)
+    {
+        //save
+        $this->em->persist($fiction);
+        $this->em->flush();
+
+        //transform into IO
+        $transformer = new FictionTransformer($this->em);
+        $fictionIO = $transformer->convertEntityIntoIO($fiction);
+
+        //serialize
+        $serializer = new CustomSerializer();
+        $fictionIO = $serializer->serialize($fictionIO);
+
+        return $fictionIO;
+    }
+
+    public function fetchFiction($fictionId)
+    {
+        //get fiction
+        $fiction = $this->em->getRepository('App:Concept\Fiction')->findOneById($fictionId);
+
+        //check if fiction exists
+        if (!$fiction) {
+            throw new NotFoundHttpException(sprintf(
+                'Aucune fiction avec l\'id "%s" n\'a été trouvée',
+                $fictionId
+            ));
+        }
+
+        return $fiction;
+    }
+
 }

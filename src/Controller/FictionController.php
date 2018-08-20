@@ -2,12 +2,7 @@
 
 namespace App\Controller;
 
-use App\Component\Handler\EvenementHandler;
 use App\Component\Handler\FictionHandler;
-
-use App\Component\Handler\PersonnageHandler;
-use App\Component\Handler\TexteHandler;
-use App\Component\Hydrator\FictionHydrator;
 use App\Component\IO\FictionIO;
 use App\Entity\Concept\Fiction;
 use App\Form\FictionType;
@@ -16,7 +11,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\FOSRestController;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class FictionController extends FOSRestController
 {
@@ -48,7 +42,6 @@ class FictionController extends FOSRestController
      */
     public function postFiction(Request $request)
     {
-//        $data = $request->request->all();
         $data = json_decode($request->getContent(), true);
 
         $fictionIO = new FictionIO();
@@ -59,10 +52,13 @@ class FictionController extends FOSRestController
 
             $fictionIO = $this->getHandler()->postFiction($data);
 
+            //refacto la génération de route
             $url = $this->generateUrl(
                 'get_fiction', array(
                 'id' => json_decode($fictionIO)->id
             ));
+
+//            $this->createRouteWithId($id);
 
             $response = $this->getResponse($fictionIO, $url);
 
@@ -77,33 +73,15 @@ class FictionController extends FOSRestController
      */
     public function putFiction(Request $request, $fictionId)
     {
-        $em = $this->getDoctrine()->getManager();
-        $fiction = $em->getRepository('App:Concept\Fiction')->findOneById($fictionId);
-
-        if (!$fiction) {
-            throw new NotFoundHttpException(sprintf(
-                'Aucune fiction avec l\'id "%s" n\'a été trouvée',
-                $fictionId
-            ));
-        }
-
         $data = json_decode($request->getContent(), true);
 
-        $fictionIO = new FictionIO();
-        $fictionIO->setId($fictionId);
-        $data['id'] = $fictionId;
-//        $fictionIO->setTitre($data['titre']);
-//        $fictionIO->setDescription($data['description']);
+        $fictionIO = $this->getHandler()->putFiction($fictionId, $data);
 
-        $form = $this->createForm(FictionType::class, $fictionIO);
-        $form->submit($data);
+        //create response
+        $url = $this->createRouteGetFiction($fictionId);
+        $response = $this->getResponse($fictionIO, $url);
 
-        if($form->isSubmitted()){
-            return $this->getHandler()->putFiction($data);
-        }
-
-        return new JsonResponse("Echec de la mise à jour");
-
+        return $response;
 
     }
 
@@ -147,4 +125,15 @@ class FictionController extends FOSRestController
 
         return $response;
     }
+
+    public function createRouteGetFiction($id)
+    {
+        $url = $this->generateUrl(
+            'get_fiction', array(
+            'id' => $id
+        ));
+
+        return $url;
+    }
+
 }
