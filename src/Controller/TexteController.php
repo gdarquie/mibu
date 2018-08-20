@@ -6,7 +6,7 @@ use App\Component\Fetcher\TexteFetcher;
 use App\Component\Handler\TexteHandler;
 use App\Component\IO\TexteIO;
 use App\Entity\Element\Texte;
-use App\Component\Hydrator\TexteHydrator;
+use App\Component\Transformer\TexteTransformer;
 use App\Component\Serializer\CustomSerializer;
 use App\Form\TexteType;
 use Pagerfanta\Adapter\ArrayAdapter;
@@ -30,7 +30,7 @@ class TexteController extends FOSRestController
         $texteFetcher = new TexteFetcher();
         $texte = $texteFetcher->fetchTexte($em, $texteId);
 
-        $texteHydrator = new TexteHydrator();
+        $texteHydrator = new TexteTransformer();
         $texteIO = $texteHydrator->hydrateTexte($texte);
 
         $serializer = new CustomSerializer();
@@ -54,7 +54,7 @@ class TexteController extends FOSRestController
         $textes = $texteFetcher->fetchTextes($em, $fictionId);
 
         //hydrator
-        $texteHydrator = new TexteHydrator();
+        $texteHydrator = new TexteTransformer();
         $textesIO = [];
         $adapter = new ArrayAdapter($textes);
         $pagerfanta = new Pagerfanta($adapter);
@@ -114,7 +114,7 @@ class TexteController extends FOSRestController
         $texteFetcher = new TexteFetcher();
         $texte = $texteFetcher->fetchTexte($em, $texteId);
 
-        $texteHydrator = new TexteHydrator();
+        $texteHydrator = new TexteTransformer();
         $texteIO = $texteHydrator->hydrateTexte($texte);
 
         $data = json_decode($request->getContent(), true);

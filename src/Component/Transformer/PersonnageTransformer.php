@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Component\Hydrator;
+namespace App\Component\Transformer;
 
 use App\Component\IO\PersonnageIO;
 
-class PersonnageHydrator extends ElementHydrator
+class PersonnageTransformer extends ElementTransformer
 {
     public function hydratePersonnage($personnage)
     {

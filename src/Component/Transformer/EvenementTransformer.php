@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Component\Hydrator;
+namespace App\Component\Transformer;
 
 use App\Component\IO\EvenementIO;
 
-class EvenementHydrator extends ElementHydrator
+class EvenementTransformer extends ElementTransformer
 {
     public function hydrateEvenement($evenement)
     {

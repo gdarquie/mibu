@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Component\Handler\PartieHandler;
-use App\Component\Hydrator\PartieHydrator;
+use App\Component\Transformer\PartieTransformer;
 use App\Component\Serializer\CustomSerializer;
 use App\Entity\Concept\Fiction;
 use App\Entity\Element\Partie;
@@ -30,7 +30,7 @@ class PartieController extends FOSRestController
     {
         $this->em = $this->getDoctrine()->getManager();
 
-        $partieHydrator = new PartieHydrator();
+        $partieHydrator = new PartieTransformer();
         $parties = $this->em->getRepository(Partie::class)->findAll();
         $partiesIO = [];
 
@@ -63,7 +63,7 @@ class PartieController extends FOSRestController
             ));
         }
 
-        $partieHydrator = new PartieHydrator();
+        $partieHydrator = new PartieTransformer();
         $partieIO = $partieHydrator->hydratePartie($partie);
 
         $serializer = new CustomSerializer();

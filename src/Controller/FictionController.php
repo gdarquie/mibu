@@ -3,9 +3,7 @@
 namespace App\Controller;
 
 use App\Component\Handler\FictionHandler;
-use App\Component\Hydrator\FictionHydrator;
 use App\Component\IO\FictionIO;
-use App\Component\Serializer\CustomSerializer;
 use App\Entity\Concept\Fiction;
 use App\Form\FictionType;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -13,11 +11,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\FOSRestController;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class FictionController extends FOSRestController
 {
-
     /**
      * @Rest\Get("fictions", name="get_fictions")
      */
@@ -56,10 +52,13 @@ class FictionController extends FOSRestController
 
             $fictionIO = $this->getHandler()->postFiction($data);
 
+            //refacto la génération de route
             $url = $this->generateUrl(
                 'get_fiction', array(
                 'id' => json_decode($fictionIO)->id
             ));
+
+//            $this->createRouteWithId($id);
 
             $response = $this->getResponse($fictionIO, $url);
 
@@ -74,50 +73,16 @@ class FictionController extends FOSRestController
      */
     public function putFiction(Request $request, $fictionId)
     {
-        $em = $this->getDoctrine()->getManager(); //récupérer directement
-        $fiction = $em->getRepository('App:Concept\Fiction')->findOneById($fictionId);
-
-        if (!$fiction) {
-            throw new NotFoundHttpException(sprintf(
-                'Aucune fiction avec l\'id "%s" n\'a été trouvée',
-                $fictionId
-            ));
-        }
-
         $data = json_decode($request->getContent(), true);
 
-        $fiction->setTitre($data['titre']);
-        $fiction->setDescription($data['description']);
-        //autres changements?
+        $fictionIO = $this->getHandler()->putFiction($fictionId, $data);
 
-        //convert into IO
-        $fictionHydrator = new FictionHydrator($em);
-        $fictionIO = $fictionHydrator->hydrateFiction($fiction);
+        //create response
+        $url = $this->createRouteGetFiction($fictionId);
+        $response = $this->getResponse($fictionIO, $url);
 
-        //form for validation
-        $form = $this->createForm(FictionType::class, $fictionIO);
-        $form->submit($data);
+        return $response;
 
-
-        if($form->isSubmitted()) {  //remplacer par isValidate
-
-            $em->persist($fiction);
-            $em->flush();
-
-            $url = $this->generateUrl(
-                'get_fiction', array(
-                'id' => $fiction->getId()
-            ));
-
-            $serializer = new CustomSerializer();
-            $fictionIO = $serializer->serialize($fictionIO);
-
-            $response = $this->getResponse($fictionIO, $url);
-
-            return $response;
-        }
-
-        return new JsonResponse("Echec de l'insertion", 500);
     }
 
     /**
@@ -160,4 +125,15 @@ class FictionController extends FOSRestController
 
         return $response;
     }
+
+    public function createRouteGetFiction($id)
+    {
+        $url = $this->generateUrl(
+            'get_fiction', array(
+            'id' => $id
+        ));
+
+        return $url;
+    }
+
 }

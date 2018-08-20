@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Component\Handler\EvenementHandler;
-use App\Component\Hydrator\EvenementHydrator;
+use App\Component\Transformer\EvenementTransformer;
 use App\Component\Serializer\CustomSerializer;
 use App\Entity\Concept\Fiction;
 use App\Entity\Element\Evenement;
@@ -34,7 +34,7 @@ class EvenementController extends FOSRestController
             ));
         }
 
-        $evenementHydrator = new EvenementHydrator();
+        $evenementHydrator = new EvenementTransformer();
         $evenementIO = $evenementHydrator->hydrateEvenement($evenement);
 
         $serializer = new CustomSerializer();
@@ -55,7 +55,7 @@ class EvenementController extends FOSRestController
     public function getEvenements($fictionId, $page = 1, $maxPerPage = 10)
     {
         $em = $this->getDoctrine()->getManager();
-        $evenementHydrator = new EvenementHydrator();
+        $evenementHydrator = new EvenementTransformer();
 
         $evenements = $em->getRepository(Fiction::class)->getEvenementsFiction($fictionId);
 

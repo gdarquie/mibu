@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Component\Hydrator;
+namespace App\Component\Transformer;
 
 use App\Component\IO\PartieIO;
 
-class PartieHydrator extends ElementHydrator
+class PartieTransformer extends ElementTransformer
 {
     public function hydratePartie($partie)
     {

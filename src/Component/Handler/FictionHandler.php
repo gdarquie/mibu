@@ -3,6 +3,7 @@
 namespace App\Component\Handler;
 
 use App\Component\Hydrator\FictionHydrator;
+use App\Component\Transformer\FictionTransformer;
 use App\Component\IO\FictionIO;
 use App\Component\Serializer\CustomSerializer;
 use App\Entity\Concept\Fiction;
@@ -24,7 +25,7 @@ class FictionHandler
 
     public function getFictions($page = 1, $maxPerPage = 10)
     {
-        $fictionHydrator = new FictionHydrator($this->em);
+        $fictionHydrator = new FictionTransformer($this->em);
         $fictions = $this->em->getRepository(Fiction::class)->findAll();
         $fictionsIO = [];
 
@@ -34,7 +35,7 @@ class FictionHandler
         $pagerfanta->setCurrentPage($page);
 
         foreach ($pagerfanta as $fiction){
-            $fictionIO = $fictionHydrator->hydrateFiction($fiction);
+            $fictionIO = $fictionHydrator->convertEntityIntoIO($fiction);
 
             array_push($fictionsIO, $fictionIO);
         }
@@ -60,8 +61,8 @@ class FictionHandler
             ));
         }
 
-        $fictionHydrator = new FictionHydrator($this->em);
-        $fictionIO = $fictionHydrator->hydrateFiction($fiction);
+        $fictionHydrator = new FictionTransformer($this->em);
+        $fictionIO = $fictionHydrator->convertEntityIntoIO($fiction);
 
         $serializer = new CustomSerializer();
 
@@ -109,17 +110,27 @@ class FictionHandler
             }
         }
 
-        $fictionHydrator = new FictionHydrator($this->em);
-        $fictionIO = $fictionHydrator->hydrateFiction($fiction);
+        $fictionHydrator = new FictionTransformer($this->em);
+        $fictionIO = $fictionHydrator->convertEntityIntoIO($fiction);
 
         $serializer = new CustomSerializer();
 
         return $serializer->serialize($fictionIO);
     }
 
-    public function putFiction($data)
+    public function putFiction($fictionId, $data)
     {
+        //fetch fiction and check if exists
+        $fiction = $this->fetchFiction($fictionId);
 
+        //change the data
+        $hydrator = new FictionHydrator();
+        $fiction = $hydrator->hydrateFiction($fiction, $data);
+
+        //save and create IO
+        $fictionIO = $this->saveFiction($fiction);
+
+        return $fictionIO;
     }
 
     public function deleteFiction()
@@ -127,7 +138,7 @@ class FictionHandler
         
     }
 
-    public function createFiction($data)
+    public function createFiction($data) // à revoir?
     {
         $fiction = new Fiction();
         $fiction->setTitre($data['titre']);
@@ -137,4 +148,38 @@ class FictionHandler
 
         return $fiction;
     }
+
+    public function saveFiction($fiction)
+    {
+        //save
+        $this->em->persist($fiction);
+        $this->em->flush();
+
+        //transform into IO
+        $transformer = new FictionTransformer($this->em);
+        $fictionIO = $transformer->convertEntityIntoIO($fiction);
+
+        //serialize
+        $serializer = new CustomSerializer();
+        $fictionIO = $serializer->serialize($fictionIO);
+
+        return $fictionIO;
+    }
+
+    public function fetchFiction($fictionId)
+    {
+        //get fiction
+        $fiction = $this->em->getRepository('App:Concept\Fiction')->findOneById($fictionId);
+
+        //check if fiction exists
+        if (!$fiction) {
+            throw new NotFoundHttpException(sprintf(
+                'Aucune fiction avec l\'id "%s" n\'a été trouvée',
+                $fictionId
+            ));
+        }
+
+        return $fiction;
+    }
+
 }

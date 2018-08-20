@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Component\Hydrator;
+namespace App\Component\Transformer;
 
 use App\Component\IO\TexteIO;
 
-class TexteHydrator extends ElementHydrator
+class TexteTransformer extends ElementTransformer
 {
     public function hydrateTexte($texte)
     {
