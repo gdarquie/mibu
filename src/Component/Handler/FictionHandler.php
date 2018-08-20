@@ -4,14 +4,12 @@ namespace App\Component\Handler;
 
 use App\Component\Hydrator\FictionHydrator;
 use App\Component\Transformer\FictionTransformer;
-use App\Component\IO\FictionIO;
 use App\Component\Serializer\CustomSerializer;
 use App\Entity\Concept\Fiction;
-use App\Form\FictionType;
 use Doctrine\ORM\EntityManager;
 use Pagerfanta\Adapter\ArrayAdapter;
 use Pagerfanta\Pagerfanta;
-use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class FictionHandler
@@ -73,6 +71,7 @@ class FictionHandler
     {
         $fiction = $this->createFiction($data);
 
+        //refacto?
         if(isset($data['textes'])){
 
             if($data['textes'] !== null){
@@ -133,9 +132,13 @@ class FictionHandler
         return $fictionIO;
     }
 
-    public function deleteFiction()
+    public function deleteFiction($fictionId)
     {
-        
+        $fiction = $this->fetchFiction($fictionId);
+        $this->em->remove($fiction);
+        $this->em->flush();
+
+        return new JsonResponse('Suppression de la fiction '.$fictionId.'.', 202);
     }
 
     public function createFiction($data) // à revoir?

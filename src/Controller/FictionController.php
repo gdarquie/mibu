@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Component\Handler\FictionHandler;
 use App\Component\IO\FictionIO;
-use App\Entity\Concept\Fiction;
 use App\Form\FictionType;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,7 +18,7 @@ class FictionController extends FOSRestController
      */
     public function getFictions(): Response
     {
-        return $this->getResponse(
+        return $this->createResponse(
             $this->getHandler()->getFictions($page = 1, $maxPerPage = 10)
         );
     }
@@ -29,7 +28,7 @@ class FictionController extends FOSRestController
      */
     public function getFiction($id): Response
     {
-        return $this->getResponse(
+        return $this->createResponse(
             $this->getHandler()->getFiction($id)
         );
     }
@@ -42,7 +41,7 @@ class FictionController extends FOSRestController
      */
     public function postFiction(Request $request)
     {
-        $data = json_decode($request->getContent(), true);
+        $data = $this->getData($request);
 
         $fictionIO = new FictionIO();
         $form = $this->createForm(FictionType::class, $fictionIO);
@@ -52,15 +51,8 @@ class FictionController extends FOSRestController
 
             $fictionIO = $this->getHandler()->postFiction($data);
 
-            //refacto la génération de route
-            $url = $this->generateUrl(
-                'get_fiction', array(
-                'id' => json_decode($fictionIO)->id
-            ));
-
-//            $this->createRouteWithId($id);
-
-            $response = $this->getResponse($fictionIO, $url);
+            $url = $this->createRouteGetFiction(json_decode($fictionIO)->id);
+            $response = $this->createResponse($fictionIO, $url);
 
             return $response;
         }
@@ -73,13 +65,12 @@ class FictionController extends FOSRestController
      */
     public function putFiction(Request $request, $fictionId)
     {
-        $data = json_decode($request->getContent(), true);
+        $data = $this->getData($request);
 
         $fictionIO = $this->getHandler()->putFiction($fictionId, $data);
 
-        //create response
         $url = $this->createRouteGetFiction($fictionId);
-        $response = $this->getResponse($fictionIO, $url);
+        $response = $this->createResponse($fictionIO, $url);
 
         return $response;
 
@@ -88,33 +79,26 @@ class FictionController extends FOSRestController
     /**
      * @Rest\Delete("/fictions/{fictionId}",name="delete_fiction")
      */
-    public function deleteAction(Request $request, $fictionId)
+    public function deleteAction($fictionId)
     {
-
-        $em = $this->getDoctrine()->getManager();
-
-        $fiction = $this->getDoctrine()->getRepository(Fiction::class)->findOneById($fictionId);
-
-        if (!$fiction) {
-            throw $this->createNotFoundException(sprintf(
-                'Aucune fiction avec l\'id "%s" n\'a été trouvée',
-                $fictionId
-            ));
-        }
-
-        $em->remove($fiction);
-        $em->flush();
-
-        return new JsonResponse('Suppression de la fiction '.$fictionId.'.', 202);
+        return $this->getHandler()->deleteFiction($fictionId);
     }
 
+    /**
+     * @return FictionHandler
+     */
     public function getHandler()
     {
         $fictionHandler = new FictionHandler($this->getDoctrine()->getManager());
         return $fictionHandler;
     }
 
-    public function getResponse($io, $url = null)
+    /**
+     * @param $io
+     * @param null $url
+     * @return Response
+     */
+    public function createResponse($io, $url = null)
     {
         $response = new Response($io);
         $response->headers->set('Content-Type', 'application/json');
@@ -126,6 +110,10 @@ class FictionController extends FOSRestController
         return $response;
     }
 
+    /**
+     * @param $id
+     * @return string
+     */
     public function createRouteGetFiction($id)
     {
         $url = $this->generateUrl(
@@ -134,6 +122,15 @@ class FictionController extends FOSRestController
         ));
 
         return $url;
+    }
+
+    /**
+     * @param $request
+     * @return mixed
+     */
+    public function getData($request)
+    {
+        return json_decode($request->getContent(), true);
     }
 
 }
