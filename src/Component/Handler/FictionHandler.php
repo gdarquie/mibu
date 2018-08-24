@@ -4,17 +4,20 @@ namespace App\Component\Handler;
 
 use App\Component\Fetcher\FictionFetcher;
 use App\Component\Hydrator\FictionHydrator;
+use App\Component\IO\Pagination\PaginatedCollectionIO;
 use App\Component\Transformer\FictionTransformer;
 use App\Component\Serializer\CustomSerializer;
 use App\Entity\Concept\Fiction;
 use Doctrine\ORM\EntityManager;
-use Pagerfanta\Adapter\ArrayAdapter;
+use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
-class FictionHandler
+class FictionHandler extends BaseHandler
 {
     private $em;
+
+    private $router;
 
     public function __construct(EntityManager $em)
     {
@@ -26,29 +29,45 @@ class FictionHandler
      * @param int $maxPerPage
      * @return array|bool|float|int|string
      */
-    public function getFictions($page = 1, $maxPerPage = 10)
+    public function getFictions($request)
     {
-        $fictions = $this->em->getRepository(Fiction::class)->findAll();
-        $fictionsIO = [];
 
-        $adapter = new ArrayAdapter($fictions);
+        $page = $request->query->get('page', 1);
+        $maxPerPage = $request->query->get('maxPerPage', 10);
+
+        $fictionsIO = [];
+        $qb = $this->em->getRepository(Fiction::class)->getTextesQueryBuilder();
+
+        $adapter = new DoctrineORMAdapter($qb);
         $pagerfanta = new Pagerfanta($adapter);
         $pagerfanta->setMaxPerPage($maxPerPage);
         $pagerfanta->setCurrentPage($page);
 
-        foreach ($pagerfanta as $fiction){
-            $fictionIO = $this-$this->getTransformer()->convertEntityIntoIO($fiction);
+        foreach ($pagerfanta->getCurrentPageResults() as $fiction){
+            $fictionIO = $this->getTransformer()->convertEntityIntoIO($fiction);
 
             array_push($fictionsIO, $fictionIO);
         }
 
         $total = $pagerfanta->getNbResults();
-        $count = count($fictionsIO);
 
-        $serializer = new CustomSerializer();
-        $fictionsIO = $serializer->serialize($fictionsIO);
+        $collection = new PaginatedCollectionIO($fictionsIO,$total);
 
-        return $fictionsIO;
+//        $this->generateUrl('get_fictions', '', $page);
+
+        $collection->addLink('self', 'fictions?page='.$page); //todo : récupérer dynamiquement la route à partir de son nom & pouvoir ajouter d'autres params
+        $collection->addLink('first', 'fictions?page=1');
+        $collection->addLink('last', 'fictions?page='.$pagerfanta->getNbPages());
+
+        if ($pagerfanta->hasPreviousPage()) {
+            $collection->addLink('next', 'fictions?page='.$pagerfanta->getPreviousPage());
+        }
+
+        if ($pagerfanta->hasNextPage()) {
+            $collection->addLink('next', 'fictions?page='.$pagerfanta->getNextPage());
+        }
+
+        return $collection;
 
     }
 
@@ -148,7 +167,7 @@ class FictionHandler
         return new JsonResponse('Suppression de la fiction '.$fictionId.'.', 202);
     }
 
-    // todo : à revoir?
+    // todo : à revoir? supprimer?
     public function createFiction($data)
     {
         $fiction = new Fiction();

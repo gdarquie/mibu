@@ -82,7 +82,7 @@ class EvenementControllerTest extends ApiTestCase
     {
         $fiction = $this->createFiction();
         $evenement = $this->createEvenementFiction($fiction);
-        $evenement2 = $this->createEvenementFiction($fiction);
+        $evenement2 = $this->createEvenementFiction($fiction); //use in test
 
         $response = $this->client->delete(ApiTestCase::TEST_PREFIX.'/evenements/'.$evenement->getId());
         $this->assertEquals(200, $response->getStatusCode());
