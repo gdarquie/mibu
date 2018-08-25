@@ -235,10 +235,10 @@ class ApiTestCase extends KernelTestCase
         return $last['response'];
     }
 
-    protected function createFiction() {
+    protected function createFiction($titre = 'titre') {
 
         $fiction = new Fiction();
-        $fiction->setTitre('Titre');
+        $fiction->setTitre($titre);
         $fiction->setDescription('Description');
 
         $this->getService('doctrine')->getManager()->persist($fiction);

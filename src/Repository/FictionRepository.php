@@ -13,6 +13,10 @@ class FictionRepository extends ServiceEntityRepository
         parent::__construct($registry, Fiction::class);
     }
 
+    /**
+     * @param $id
+     * @return mixed
+     */
     public function getTextesFiction($id)
     {
         $query = $this->getEntityManager()->createQuery('SELECT t FROM App:Element\Texte t JOIN t.fiction f WHERE f.id = :id ORDER BY t.id');
@@ -22,6 +26,10 @@ class FictionRepository extends ServiceEntityRepository
         return $textes;
     }
 
+    /**
+     * @param $fictionId
+     * @return mixed
+     */
     public function getPersonnagesFiction($fictionId)
     {
         $query = $this->getEntityManager()->createQuery('SELECT p FROM App:Element\Personnage p JOIN p.fiction f WHERE f.id = :fictionId');
@@ -31,6 +39,10 @@ class FictionRepository extends ServiceEntityRepository
         return $personnages;
     }
 
+    /**
+     * @param $fictionId
+     * @return mixed
+     */
     public function getEvenementsFiction($fictionId)
     {
         $query = $this->getEntityManager()->createQuery('SELECT e FROM App:Element\Evenement e JOIN e.fiction f WHERE f.id = :fictionId');
@@ -38,6 +50,14 @@ class FictionRepository extends ServiceEntityRepository
         $evenements = $query->getResult();
 
         return $evenements;
+    }
+
+    /**
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function getTextesQueryBuilder()
+    {
+        return $this->createQueryBuilder('texte')->orderBy('texte.id', 'ASC');
     }
 
 }

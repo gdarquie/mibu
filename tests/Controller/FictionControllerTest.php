@@ -61,6 +61,43 @@ class FictionControllerTest extends ApiTestCase
         echo "\n\n";
     }
 
+    public function testGetFictions()
+    {
+       for ($i = 0; $i<25; $i++) {
+           $this->createFiction('Fiction '.$i);
+       }
+
+       //page 1
+        $response = $this->client->get(ApiTestCase::TEST_PREFIX.'/fictions');
+        $this->assertEquals(200, $response->getStatusCode());
+        $payload = json_decode($response->getBody(true), true);
+
+        $this->assertEquals('Fiction 5', $payload['items'][5]['titre']);
+        $this->assertEquals(10, $payload['count'], "Il n'y a pas le bon compte de fictions");
+        $this->assertEquals(25, $payload['total'], "Il n'y a pas le bon total de fictions");
+        $this->assertArrayHasKey('links', $payload, "Il n'y a pas de champ links");
+        $this->assertArrayHasKey('next', $payload['links'], "Il n'y a pas de champ links.next");
+
+        //page 2
+        $nextLink = $payload['links']['next'];
+        $response = $this->client->get(ApiTestCase::TEST_PREFIX.'/'.$nextLink);
+        $payloadNext = json_decode($response->getBody(true), true);
+
+        $this->assertEquals('Fiction 15', $payloadNext['items'][5]['titre']);
+        $this->assertEquals(10, count($payloadNext['items']), "Il n'y a pas le bon compte de fictions");
+        $this->assertArrayHasKey('links', $payloadNext, "Il n'y a pas de champ links");
+        $this->assertArrayHasKey('next', $payloadNext['links'], "Il n'y a pas de champ links.next");
+
+        //last
+        $lastLink = $payload['links']['last'];
+        $response = $this->client->get(ApiTestCase::TEST_PREFIX.'/'.$lastLink);
+        $payloadLast = json_decode($response->getBody(true), true);
+
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals('Fiction 24', $payloadLast['items'][4]['titre']);
+
+    }
+
     public function testGetFiction()
     {
         $fiction = $this->createFiction();

@@ -9,17 +9,18 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use FOS\RestBundle\Controller\Annotations as Rest;
-use FOS\RestBundle\Controller\FOSRestController;
 
-class FictionController extends FOSRestController
+class FictionController extends BaseController
 {
     /**
      * @Rest\Get("fictions", name="get_fictions")
      */
-    public function getFictions(): Response
+    public function getFictions(Request $request): Response
     {
-        return $this->createResponse(
-            $this->getHandler()->getFictions($page = 1, $maxPerPage = 10)
+        return $this->createApiResponse(
+            $this->getHandler()->getFictions($request),
+            200,
+            $this->createUrl('get_fictions', [], $request->query->get('page', 1))
         );
     }
 
@@ -69,9 +70,7 @@ class FictionController extends FOSRestController
     public function putFiction(Request $request, $fictionId)
     {
         $data = $this->getData($request);
-
         $fictionIO = $this->getHandler()->putFiction($fictionId, $data);
-
         $url = $this->createRouteGetFiction($fictionId);
         $response = $this->createResponse($fictionIO, $url);
 
@@ -92,7 +91,7 @@ class FictionController extends FOSRestController
      */
     public function getHandler()
     {
-        $fictionHandler = new FictionHandler($this->getDoctrine()->getManager());
+        $fictionHandler = new FictionHandler($this->getDoctrine()->getManager()); //todo : remplacer par une injection de dépendance
         return $fictionHandler;
     }
 
