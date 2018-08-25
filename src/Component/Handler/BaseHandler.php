@@ -3,21 +3,21 @@
 namespace App\Component\Handler;
 
 use Doctrine\ORM\EntityManager;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Routing\Router;
 
 class BaseHandler
 {
-    private $router;
+    protected $em;
+    protected $router;
 
-    public function __construct(UrlGeneratorInterface $router, EntityManager $em)
+    public function __construct(EntityManager $em, Router $router)
     {
         $this->em = $em;
+        $this->router = $router;
     }
 
-    //todo = utiliser la fonction quand injection de dépendance ok
-    public function generateUrl($route, $params, $targetPage)
+    public function generateUrl($route, array $params, $targetPage)
     {
-        dump($this);die;
         return $this->router->generate(
             $route,
             array_merge(

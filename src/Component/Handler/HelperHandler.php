@@ -2,7 +2,6 @@
 
 namespace App\Component\Handler;
 
-
 use App\Entity\Concept\Fiction;
 use App\Entity\Modele\AbstractItem;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;

@@ -12,26 +12,22 @@ use Doctrine\ORM\EntityManager;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Routing\Router;
+
 
 class FictionHandler extends BaseHandler
 {
-    private $em;
-
-    private $router;
-
-    public function __construct(EntityManager $em)
+    public function __construct(EntityManager $em, Router $router)
     {
-        $this->em = $em;
+        parent::__construct($em, $router);
     }
 
     /**
-     * @param int $page
-     * @param int $maxPerPage
-     * @return array|bool|float|int|string
+     * @param $request
+     * @return PaginatedCollectionIO
      */
     public function getFictions($request)
     {
-
         $page = $request->query->get('page', 1);
         $maxPerPage = $request->query->get('maxPerPage', 10);
 
@@ -53,18 +49,16 @@ class FictionHandler extends BaseHandler
 
         $collection = new PaginatedCollectionIO($fictionsIO,$total);
 
-//        $this->generateUrl('get_fictions', '', $page);
-
-        $collection->addLink('self', 'fictions?page='.$page); //todo : récupérer dynamiquement la route à partir de son nom & pouvoir ajouter d'autres params
-        $collection->addLink('first', 'fictions?page=1');
-        $collection->addLink('last', 'fictions?page='.$pagerfanta->getNbPages());
+        $collection->addLink('self', $this->generateUrl('get_fictions', [], $page));
+        $collection->addLink('first', $this->generateUrl('get_fictions', [], 1));
+        $collection->addLink('last', $this->generateUrl('get_fictions', [], $pagerfanta->getNbPages()));
 
         if ($pagerfanta->hasPreviousPage()) {
-            $collection->addLink('next', 'fictions?page='.$pagerfanta->getPreviousPage());
+            $collection->addLink('previous', $this->generateUrl('get_fictions', [], $pagerfanta->getPreviousPage()));
         }
 
         if ($pagerfanta->hasNextPage()) {
-            $collection->addLink('next', 'fictions?page='.$pagerfanta->getNextPage());
+            $collection->addLink('next', $this->generateUrl('get_fictions', [], $pagerfanta->getNextPage()));
         }
 
         return $collection;
