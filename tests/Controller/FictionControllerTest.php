@@ -80,7 +80,7 @@ class FictionControllerTest extends ApiTestCase
 
         //page 2
         $nextLink = $payload['links']['next'];
-        $response = $this->client->get(ApiTestCase::TEST_PREFIX.'/'.$nextLink);
+        $response = $this->client->get($nextLink);
         $payloadNext = json_decode($response->getBody(true), true);
 
         $this->assertEquals('Fiction 15', $payloadNext['items'][5]['titre']);
@@ -90,7 +90,7 @@ class FictionControllerTest extends ApiTestCase
 
         //last
         $lastLink = $payload['links']['last'];
-        $response = $this->client->get(ApiTestCase::TEST_PREFIX.'/'.$lastLink);
+        $response = $this->client->get($lastLink);
         $payloadLast = json_decode($response->getBody(true), true);
 
         $this->assertEquals(200, $response->getStatusCode());

@@ -91,7 +91,8 @@ class FictionController extends BaseController
      */
     public function getHandler()
     {
-        $fictionHandler = new FictionHandler($this->getDoctrine()->getManager()); //todo : remplacer par une injection de dépendance
+        //get service
+        $fictionHandler = new FictionHandler($this->getDoctrine()->getManager(), $this->get('router'));
         return $fictionHandler;
     }
 
