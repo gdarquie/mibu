@@ -20,7 +20,7 @@ class FictionController extends BaseController
         return $this->createApiResponse(
             $this->getHandler()->getFictions($request),
             200,
-            $this->createUrl('get_fictions', [], $request->query->get('page', 1))
+            $this->getHandler()->generateUrl('get_fictions', [], $request->query->get('page', 1))
         );
     }
 
