@@ -85,7 +85,11 @@ class FictionHandler extends BaseHandler
      */
     public function postFiction($data)
     {
-        $fiction = $this->createFiction($data);
+        $fiction = new Fiction();
+        $fiction = $this->getHydrator()->hydrateFiction($fiction, $data);
+
+        //add a check for testing if valid? (add a form)
+        $fictionIO = $this->saveFiction($fiction);
 
         //todo = refacto en une seule fonction
         if(isset($data['textes'])){
@@ -125,8 +129,6 @@ class FictionHandler extends BaseHandler
             }
         }
 
-        $fictionIO = $this->getTransformer()->convertEntityIntoIO($fiction);
-
         return $this->getSerializer()->serialize($fictionIO);
     }
 
@@ -149,6 +151,9 @@ class FictionHandler extends BaseHandler
         //save and create IO
         $fictionIO = $this->saveFiction($fiction);
 
+        //change into Json
+        $fictionIO = $this->getSerializer()->serialize($fictionIO);
+
         return $fictionIO;
     }
 
@@ -159,18 +164,6 @@ class FictionHandler extends BaseHandler
         $this->em->flush();
 
         return new JsonResponse('Suppression de la fiction '.$fictionId.'.', 202);
-    }
-
-    // todo : à revoir? supprimer?
-    public function createFiction($data)
-    {
-        $fiction = new Fiction();
-        $fiction->setTitre($data['titre']);
-        $fiction->setDescription($data['description']);
-        $this->em->persist($fiction);
-        $this->em->flush();
-
-        return $fiction;
     }
 
     /**
@@ -188,9 +181,6 @@ class FictionHandler extends BaseHandler
         //transform into IO
         $transformer = new FictionTransformer($this->em);
         $fictionIO = $transformer->convertEntityIntoIO($fiction);
-
-        //serialize
-        $fictionIO = $this->getSerializer()->serialize($fictionIO);
 
         return $fictionIO;
     }

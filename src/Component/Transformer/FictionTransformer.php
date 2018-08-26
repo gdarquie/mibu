@@ -22,10 +22,9 @@ class FictionTransformer
 
     public function convertEntityIntoIO($fiction)
     {
-        $fictionId = $fiction->getId();
-        $textes = $this->em->getRepository('App:Concept\Fiction')->getTextesFiction($fictionId);
-        $personnages = $this->em->getRepository('App:Concept\Fiction')->getPersonnagesFiction($fictionId);
-        $evenements = $this->em->getRepository('App:Concept\Fiction')->getEvenementsFiction($fictionId);
+//        $textes = $this->em->getRepository('App:Concept\Fiction')->getTextesFiction($fictionId);
+//        $personnages = $this->em->getRepository('App:Concept\Fiction')->getPersonnagesFiction($fictionId);
+//        $evenements = $this->em->getRepository('App:Concept\Fiction')->getEvenementsFiction($fictionId);
 
         $fictionIO = new FictionIO();
 
