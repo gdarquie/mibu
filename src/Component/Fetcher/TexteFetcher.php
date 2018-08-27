@@ -4,15 +4,22 @@ namespace App\Component\Fetcher;
 
 use App\Entity\Concept\Fiction;
 use App\Entity\Element\Texte;
+use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 
 class TexteFetcher
 {
+    private $em;
 
-    public function fetchTexte($em, $texteId) {
+    public function __construct(EntityManager $em)
+    {
+        $this->em = $em;
+    }
 
-        $texte = $em
+    public function fetchTexte($texteId) {
+
+        $texte = $this->em
             ->getRepository(Texte::class)
             ->findOneById($texteId);
 
@@ -26,9 +33,9 @@ class TexteFetcher
         return $texte;
     }
 
-    public function fetchTextes($em, $fictionId) {
+    public function fetchTextes($fictionId) {
 
-        $textes = $em->getRepository(Fiction::class)->getTextesFiction($fictionId);
+        $textes = $this->em->getRepository(Fiction::class)->getTextesFiction($fictionId);
 
         if (!$textes) {
             throw new NotFoundHttpException(sprintf(
@@ -39,8 +46,5 @@ class TexteFetcher
 
         return $textes;
     }
-
-
-
 
 }

@@ -2,7 +2,7 @@
 
 namespace App\Component\Fetcher;
 
-
+use App\Entity\Concept\Fiction;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -18,10 +18,8 @@ class FictionFetcher
 
     public function fetchFiction($fictionId)
     {
-        //get fiction
-        $fiction = $this->em->getRepository('App:Concept\Fiction')->findOneById($fictionId);
+        $fiction = $this->em->getRepository(Fiction::class)->findOneById($fictionId);
 
-        //check if fiction exists
         if (!$fiction) {
             throw new NotFoundHttpException(sprintf(
                 'Aucune fiction avec l\'id "%s" n\'a été trouvée',
