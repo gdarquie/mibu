@@ -9,7 +9,7 @@ class PersonnageTransformer extends ElementTransformer
     public function hydratePersonnage($personnage)
     {
         $personnageIO = new PersonnageIO();
-        $personnageIO = $this->hydrateElement($personnage, $personnageIO);
+        $personnageIO = $this->transformElement($personnage, $personnageIO);
 
         $personnageIO->setNom($personnage->getNom());
         $personnageIO->setPrenom($personnageIO->getPrenom());

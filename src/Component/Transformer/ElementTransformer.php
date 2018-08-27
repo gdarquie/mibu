@@ -4,7 +4,8 @@ namespace App\Component\Transformer;
 
 class ElementTransformer
 {
-    public function hydrateElement($element, $io)
+    //todo : ajouter un ConceptTransformer? | penser composition plutôt que hiérarchie?
+    public function transformElement($element, $io)
     {
         $io->setId($element->getId());
         $io->setTitre($element->getTitre());

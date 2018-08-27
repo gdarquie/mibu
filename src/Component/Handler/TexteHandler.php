@@ -2,18 +2,53 @@
 
 namespace App\Component\Handler;
 
+use App\Component\Fetcher\TexteFetcher;
+use App\Component\Serializer\CustomSerializer;
+use App\Component\Transformer\TexteTransformer;
 use App\Entity\Element\Texte;
-use App\Entity\Modele\AbstractItem;
+use Doctrine\ORM\EntityManager;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Routing\Router;
 
 
-class TexteHandler
+class TexteHandler extends BaseHandler
 {
 
-    public function __construct()
+    public function __construct(EntityManager $em, Router $router)
     {
+        parent::__construct($em, $router);
         $this->helper = new HelperHandler();
     }
 
+    public function getTexte($id)
+    {
+        //todo : à tester et à appeler dans le controlleur
+        $texte = $this->getFetcher()->fetchTexte($id);
+        $texteIO = $this->getTransformer()->convertEntityIntoIO($texte);
+
+        return $this->getSerializer()->serialize($texteIO);
+    }
+
+    public function getTextes()
+    {
+        
+    }
+    
+    public function putTexte()
+    {
+        
+    }
+    
+    public function deleteTexte($texteId)
+    {
+        $texte = $this->getFetcher()->fetchTexte($texteId);
+        $this->em->remove($texte);
+        $this->em->flush();
+
+        return new JsonResponse('Suppression du texte '.$texteId.'.', 200);
+    }
+
+    //todo : delete ?
     /**
      * @param $em
      * @param $data
@@ -86,6 +121,39 @@ class TexteHandler
         return $texte = $this->helper->setData($data, $texte);
 
     }
+
+    /**
+     * @return TexteFetcher
+     */
+    public function getFetcher(): TexteFetcher
+    {
+        return new TexteFetcher($this->em);
+    }
+
+    /**
+     * @return TexteHydrator
+     */
+    public function getHydrator(): TexteHydrator
+    {
+        return new TexteHydrator($this->em);
+    }
+
+    /**
+     * @return TexteTransformer
+     */
+    public function getTransformer() : TexteTransformer
+    {
+        return new TexteTransformer($this->em);
+    }
+
+    /**
+     * @return CustomSerializer
+     */
+    public function getSerializer(): CustomSerializer
+    {
+        return new CustomSerializer();
+    }
+
 
 
 }

@@ -9,7 +9,7 @@ class EvenementTransformer extends ElementTransformer
     public function hydrateEvenement($evenement)
     {
         $evenementIO = new EvenementIO();
-        $evenementIO = $this->hydrateElement($evenement, $evenementIO);
+        $evenementIO = $this->transformElement($evenement, $evenementIO);
 
         $evenementIO->setAnneeDebut($evenement->getAnneeDebut());
         $evenementIO->setAnneeFin($evenement->getAnneeFin());
