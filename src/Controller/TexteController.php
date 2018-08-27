@@ -4,8 +4,6 @@ namespace App\Controller;
 
 use App\Component\Fetcher\TexteFetcher;
 use App\Component\Handler\TexteHandler;
-use App\Component\IO\TexteIO;
-use App\Entity\Element\Texte;
 use App\Component\Transformer\TexteTransformer;
 use App\Component\Serializer\CustomSerializer;
 use App\Form\TexteType;
@@ -27,8 +25,8 @@ class TexteController extends FOSRestController
     {
         $em = $this->getDoctrine()->getManager();
 
-        $texteFetcher = new TexteFetcher();
-        $texte = $texteFetcher->fetchTexte($em, $texteId);
+        $texteFetcher = new TexteFetcher($em);
+        $texte = $texteFetcher->fetchTexte($texteId);
 
         $texteHydrator = new TexteTransformer();
         $texteIO = $texteHydrator->hydrateTexte($texte);
@@ -50,8 +48,8 @@ class TexteController extends FOSRestController
         $em = $this->getDoctrine()->getManager();
 
         //fetcher
-        $texteFetcher = new TexteFetcher();
-        $textes = $texteFetcher->fetchTextes($em, $fictionId);
+        $texteFetcher = new TexteFetcher($em);
+        $textes = $texteFetcher->fetchTextes($fictionId);
 
         //hydrator
         $texteHydrator = new TexteTransformer();
@@ -89,8 +87,7 @@ class TexteController extends FOSRestController
         $em = $this->getDoctrine()->getManager();
 
         $data = json_decode($request->getContent(), true);
-        $handlerTexte = new TexteHandler();
-        $texte = $handlerTexte->createTexte($em, $data);
+        $texte = $this->getHandler()->createTexte($em, $data);
 
         $response = $this->getTexte($texte->getId());
         $texteUrl = $this->generateUrl(
@@ -111,8 +108,8 @@ class TexteController extends FOSRestController
     {
         $em = $this->getDoctrine()->getManager();
 
-        $texteFetcher = new TexteFetcher();
-        $texte = $texteFetcher->fetchTexte($em, $texteId);
+        $texteFetcher = new TexteFetcher($em);
+        $texte = $texteFetcher->fetchTexte($texteId);
 
         $texteHydrator = new TexteTransformer();
         $texteIO = $texteHydrator->hydrateTexte($texte);
@@ -124,8 +121,7 @@ class TexteController extends FOSRestController
 
         if($form->isSubmitted()){
 
-            $handlerTexte = new TexteHandler();
-            $texte = $handlerTexte->updateTexte($em, $texte, $data);
+            $texte = $this->getHandler()->updateTexte($em, $texte, $data);
 
             $em->persist($texte);
             $em->flush();
@@ -148,16 +144,18 @@ class TexteController extends FOSRestController
     /**
      * @Rest\Delete("/textes/{texteId}",name="delete_texte")
      */
-    public function deleteTexte(Request $request, $texteId)
+    public function deleteAction($texteId)
     {
-        $em = $this->getDoctrine()->getManager();
-
-        $texteFetcher = new TexteFetcher();
-        $texte = $texteFetcher->fetchTexte($em, $texteId);
-
-        $em->remove($texte);
-        $em->flush();
-
-        return $this->getTextes($texte->getFiction()->getId());
+        return $this->getHandler()->deleteTexte($texteId);
     }
+
+    /**
+     * @return TexteHandler
+     */
+    public function getHandler()
+    {
+        $fictionHandler = new TexteHandler($this->getDoctrine()->getManager(), $this->get('router'));
+        return $fictionHandler;
+    }
+
 }

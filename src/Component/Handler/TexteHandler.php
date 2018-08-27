@@ -2,18 +2,47 @@
 
 namespace App\Component\Handler;
 
+use App\Component\Fetcher\TexteFetcher;
 use App\Entity\Element\Texte;
-use App\Entity\Modele\AbstractItem;
+use Doctrine\ORM\EntityManager;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Routing\Router;
 
 
-class TexteHandler
+class TexteHandler extends BaseHandler
 {
 
-    public function __construct()
+    public function __construct(EntityManager $em, Router $router)
     {
+        parent::__construct($em, $router);
         $this->helper = new HelperHandler();
     }
 
+    public function getTexte()
+    {
+        
+    }
+
+    public function getTextes()
+    {
+        
+    }
+    
+    public function putTexte()
+    {
+        
+    }
+    
+    public function deleteTexte($texteId)
+    {
+        $texte = $this->getFetcher()->fetchTexte($texteId);
+        $this->em->remove($texte);
+        $this->em->flush();
+
+        return new JsonResponse('Suppression du texte '.$texteId.'.', 200);
+    }
+
+    //todo : delete ?
     /**
      * @param $em
      * @param $data
@@ -85,6 +114,11 @@ class TexteHandler
 
         return $texte = $this->helper->setData($data, $texte);
 
+    }
+
+    public function getFetcher()
+    {
+        return new TexteFetcher($this->em);
     }
 
 
