@@ -3,6 +3,8 @@
 namespace App\Component\Handler;
 
 use App\Component\Fetcher\TexteFetcher;
+use App\Component\Serializer\CustomSerializer;
+use App\Component\Transformer\TexteTransformer;
 use App\Entity\Element\Texte;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -18,9 +20,13 @@ class TexteHandler extends BaseHandler
         $this->helper = new HelperHandler();
     }
 
-    public function getTexte()
+    public function getTexte($id)
     {
-        
+        //todo : à tester et à appeler dans le controlleur
+        $texte = $this->getFetcher()->fetchTexte($id);
+        $texteIO = $this->getTransformer()->convertEntityIntoIO($texte);
+
+        return $this->getSerializer()->serialize($texteIO);
     }
 
     public function getTextes()
@@ -116,10 +122,38 @@ class TexteHandler extends BaseHandler
 
     }
 
-    public function getFetcher()
+    /**
+     * @return TexteFetcher
+     */
+    public function getFetcher(): TexteFetcher
     {
         return new TexteFetcher($this->em);
     }
+
+    /**
+     * @return TexteHydrator
+     */
+    public function getHydrator(): TexteHydrator
+    {
+        return new TexteHydrator($this->em);
+    }
+
+    /**
+     * @return TexteTransformer
+     */
+    public function getTransformer() : TexteTransformer
+    {
+        return new TexteTransformer($this->em);
+    }
+
+    /**
+     * @return CustomSerializer
+     */
+    public function getSerializer(): CustomSerializer
+    {
+        return new CustomSerializer();
+    }
+
 
 
 }

@@ -23,16 +23,7 @@ class TexteController extends FOSRestController
      */
     public function getTexte($texteId)
     {
-        $em = $this->getDoctrine()->getManager();
-
-        $texteFetcher = new TexteFetcher($em);
-        $texte = $texteFetcher->fetchTexte($texteId);
-
-        $texteHydrator = new TexteTransformer();
-        $texteIO = $texteHydrator->hydrateTexte($texte);
-
-        $serializer = new CustomSerializer();
-        $texteIO = $serializer->serialize($texteIO);
+        $texteIO = $this->getHandler()->getTexte($texteId);
 
         $response = new Response($texteIO);
         $response->headers->set('Content-Type', 'application/json');

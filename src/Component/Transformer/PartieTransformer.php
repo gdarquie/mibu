@@ -9,7 +9,7 @@ class PartieTransformer extends ElementTransformer
     public function hydratePartie($partie)
     {
         $partieIO = new PartieIO();
-        $partieIO = $this->hydrateElement($partie, $partieIO);
+        $partieIO = $this->transformElement($partie, $partieIO);
         //textes
 
         return $partieIO;
