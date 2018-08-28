@@ -175,8 +175,7 @@ class FictionHandler extends BaseHandler
     public function saveFiction($fiction)
     {
         //save
-        $this->em->persist($fiction);
-        $this->em->flush();
+        $this->save($fiction);
 
         //transform into IO
         $transformer = new FictionTransformer($this->em);

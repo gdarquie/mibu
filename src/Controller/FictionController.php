@@ -127,13 +127,4 @@ class FictionController extends BaseController
         return $url;
     }
 
-    /**
-     * @param $request
-     * @return mixed
-     */
-    public function getData($request)
-    {
-        return json_decode($request->getContent(), true);
-    }
-
 }

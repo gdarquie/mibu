@@ -17,7 +17,7 @@ class ElementIO extends AbstractConceptIO
     /**
      * @return mixed
      */
-    public function getFictionId(): string
+    public function getFictionId(): ?string
     {
         return $this->fictionId;
     }

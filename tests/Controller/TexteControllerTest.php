@@ -44,11 +44,12 @@ class TexteControllerTest extends ApiTestCase
             'type' => 'promesse'
         );
 
+        $status = 200;
+
         try {
             $this->client->post(ApiTestCase::TEST_PREFIX . '/textes', [
                 'body' => json_encode($data)
             ]);
-            $status = 200;
 
         } catch (RequestException $e ) {
 
