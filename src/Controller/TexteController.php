@@ -25,7 +25,7 @@ class TexteController extends BaseController
     public function getTexte($texteId)
     {
         $texteIO = $this->getHandler()->getTexte($texteId);
-        $response = new Response($texteIO);
+        $response = new Response($texteIO); //todo : replace by a function
         $response->headers->set('Content-Type', 'application/json');
 
         return $response;
@@ -100,39 +100,14 @@ class TexteController extends BaseController
      */
     public function putTexte(Request $request, $texteId)
     {
-        $em = $this->getDoctrine()->getManager();
+        $data = $this->getData($request);
+        $texteIO = $this->getHandler()->putTexte($texteId, $data);
 
-        $texteFetcher = new TexteFetcher($em);
-        $texte = $texteFetcher->fetchTexte($texteId);
-
-        $texteHydrator = new TexteTransformer();
-        $texteIO = $texteHydrator->hydrateTexte($texte);
-
-        $data = json_decode($request->getContent(), true);
-
-        $form = $this->createForm(TexteType::class, $texteIO);
-        $form->submit($data);
-
-        if($form->isSubmitted()){
-
-            $texte = $this->getHandler()->updateTexte($em, $texte, $data);
-
-            $em->persist($texte);
-            $em->flush();
-
-            $response = new JsonResponse("Mise à jour du texte", 202);
-            $texteUrl = $this->generateUrl(
-                'get_texte', array(
-                'texteId' => $texte->getId()
-            ));
-
-            $response->headers->set('Location', $texteUrl);
-
-            return $response;
-
-        }
-
-        return new JsonResponse("Echec de la mise à jour");
+        return $this->createApiResponse(
+            $texteIO,
+            202,
+            $this->createRoute('get_texte', $texteIO->getId()) //todo : replace by generateUrl()
+        );
     }
 
     /**
@@ -143,13 +118,13 @@ class TexteController extends BaseController
         return $this->getHandler()->deleteTexte($texteId);
     }
 
+
     /**
      * @return TexteHandler
      */
     public function getHandler()
     {
-        $fictionHandler = new TexteHandler($this->getDoctrine()->getManager(), $this->get('router'));
-        return $fictionHandler;
+        return new TexteHandler($this->getDoctrine()->getManager(), $this->get('router'));
     }
 
     /**
