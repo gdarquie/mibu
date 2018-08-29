@@ -34,40 +34,14 @@ class TexteController extends BaseController
     /**
      * @Rest\Get("textes/fiction/{fictionId}", name="get_textes")
      */
-    public function getTextes($fictionId, $page = 1, $maxPerPage = 10)
+    public function getTextes(Request $request, $fictionId)
     {
-        $em = $this->getDoctrine()->getManager();
-
-        //fetcher
-        $texteFetcher = new TexteFetcher($em);
-        $textes = $texteFetcher->fetchTextes($fictionId);
-
-        //hydrator
-        $texteHydrator = new TexteTransformer();
-        $textesIO = [];
-        $adapter = new ArrayAdapter($textes);
-        $pagerfanta = new Pagerfanta($adapter);
-        $pagerfanta->setMaxPerPage($maxPerPage);
-        $pagerfanta->setCurrentPage($page);
-
-        foreach ($pagerfanta as $texte){
-            $texteIO = $texteHydrator->hydrateTexte($texte);
-
-            array_push($textesIO, $texteIO);
-        }
-
-        $total = $pagerfanta->getNbResults();
-        $count = count($textesIO);
-
-        //serializer
-        $serializer = new CustomSerializer();
-        $textesIO = $serializer->serialize($textesIO);
-
-        $response = new Response($textesIO);
-
-        $response->headers->set('Content-Type', 'application/json');
-
-        return $response;
+        //remplacer la valeur en dure pour fictionId
+        return $this->createApiResponse(
+            $this->getHandler()->getTextes($request, $fictionId),
+            200,
+            $this->getHandler()->generateUrl('get_textes', ['fictionId' => $fictionId], $request->query->get('page', 1))
+        );
     }
 
     /**

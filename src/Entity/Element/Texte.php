@@ -6,7 +6,7 @@ use App\Entity\Modele\AbstractElement;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\TexteRepository")
  * @ORM\Table(name="texte")
  */
 class Texte extends AbstractElement
