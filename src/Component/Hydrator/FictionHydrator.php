@@ -2,12 +2,11 @@
 
 namespace App\Component\Hydrator;
 
-class FictionHydrator
+class FictionHydrator extends ConceptHydrator
 {
     public function hydrateFiction($fiction, $data)
     {
-        ($data['titre']) ? $fiction->setTitre($data['titre']) : '';
-        ($data['description']) ? $fiction->setDescription($data['description']) : '';
+        $fiction = parent::hydrateConcept($fiction, $data);
 
         return $fiction;
     }

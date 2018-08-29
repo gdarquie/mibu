@@ -15,6 +15,7 @@ class TexteType extends AbstractType
             ->add('titre')
             ->add('description')
             ->add('type')
+            ->add('itemId')
             ->add('fictionId')
             ;
     }

@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Component\Fetcher\TexteFetcher;
 use App\Component\Handler\TexteHandler;
+use App\Component\IO\TexteIO;
 use App\Component\Transformer\TexteTransformer;
 use App\Component\Serializer\CustomSerializer;
 use App\Form\TexteType;
@@ -15,7 +16,7 @@ use Symfony\Component\HttpFoundation\Response;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\FOSRestController;
 
-class TexteController extends FOSRestController
+class TexteController extends BaseController
 {
 
     /**
@@ -24,7 +25,6 @@ class TexteController extends FOSRestController
     public function getTexte($texteId)
     {
         $texteIO = $this->getHandler()->getTexte($texteId);
-
         $response = new Response($texteIO);
         $response->headers->set('Content-Type', 'application/json');
 
@@ -75,20 +75,23 @@ class TexteController extends FOSRestController
      */
     public function postTexte(Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
+        $data = $this->getData($request);
+        $texteIO = new TexteIO();
+        $form = $this->createForm(TexteType::class, $texteIO);
+        $form->submit($data);
 
-        $data = json_decode($request->getContent(), true);
-        $texte = $this->getHandler()->createTexte($em, $data);
+        if($form->isSubmitted()) {  //remplacer par isValidate
 
-        $response = $this->getTexte($texte->getId());
-        $texteUrl = $this->generateUrl(
-            'get_texte', array(
-            'texteId' => $texte->getId()
-        ));
-        $response->headers->set('Content-Type', 'application/json');
-        $response->headers->set('Location', $texteUrl);
+            $texteIO = $this->getHandler()->postTexte($data);
 
-        return $response;
+            return $this->createApiResponse(
+                $texteIO,
+                200,
+                $this->createRoute('get_texte', $texteIO->getId()) //todo : replace by generateUrl()
+            );
+        }
+
+        return new JsonResponse("Echec de l'insertion", 500);
 
     }
 
@@ -147,6 +150,20 @@ class TexteController extends FOSRestController
     {
         $fictionHandler = new TexteHandler($this->getDoctrine()->getManager(), $this->get('router'));
         return $fictionHandler;
+    }
+
+    /**
+     * @param $id
+     * @return string
+     */
+    public function createRoute($routeName, $id)
+    {
+        $url = $this->generateUrl(
+            $routeName, array(
+            'texteId' => $id
+        ));
+
+        return $url;
     }
 
 }

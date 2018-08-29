@@ -2,12 +2,16 @@
 
 namespace App\Component\Handler;
 
+use App\Component\Fetcher\FictionFetcher;
+use App\Component\Fetcher\ItemFetcher;
 use App\Component\Fetcher\TexteFetcher;
 use App\Component\Serializer\CustomSerializer;
 use App\Component\Transformer\TexteTransformer;
 use App\Entity\Element\Texte;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Router;
 
 
@@ -22,7 +26,6 @@ class TexteHandler extends BaseHandler
 
     public function getTexte($id)
     {
-        //todo : à tester et à appeler dans le controlleur
         $texte = $this->getFetcher()->fetchTexte($id);
         $texteIO = $this->getTransformer()->convertEntityIntoIO($texte);
 
@@ -32,6 +35,35 @@ class TexteHandler extends BaseHandler
     public function getTextes()
     {
         
+    }
+
+    public function postTexte($data)
+    {
+        $fictionFetcher = new FictionFetcher($this->em);
+
+        if(!isset($data['fictionId'])) {
+            throw new BadRequestHttpException(sprintf(
+                "Il n'y a pas de fiction liée à ce texte."
+            ));
+        }
+
+        $fiction = $fictionFetcher->fetchFiction($data['fictionId']);
+
+        $texte = new Texte($data['titre'], $data['description'], $data['type'], $fiction); //todo : remplacer par un hydrator
+
+        if (isset($data['itemId'])) {
+
+            $itemFetcher = new ItemFetcher($this->em);
+            $texte->setItem($itemFetcher->fetchItem($data['itemId']));
+        }
+
+        if(!$this->save($texte)) {
+            throw new NotFoundHttpException(sprintf(
+                "Le texte n'a pas été sauvegardé."
+            ));
+        }
+
+        return $this->getTransformer()->convertEntityIntoIO($texte);
     }
     
     public function putTexte()
