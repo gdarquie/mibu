@@ -47,12 +47,4 @@ class BaseController extends FOSRestController
         return new CustomSerializer();
     }
 
-
-//    public function createUrl($route, $routeParams, $targetPage)
-//    {
-//        return $this->generateUrl($route, array_merge(
-//            $routeParams,
-//            array('page' => $targetPage)
-//        ));
-//    }
 }
