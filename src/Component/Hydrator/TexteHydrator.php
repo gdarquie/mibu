@@ -9,7 +9,7 @@ class TexteHydrator extends ElementHydrator
     public function hydrateTexte(Texte $texte, $data)
     {
         parent::hydrateElement($texte, $data);
-        ($data['fictionId']) ? $texte->setFiction($data['fictionId']) : '';
+        ($data['fictionId']) ? $texte->setFiction($data['fiction']) : '';
 
         return $texte;
     }

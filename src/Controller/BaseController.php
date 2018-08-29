@@ -30,6 +30,7 @@ class BaseController extends FOSRestController
     {
         $response = new Response($this->getSerializer()->serialize($data));
         $response->headers->set('Content-Type', 'application/json');
+        $response->setStatusCode($statusCode);
 
         if (isset($url)) {
             $response->headers->set('Location', $url);
