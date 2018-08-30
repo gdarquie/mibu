@@ -35,9 +35,8 @@ class TexteHandler extends BaseHandler
     public function getTexte($id)
     {
         $texte = $this->getFetcher()->fetchTexte($id);
-        $texteIO = $this->getTransformer()->convertEntityIntoIO($texte);
 
-        return $this->getSerializer()->serialize($texteIO);
+        return $this->getTransformer()->convertEntityIntoIO($texte);
     }
 
     /**
@@ -98,13 +97,14 @@ class TexteHandler extends BaseHandler
 
         $fiction = $fictionFetcher->fetchFiction($data['fictionId']);
 
-        $texte = new Texte($data['titre'], $data['description'], $data['type'], $fiction); //todo : remplacer par un hydrator
+        $item = [];
 
         if (isset($data['itemId'])) {
-
             $itemFetcher = new ItemFetcher($this->em);
-            $texte->setItem($itemFetcher->fetchItem($data['itemId']));
+            $item = $itemFetcher->fetchItem($data['itemId']);
         }
+
+        $texte = new Texte($data['titre'], $data['description'], $data['type'], $fiction, $item);
 
         if(!$this->save($texte)) {
             throw new NotFoundHttpException(sprintf(

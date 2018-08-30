@@ -25,10 +25,12 @@ class TexteController extends BaseController
     public function getTexte($texteId)
     {
         $texteIO = $this->getHandler()->getTexte($texteId);
-        $response = new Response($texteIO); //todo : replace by a function
-        $response->headers->set('Content-Type', 'application/json');
 
-        return $response;
+        return $this->createApiResponse(
+            $texteIO,
+            200,
+            $this->getHandler()->generateSimpleUrl('get_texte', ['texteId' => $texteId])
+            );
     }
 
     /**
@@ -36,7 +38,6 @@ class TexteController extends BaseController
      */
     public function getTextes(Request $request, $fictionId)
     {
-        //remplacer la valeur en dure pour fictionId
         return $this->createApiResponse(
             $this->getHandler()->getTextes($request, $fictionId),
             200,
@@ -61,7 +62,7 @@ class TexteController extends BaseController
             return $this->createApiResponse(
                 $texteIO,
                 200,
-                $this->createRoute('get_texte', $texteIO->getId()) //todo : replace by generateUrl()
+                $this->getHandler()->generateSimpleUrl('get_texte', ['texteId' => $texteIO->getId()])
             );
         }
 
@@ -80,7 +81,7 @@ class TexteController extends BaseController
         return $this->createApiResponse(
             $texteIO,
             202,
-            $this->createRoute('get_texte', $texteIO->getId()) //todo : replace by generateUrl()
+            $this->getHandler()->generateSimpleUrl('get_texte', ['texteId' => $texteIO->getId()])
         );
     }
 
@@ -92,27 +93,12 @@ class TexteController extends BaseController
         return $this->getHandler()->deleteTexte($texteId);
     }
 
-
     /**
      * @return TexteHandler
      */
     public function getHandler()
     {
         return new TexteHandler($this->getDoctrine()->getManager(), $this->get('router'));
-    }
-
-    /**
-     * @param $id
-     * @return string
-     */
-    public function createRoute($routeName, $id)
-    {
-        $url = $this->generateUrl(
-            $routeName, array(
-            'texteId' => $id
-        ));
-
-        return $url;
     }
 
 }

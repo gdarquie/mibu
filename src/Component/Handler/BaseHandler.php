@@ -38,6 +38,16 @@ class BaseHandler
         );
     }
 
+    public function generateSimpleUrl($route, array $params)
+    {
+        return $this->router->generate(
+            $route,
+            array_merge(
+                $params
+            )
+        );
+    }
+
     /**
      * @param $entity
      * @return bool
