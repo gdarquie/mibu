@@ -22,10 +22,14 @@ use Symfony\Component\Routing\Router;
 class TexteHandler extends BaseHandler
 {
 
+    /**
+     * TexteHandler constructor.
+     * @param EntityManager $em
+     * @param Router $router
+     */
     public function __construct(EntityManager $em, Router $router)
     {
         parent::__construct($em, $router);
-        $this->helper = new HelperHandler();
     }
 
     /**
@@ -181,6 +185,7 @@ class TexteHandler extends BaseHandler
         return new TexteTransformer();
     }
 
+    //todo : remplacer par baseHandler
     /**
      * @return CustomSerializer
      */
