@@ -2,20 +2,56 @@
 
 namespace App\Component\Handler;
 
+use App\Component\Fetcher\PersonnageFetcher;
+use App\Component\Transformer\PersonnageTransformer;
 use App\Entity\Element\Personnage;
 use Doctrine\ORM\EntityManager;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Routing\Router;
 
-class PersonnageHandler
+class PersonnageHandler extends BaseHandler
 {
+
     /**
      * PersonnageHandler constructor.
+     * @param EntityManager $em
+     * @param Router $router
      */
-    public function __construct()
+    public function __construct(EntityManager $em, Router $router)
     {
+        parent::__construct($em, $router);
         $this->helper = new HelperHandler();
     }
 
+    public function getPersonnage()
+    {
+        
+    }
 
+    public function getPersonnages()
+    {
+        
+    }
+
+    public function postPersonnage()
+    {
+        
+    }
+
+    public function putPersonnage()
+    {
+        
+    }
+
+    public function deletePersonnage($personnageId)
+    {
+        $personnage = $this->getFetcher()->fetchPersonnage($personnageId);
+        $this->em->remove($personnage);
+        $this->em->flush();
+
+        return new JsonResponse('Suppression du texte '.$personnageId.'.', 200);
+    }
+    
     /**
      * @param EntityManager $em
      * @param $data
@@ -107,6 +143,30 @@ class PersonnageHandler
         $personnage->setFiction($data['fictionId']);
 
         return $personnage;
+    }
+
+    /**
+     * @return PersonnageFetcher
+     */
+    public function getFetcher(): PersonnageFetcher
+    {
+        return new PersonnageFetcher($this->em);
+    }
+
+    /**
+     * @return PersonnageHydrator
+     */
+    public function getHydrator(): PersonnageHydrator
+    {
+        return new PersonnageHydrator();
+    }
+
+    /**
+     * @return PersonnageTransformer
+     */
+    public function getTransformer() : PersonnageTransformer
+    {
+        return new PersonnageTransformer();
     }
 
 }

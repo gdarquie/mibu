@@ -2,6 +2,7 @@
 
 namespace App\Component\Handler;
 
+use App\Component\Serializer\CustomSerializer;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\Routing\Router;
 
@@ -59,5 +60,14 @@ class BaseHandler
 
         return true;
     }
+
+    /**
+     * @return CustomSerializer
+     */
+    public function getSerializer(): CustomSerializer
+    {
+        return new CustomSerializer();
+    }
+
 
 }

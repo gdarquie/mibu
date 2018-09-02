@@ -155,6 +155,8 @@ class PersonnageController extends FOSRestController
      */
     public function deletePersonnage($personnageId)
     {
+        $this->getHandler()->deletePersonnage();
+
         $em = $this->getDoctrine()->getManager();
 
         $personnage = $this->getDoctrine()->getRepository(Personnage::class)->findOneById($personnageId);
@@ -213,5 +215,13 @@ class PersonnageController extends FOSRestController
     public function deleteGenerated()
     {
         return 'Deleted';
+    }
+
+    /**
+     * @return PersonnageHandler
+     */
+    public function getHandler()
+    {
+        return new PersonnageHandler($this->getDoctrine()->getManager(), $this->get('router'));
     }
 }
