@@ -2,20 +2,52 @@
 
 namespace App\Component\Handler;
 
+use App\Component\Fetcher\PersonnageFetcher;
+use App\Component\Transformer\PersonnageTransformer;
 use App\Entity\Element\Personnage;
 use Doctrine\ORM\EntityManager;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Routing\Router;
 
-class PersonnageHandler
+class PersonnageHandler extends BaseHandler
 {
+
     /**
      * PersonnageHandler constructor.
+     * @param EntityManager $em
+     * @param Router $router
      */
-    public function __construct()
+    public function __construct(EntityManager $em, Router $router)
     {
+        parent::__construct($em, $router);
         $this->helper = new HelperHandler();
     }
 
+    public function getPersonnage()
+    {
+    }
 
+    public function getPersonnages()
+    {
+    }
+
+    public function postPersonnage()
+    {
+    }
+
+    public function putPersonnage()
+    {
+    }
+
+    public function deletePersonnage($personnageId)
+    {
+        $personnage = $this->getFetcher()->fetchPersonnage($personnageId);
+        $this->em->remove($personnage);
+        $this->em->flush();
+
+        return new JsonResponse('Suppression du texte '.$personnageId.'.', 200);
+    }
+    
     /**
      * @param EntityManager $em
      * @param $data
@@ -27,13 +59,10 @@ class PersonnageHandler
     {
         $data = $this->getData($em, $data);
         $personnage = $this->setData($data);
-
         $em->persist($personnage);
         $em->flush();
-
         return $personnage;
     }
-
     /**
      * @param EntityManager $em
      * @param $personnages
@@ -47,7 +76,6 @@ class PersonnageHandler
         {
             $this->createPersonnage($em, $data);
         }
-
         return true;
     }
 
@@ -61,10 +89,8 @@ class PersonnageHandler
     {
         $data = $this->getData($em, $data);
         $personnage = $this->setData($data, $personnage);
-
         $em->persist($personnage);
         $em->flush();
-
         return $personnage;
     }
 
@@ -86,9 +112,7 @@ class PersonnageHandler
     public function setData($data, Personnage $personnage = null)
     {
         (!$personnage) ? $personnage = new Personnage($data['titre'],$data['description']) : $personnage = $this->helper->setData($data, $personnage);
-
         return $personnage = $this->setPersonnageData($personnage, $data);
-
     }
 
     /**
@@ -103,10 +127,32 @@ class PersonnageHandler
         (isset($data['annee_naissance'])) ? $personnage->setAnneeNaissance($data['annee_naissance']) : $personnage->setAnneeNaissance(null);
         (isset($data['annee_mort'])) ? $personnage->setAnneeMort($data['annee_mort']) : $personnage->setAnneeMort(null);
         (isset($data['genre'])) ? $personnage->setGenre($data['genre']) : $personnage->setGenre(null);
-
         $personnage->setFiction($data['fictionId']);
-
         return $personnage;
+    }
+
+    /**
+     * @return PersonnageFetcher
+     */
+    public function getFetcher(): PersonnageFetcher
+    {
+        return new PersonnageFetcher($this->em);
+    }
+
+    /**
+     * @return PersonnageHydrator
+     */
+    public function getHydrator(): PersonnageHydrator
+    {
+        return new PersonnageHydrator();
+    }
+
+    /**
+     * @return PersonnageTransformer
+     */
+    public function getTransformer() : PersonnageTransformer
+    {
+        return new PersonnageTransformer();
     }
 
 }

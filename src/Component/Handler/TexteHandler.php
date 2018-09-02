@@ -22,10 +22,14 @@ use Symfony\Component\Routing\Router;
 class TexteHandler extends BaseHandler
 {
 
+    /**
+     * TexteHandler constructor.
+     * @param EntityManager $em
+     * @param Router $router
+     */
     public function __construct(EntityManager $em, Router $router)
     {
         parent::__construct($em, $router);
-        $this->helper = new HelperHandler();
     }
 
     /**
@@ -97,7 +101,7 @@ class TexteHandler extends BaseHandler
 
         $fiction = $fictionFetcher->fetchFiction($data['fictionId']);
 
-        $item = [];
+        $item = null;
 
         if (isset($data['itemId'])) {
             $itemFetcher = new ItemFetcher($this->em);
@@ -158,6 +162,20 @@ class TexteHandler extends BaseHandler
     }
 
     /**
+     * @param $textes
+     * @return bool
+     */
+    public function createTextes($textes)
+    {
+        foreach ($textes as $data)
+        {
+            $this->postTexte($data);
+        }
+
+        return true;
+    }
+
+    /**
      * @return TexteFetcher
      */
     public function getFetcher(): TexteFetcher
@@ -181,6 +199,7 @@ class TexteHandler extends BaseHandler
         return new TexteTransformer();
     }
 
+    //todo : remplacer par baseHandler
     /**
      * @return CustomSerializer
      */

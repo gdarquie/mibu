@@ -18,7 +18,7 @@ use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\HttpFoundation\Response;
 
 
-class PersonnageController extends FOSRestController
+class PersonnageController extends BaseController
 {
     /**
      * @Rest\Get("personnages/{personnageId}", name="get_personnage")
@@ -94,8 +94,7 @@ class PersonnageController extends FOSRestController
 
         $em = $this->getDoctrine()->getManager();
 
-        $handlerPersonnage = new PersonnageHandler();
-        $personnage = $handlerPersonnage->createPersonnage($em, $data);
+        $personnage = $this->getHandler()->createPersonnage($em, $data);
 
         $response = $this->getPersonnage($personnage->getId());
 
@@ -130,8 +129,7 @@ class PersonnageController extends FOSRestController
 
         if($form->isSubmitted()){
 
-            $handlerPersonnage = new PersonnageHandler();
-            $personnage = $handlerPersonnage->updatePersonnage($em, $personnage, $data);
+            $personnage = $this->getHandler()->updatePersonnage($em, $personnage, $data);
 
             $em->persist($personnage);
             $em->flush();
@@ -155,23 +153,8 @@ class PersonnageController extends FOSRestController
      */
     public function deletePersonnage($personnageId)
     {
-        $em = $this->getDoctrine()->getManager();
+        return $this->getHandler()->deletePersonnage($personnageId);
 
-        $personnage = $this->getDoctrine()->getRepository(Personnage::class)->findOneById($personnageId);
-
-        if (!$personnage) {
-            throw $this->createNotFoundException(sprintf(
-                'Pas de personnage trouvé avec l\'id "%s"',
-                $personnageId
-            ));
-        }
-
-        $fictionId = $personnage->getFiction()->getId();
-
-        $em->remove($personnage);
-        $em->flush();
-
-        return $this->getPersonnages($fictionId);
     }
 
     /**
@@ -213,5 +196,13 @@ class PersonnageController extends FOSRestController
     public function deleteGenerated()
     {
         return 'Deleted';
+    }
+
+    /**
+     * @return PersonnageHandler
+     */
+    public function getHandler()
+    {
+        return new PersonnageHandler($this->getDoctrine()->getManager(), $this->get('router'));
     }
 }

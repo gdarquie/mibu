@@ -99,7 +99,7 @@ class FictionHandler extends BaseHandler
                     $data['textes'][0]['fictionId'] =  $fiction->getId();
                 }
 
-                $texteHandler = new TexteHandler();
+                $texteHandler = new TexteHandler($this->em, $this->router);
                 $texteHandler->createTextes($this->em, $data['textes']);
 
             }
