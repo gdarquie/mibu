@@ -6,6 +6,12 @@ cache:
     - $HOME/.composer/cache/files
     - ./bin/.phpunit
 
+services:
+  - postgresql
+
+addons:
+  postgresql: "9.6"
+
 env:
   global:
     - SYMFONY_PHPUNIT_DIR=./bin/.phpunit
@@ -13,11 +19,7 @@ env:
 matrix:
   fast_finish: true
   include:
-    - php: 7.1
     - php: 7.2
-    - php: nightly
-  allow_failures:
-    - php: nightly
 
 before_install:
   - '[[ "$TRAVIS_PHP_VERSION" == "nightly" ]] || phpenv config-rm xdebug.ini'
@@ -27,7 +29,13 @@ install:
   - composer install
   - ./bin/phpunit install
 
+before_script:
+  - psql -c "CREATE DATABASE fictio_test;" -U postgres
+#  - psql -c "CREATE USER postgres WITH PASSWORD 'bar';" -U postgres
+
 script:
+  - php bin/console doctrine:database:create --env=test
+  - php bin/console --no-interaction doctrine:migrations:migrate  --env=test
   - ./bin/phpunit
   # this checks that the source code follows the Symfony Code Syntax rules
   - '[[ "$TRAVIS_PHP_VERSION" == "nightly" ]] || ./vendor/bin/php-cs-fixer fix --diff --dry-run -v'
