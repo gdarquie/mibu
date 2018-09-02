@@ -41,7 +41,7 @@ class PersonnageHandler extends BaseHandler
 
     public function deletePersonnage($personnageId)
     {
-        $personnage = $this->getFetcher()->fetchPersonnage($personnageId);
+        $personnage = $this->getFetcher()->fetchPersonnage($this->em, $personnageId);
         $this->em->remove($personnage);
         $this->em->flush();
 
