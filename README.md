@@ -13,4 +13,4 @@ Il doit permettre aux auteurs de disposer d'outils statistiques facilitant la co
 
 ## En savoir plus
 
-Une description plus complète du projet est disponible ici = [https://github.com/gdarquie/mibu/wiki](https://github.com/gdarquie/mibu/wiki)
+Une description plus complète du projet est disponible ici : [https://github.com/gdarquie/mibu/wiki](https://github.com/gdarquie/mibu/wiki)
