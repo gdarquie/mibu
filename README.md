@@ -11,4 +11,6 @@ Mibu doit permettre d'écrire des fictions se composant de textes et comportant 
 
 Il doit permettre aux auteurs de disposer d'outils statistiques facilitant la connaissance de la fiction.
 
+## En savoir plus
 
+Une description plus complète du projet est disponible ici = [https://github.com/gdarquie/mibu/wiki](https://github.com/gdarquie/mibu/wiki)
