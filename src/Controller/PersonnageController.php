@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Component\Fetcher\PersonnageFetcher;
 use App\Component\Handler\PersonnageHandler;
+use App\Component\IO\PersonnageIO;
 use App\Component\Transformer\PersonnageTransformer;
 use App\Component\Serializer\CustomSerializer;
 use App\Entity\Concept\Fiction;
@@ -90,22 +91,23 @@ class PersonnageController extends BaseController
      */
     public function postPersonnage(Request $request)
     {
-        $data = json_decode($request->getContent(), true);
+        $data = $this->getData($request);
+        $personnageIO = new PersonnageIO();
+        $form = $this->createForm(PersonnageType::class, $personnageIO);
+        $form->submit($data);
 
-        $em = $this->getDoctrine()->getManager();
+        if($form->isSubmitted()) {  //remplacer par isValidate
 
-        $personnage = $this->getHandler()->createPersonnage($em, $data);
+            $personnageIO = $this->getHandler()->postPersonnage($data);
 
-        $response = $this->getPersonnage($personnage->getId());
+            return $this->createApiResponse(
+                $personnageIO,
+                200,
+                $this->getHandler()->generateSimpleUrl('get_personnage', ['personnageId' => $personnageIO->getId()])
+            );
+        }
 
-        $personnageUrl = $this->generateUrl(
-            'get_personnage', array(
-            'personnageId' => $personnage->getId()
-        ));
-
-        $response->headers->set('Location', $personnageUrl);
-
-        return $response;
+        return new JsonResponse("Echec de l'insertion", 500);
 
     }
 
@@ -114,6 +116,7 @@ class PersonnageController extends BaseController
      */
     public function putPersonnage(Request $request, $personnageId)
     {
+
         $em = $this->getDoctrine()->getManager();
 
         $personnageFetcher = new PersonnageFetcher();
