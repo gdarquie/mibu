@@ -14,7 +14,12 @@ class PersonnageType extends AbstractType
         $builder
             ->add('titre')
             ->add('description')
+            ->add('nom')
+            ->add('prenom')
             ->add('fictionId')
+            ->add('anneeNaissance')
+            ->add('anneeMort')
+            ->add('genre')
             ;
     }
 

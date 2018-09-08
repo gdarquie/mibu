@@ -28,7 +28,7 @@ class TexteControllerTest extends ApiTestCase
         $texteUrl = $response->getHeader('Location');
         $response = $this->client->get($texteUrl[0]);
 
-        $payload = json_decode($response->getBody(true), true);
+        $payload = json_decode($response->getBody(), true);
         $this->assertArrayHasKey('titre', $payload, "Il n'y a pas de champ titre");
 
         echo $response->getBody();

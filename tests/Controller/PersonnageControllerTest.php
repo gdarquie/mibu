@@ -13,8 +13,11 @@ class PersonnageControllerTest extends ApiTestCase
         $data = array(
             "titre" => "Barius",
             "description" => "Le Sage",
+            "prenom" => "Barius",
+            "nom" => "Le Sage",
             "annee_naissance" => 0,
             "annee_mort" => 120,
+            "genre" => "h",
             "fictionId" => $fiction->getId()
         );
 
@@ -22,13 +25,14 @@ class PersonnageControllerTest extends ApiTestCase
             'body' => json_encode($data)
         ]);
 
+
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertTrue($response->hasHeader('Location'));
 
         $personnageUrl = $response->getHeader('Location');
         $response = $this->client->get($personnageUrl[0]);
 
-        $payload = json_decode($response->getBody(true), true);
+        $payload = json_decode($response->getBody(), true);
         $this->assertArrayHasKey('nom', $payload, "Il n'y a pas de champ nom");
 
         echo $response->getBody();

@@ -3,13 +3,15 @@
 namespace App\Component\Handler;
 
 use App\Component\Fetcher\PersonnageFetcher;
+use App\Component\Hydrator\PersonnageHydrator;
 use App\Component\Transformer\PersonnageTransformer;
 use App\Entity\Element\Personnage;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Router;
 
-class PersonnageHandler extends BaseHandler
+class PersonnageHandler extends ElementHandler
 {
 
     /**
@@ -31,8 +33,28 @@ class PersonnageHandler extends BaseHandler
     {
     }
 
-    public function postPersonnage()
+    public function postPersonnage($data)
     {
+        $personnage = new Personnage($data['titre'], $data['description'], isset($data['itemId']));
+
+        if(!isset($data['fictionId'])){
+            throw new BadRequestHttpException(sprintf(
+                "Il n'y a pas de fiction liée à cet élément."
+            ));
+        }
+
+        $data['fiction'] = $this->getFiction($data['fictionId']);
+
+        //change the data
+        $personnage = $this->getHydrator()->hydratePersonnage($personnage, $data);
+
+        //save
+        $this->save($personnage);
+
+        //transform into IO
+        $personnageIO = $this->getTransformer()->convertEntityIntoIO($personnage);
+
+        return $personnageIO;
     }
 
     public function putPersonnage()
@@ -136,7 +158,7 @@ class PersonnageHandler extends BaseHandler
      */
     public function getFetcher(): PersonnageFetcher
     {
-        return new PersonnageFetcher($this->em);
+        return new PersonnageFetcher();
     }
 
     /**
