@@ -2,6 +2,7 @@
 
 namespace App\Component\Handler;
 
+use App\Component\Fetcher\FictionFetcher;
 use App\Component\Fetcher\PersonnageFetcher;
 use App\Component\Hydrator\PersonnageHydrator;
 use App\Component\Transformer\PersonnageTransformer;
@@ -39,7 +40,7 @@ class PersonnageHandler extends ElementHandler
 
         if(!isset($data['fictionId'])){
             throw new BadRequestHttpException(sprintf(
-                "Il n'y a pas de fiction liée à cet élément."
+                "Le champ fictionId n'est pas renseigné."
             ));
         }
 
@@ -57,13 +58,37 @@ class PersonnageHandler extends ElementHandler
         return $personnageIO;
     }
 
-    public function putPersonnage()
+    public function putPersonnage($personnageId, $data)
     {
+        //fetch personnage and check if exists
+        $personnage = $this->getFetcher()->fetchPersonnage($personnageId);
+
+        //fetch fiction
+        $fictionFetcher = new FictionFetcher($this->em);
+
+        if(!isset($data['fictionId'])) {
+            throw new BadRequestHttpException(sprintf(
+                "Il n'y a pas de fiction liée à ce personnage."
+            ));
+        }
+
+        $data['fiction'] = $fictionFetcher->fetchFiction($data['fictionId']);
+
+        //change the data
+        $personnage = $this->getHydrator()->hydratePersonnage($personnage, $data);
+
+        //save
+        $this->save($personnage);
+
+        //transform into IO
+        $personnageIO = $this->getTransformer()->convertEntityIntoIO($personnage);
+
+        return $personnageIO;
     }
 
     public function deletePersonnage($personnageId)
     {
-        $personnage = $this->getFetcher()->fetchPersonnage($this->em, $personnageId);
+        $personnage = $this->getFetcher()->fetchPersonnage($personnageId);
         $this->em->remove($personnage);
         $this->em->flush();
 
@@ -158,7 +183,7 @@ class PersonnageHandler extends ElementHandler
      */
     public function getFetcher(): PersonnageFetcher
     {
-        return new PersonnageFetcher();
+        return new PersonnageFetcher($this->em);
     }
 
     /**

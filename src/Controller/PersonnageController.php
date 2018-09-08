@@ -116,39 +116,14 @@ class PersonnageController extends BaseController
      */
     public function putPersonnage(Request $request, $personnageId)
     {
+        $data = $this->getData($request);
+        $personnageIO = $this->getHandler()->putPersonnage($personnageId, $data);
 
-        $em = $this->getDoctrine()->getManager();
-
-        $personnageFetcher = new PersonnageFetcher();
-        $personnage = $personnageFetcher->fetchPersonnage($em, $personnageId);
-
-        $personnageHydrator = new PersonnageTransformer();
-        $personnageIO = $personnageHydrator->hydratePersonnage($personnage);
-
-        $data = json_decode($request->getContent(), true);
-
-        $form = $this->createForm(PersonnageType::class, $personnageIO);
-        $form->submit($data);
-
-        if($form->isSubmitted()){
-
-            $personnage = $this->getHandler()->updatePersonnage($em, $personnage, $data);
-
-            $em->persist($personnage);
-            $em->flush();
-
-            $response = new JsonResponse("Mise à jour du personnage", 202);
-            $personnageUrl = $this->generateUrl(
-                'get_personnage', array(
-                'personnageId' => $personnage->getId()
-            ));
-
-            $response->headers->set('Location', $personnageUrl);
-
-            return $response;
-        }
-
-        return new JsonResponse("Echec de la mise à jour");
+        return $this->createApiResponse(
+            $personnageIO,
+            202,
+            $this->getHandler()->generateSimpleUrl('get_personnage', ['personnageId' => $personnageIO->getId()])
+        );
     }
 
     /**
