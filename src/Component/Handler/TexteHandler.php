@@ -2,12 +2,12 @@
 
 namespace App\Component\Handler;
 
+use App\Component\Constant\ModelType;
 use App\Component\Fetcher\FictionFetcher;
 use App\Component\Fetcher\ItemFetcher;
 use App\Component\Fetcher\TexteFetcher;
 use App\Component\Hydrator\TexteHydrator;
 use App\Component\IO\Pagination\PaginatedCollectionIO;
-use App\Component\Serializer\CustomSerializer;
 use App\Component\Transformer\TexteTransformer;
 use App\Entity\Element\Texte;
 use Doctrine\ORM\EntityManager;
@@ -38,7 +38,7 @@ class TexteHandler extends BaseHandler
      */
     public function getTexte($id)
     {
-        return $this->getTransformer()->convertEntityIntoIO($this->getFetcher()->fetchTexte($id));
+        return $this->getEntity($id, ModelType::TEXTE);
     }
 
     /**
@@ -119,30 +119,7 @@ class TexteHandler extends BaseHandler
     
     public function putTexte($texteId, $data)
     {
-        //fetch texte and check if exists
-        $texte = $this->getFetcher()->fetchTexte($texteId);
-
-        //fetch fiction
-        $fictionFetcher = new FictionFetcher($this->em);
-
-        if(!isset($data['fictionId'])) {
-            throw new BadRequestHttpException(sprintf(
-                "Il n'y a pas de fiction liée à ce texte."
-            ));
-        }
-
-        $data['fiction'] = $fictionFetcher->fetchFiction($data['fictionId']);
-
-        //change the data
-        $texte = $this->getHydrator()->hydrateTexte($texte, $data);
-
-        //save
-        $this->save($texte);
-
-        //transform into IO
-        $texteIO = $this->getTransformer()->convertEntityIntoIO($texte);
-
-        return $texteIO;
+        return $this->putEntity($texteId, $data, ModelType::TEXTE);
     }
 
 
@@ -152,11 +129,7 @@ class TexteHandler extends BaseHandler
      */
     public function deleteTexte($texteId)
     {
-        $texte = $this->getFetcher()->fetchTexte($texteId);
-        $this->em->remove($texte);
-        $this->em->flush();
-
-        return new JsonResponse('Suppression du texte '.$texteId.'.', 200);
+        return $this->deleteEntity($texteId, ModelType::TEXTE);
     }
 
     /**
@@ -196,16 +169,5 @@ class TexteHandler extends BaseHandler
     {
         return new TexteTransformer();
     }
-
-    //todo : remplacer par baseHandler
-    /**
-     * @return CustomSerializer
-     */
-    public function getSerializer(): CustomSerializer
-    {
-        return new CustomSerializer();
-    }
-
-
 
 }

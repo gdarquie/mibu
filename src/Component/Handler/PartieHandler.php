@@ -7,6 +7,25 @@ use Doctrine\ORM\EntityManager;
 
 class PartieHandler
 {
+    public function getPartie()
+    {
+        
+    }
+    public function postPartie()
+    {
+
+    }
+
+    public function putPartie()
+    {
+        
+    }
+
+    public function detetePartie()
+    {
+
+    }
+
     public function createPartie(EntityManager $em, $data)
     {
         $helper = new HelperHandler($data);

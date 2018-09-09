@@ -157,16 +157,17 @@ class BaseHandler
         return $this->changeData($data, $entity, $modelType);
     }
 
+
     /**
-     * @param $personnageId
+     * @param $entityId
      * @param $data
      * @param $modelType
      * @return \App\Component\IO\PersonnageIO|mixed
      */
-    public function putEntity($personnageId, $data, $modelType)
+    public function putEntity($entityId, $data, $modelType)
     {
         $functionName = 'fetch'.$modelType;
-        $entity = $this->getEntityFetcher($modelType)->$functionName($personnageId);
+        $entity = $this->getEntityFetcher($modelType)->$functionName($entityId);
 
         return $this->changeData($data, $entity, $modelType);
 
@@ -186,16 +187,17 @@ class BaseHandler
         return new JsonResponse('Suppression du texte '.$personnageId.'.', 200);
     }
 
+
     /**
      * @param $data
      * @param $entity
      * @param $modelType
-     * @return \App\Component\IO\PersonnageIO|mixed
+     * @return mixed
      */
     public function changeData($data, $entity, $modelType)
     {
-        $hydrator = $this->getEntityHydrator(ModelType::PERSONNAGE);
-        $transformer = $this->getEntityTransformer(ModelType::PERSONNAGE);
+        $hydrator = $this->getEntityHydrator($modelType);
+        $transformer = $this->getEntityTransformer($modelType);
 
         if(!isset($data['fictionId'])){
             throw new UnauthorizedHttpException(sprintf(

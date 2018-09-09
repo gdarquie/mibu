@@ -9,7 +9,6 @@ use Symfony\Component\Routing\Router;
 
 class PersonnageHandler extends BaseHandler
 {
-
     /**
      * PersonnageHandler constructor.
      * @param EntityManager $em
@@ -18,7 +17,6 @@ class PersonnageHandler extends BaseHandler
     public function __construct(EntityManager $em, Router $router)
     {
         parent::__construct($em, $router);
-        $this->helper = new HelperHandler();
     }
 
     public function getPersonnage($personnageId)
@@ -36,7 +34,7 @@ class PersonnageHandler extends BaseHandler
      */
     public function postPersonnage($data)
     {
-        return $this->postEntity($data, 'personnage');
+        return $this->postEntity($data, ModelType::PERSONNAGE);
     }
 
     /**
@@ -46,7 +44,7 @@ class PersonnageHandler extends BaseHandler
      */
     public function putPersonnage($personnageId, $data)
     {
-        return $this->putEntity($personnageId, $data, 'personnage');
+        return $this->putEntity($personnageId, $data, ModelType::PERSONNAGE);
     }
 
     /**
@@ -55,7 +53,7 @@ class PersonnageHandler extends BaseHandler
      */
     public function deletePersonnage($personnageId)
     {
-        return $this->deleteEntity($personnageId, 'personnage');
+        return $this->deleteEntity($personnageId, ModelType::PERSONNAGE);
     }
 
 }
