@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Component\Fetcher\PersonnageFetcher;
 use App\Component\Handler\PersonnageHandler;
 use App\Component\IO\PersonnageIO;
 use App\Component\Transformer\PersonnageTransformer;
@@ -15,7 +14,6 @@ use Pagerfanta\Pagerfanta;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\Controller\Annotations as Rest;
-use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\HttpFoundation\Response;
 
 
@@ -26,26 +24,13 @@ class PersonnageController extends BaseController
      */
     public function getPersonnage($personnageId)
     {
-        $em = $this->getDoctrine()->getManager();
-        $personnage = $em->getRepository(Personnage::class)->findOneById($personnageId);
+        $personnageIO = $this->getHandler()->getPersonnage($personnageId);
 
-        if (!$personnage) {
-            throw $this->createNotFoundException(sprintf(
-                'Aucun personnage avec l\'id "%s" n\'a été trouvé',
-                $personnageId
-            ));
-        }
-
-        $personnageHydrator = new PersonnageTransformer();
-        $personnageIO = $personnageHydrator->hydratePersonnage($personnage);
-
-        $serializer = new CustomSerializer();
-        $personnageIO = $serializer->serialize($personnageIO);
-
-        $response = new Response($personnageIO);
-        $response->headers->set('Content-Type', 'application/json', 201);
-
-        return $response;
+        return $this->createApiResponse(
+            $personnageIO,
+            200,
+            $this->getHandler()->generateSimpleUrl('get_personnage', ['personnageId' => $personnageId])
+        );
     }
 
     /**

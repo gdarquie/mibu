@@ -38,9 +38,7 @@ class TexteHandler extends BaseHandler
      */
     public function getTexte($id)
     {
-        $texte = $this->getFetcher()->fetchTexte($id);
-
-        return $this->getTransformer()->convertEntityIntoIO($texte);
+        return $this->getTransformer()->convertEntityIntoIO($this->getFetcher()->fetchTexte($id));
     }
 
     /**
