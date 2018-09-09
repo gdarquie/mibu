@@ -36,26 +36,7 @@ class PersonnageHandler extends ElementHandler
 
     public function postPersonnage($data)
     {
-        $personnage = new Personnage($data['titre'], $data['description'], isset($data['itemId']));
-
-        if(!isset($data['fictionId'])){
-            throw new BadRequestHttpException(sprintf(
-                "Le champ fictionId n'est pas renseigné."
-            ));
-        }
-
-        $data['fiction'] = $this->getFiction($data['fictionId']);
-
-        //change the data
-        $personnage = $this->getHydrator()->hydratePersonnage($personnage, $data);
-
-        //save
-        $this->save($personnage);
-
-        //transform into IO
-        $personnageIO = $this->getTransformer()->convertEntityIntoIO($personnage);
-
-        return $personnageIO;
+        return $this->postElement($data, 'personnage');
     }
 
     public function putPersonnage($personnageId, $data)
