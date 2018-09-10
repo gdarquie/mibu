@@ -10,6 +10,8 @@ class PartieHydrator extends ElementHydrator
     {
         parent::hydrateElement($partie, $data);
         (isset($data['item'])) ? $partie->setItem($data['item']) : '';
+
+        return $partie;
     }
 }
 

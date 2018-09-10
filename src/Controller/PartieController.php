@@ -18,16 +18,40 @@ use Symfony\Component\HttpFoundation\Response;
 class PartieController extends BaseController
 {
 
+    /**
+     * @Rest\Get("parties/{partieId}", name="get_partie")
+     */
+    public function getPartie($partieId)
+    {
+        $partieIO = $this->getHandler()->getPartie($partieId);
+
+        return $this->createApiResponse(
+            $partieIO,
+            200,
+            $this->getHandler()->generateSimpleUrl('get_partie', ['partieId' => $partieId])
+        );
+    }
 
 //    public function postPartie()
 //    {
 //
 //    }
 //
-//    public function putPartie()
-//    {
-//
-//    }
+
+    /**
+     * @Rest\Put("parties/{partieId}", name="put_partie")
+     */
+    public function putPartie(Request $request, $partieId)
+    {
+        $data = $this->getData($request);
+        $partieIO = $this->getHandler()->putPartie($partieId, $data);
+
+        return $this->createApiResponse(
+            $partieIO,
+            202,
+            $this->getHandler()->generateSimpleUrl('get_partie', ['partieId' => $partieIO->getId()])
+        );
+    }
 
     /**
      * @Rest\Delete("/parties/{partieId}",name="delete_partie")
@@ -62,34 +86,6 @@ class PartieController extends BaseController
         return $response;
     }
 
-    /**
-     * @Rest\Get("parties/{id}", name="get_partie")
-     */
-    public function getPartie($id)
-    {
-        $this->em = $this->getDoctrine()->getManager();
-
-        $partie = $this->em->getRepository('App:Element\Partie')->findOneById($id);
-
-        if (!$partie) {
-            throw $this->createNotFoundException(sprintf(
-                'Aucune partie avec l\'id "%s" n\'a été trouvée',
-                $id
-            ));
-        }
-
-        $partieHydrator = new PartieTransformer();
-        $partieIO = $partieHydrator->hydratePartie($partie);
-
-        $serializer = new CustomSerializer();
-        $partieIO = $serializer->serialize($partieIO);
-
-        $response = new Response($partieIO);
-        $response->headers->set('Content-Type', 'application/json', 201);
-
-        return $response;
-    }
-
 
     /**
      * @Rest\Post("parties", name="post_partie")
@@ -118,47 +114,47 @@ class PartieController extends BaseController
 
     }
 
-    /**
-     * @Rest\Put("parties/{partieId}", name="put_partie")
-     */
-    public function putPartie(Request $request, $partieId)
-    {
-        $this->em = $this->getDoctrine()->getManager();
-
-        $partie = $this->getDoctrine()
-            ->getRepository(Partie::class)
-            ->findOneById($partieId);
-
-        if (!$partie) {
-            throw $this->createNotFoundException(sprintf(
-                'Pas de partie trouvée avec l\'id "%s"',
-                $partieId
-            ));
-        }
-
-        $data = json_decode($request->getContent(), true);
-
-        $form = $this->createForm(PartieType::class, $partie);
-        $form->submit($data);
-
-        if($form->isSubmitted()){
-            $this->em->persist($partie);
-            $this->em->flush();
-
-            $response = new JsonResponse("Mise à jour de la partie", 202);
-            $partieUrl = $this->generateUrl(
-                'get_partie', array(
-                'id' => $partie->getId()
-            ));
-
-            $response->headers->set('Location', $partieUrl);
-
-            return $response;
-
-        }
-
-        return new JsonResponse("Echec de la mise à jour");
-    }
+//    /**
+//     * @Rest\Put("parties/{partieId}", name="put_partie")
+//     */
+//    public function putPartie(Request $request, $partieId)
+//    {
+//        $this->em = $this->getDoctrine()->getManager();
+//
+//        $partie = $this->getDoctrine()
+//            ->getRepository(Partie::class)
+//            ->findOneById($partieId);
+//
+//        if (!$partie) {
+//            throw $this->createNotFoundException(sprintf(
+//                'Pas de partie trouvée avec l\'id "%s"',
+//                $partieId
+//            ));
+//        }
+//
+//        $data = json_decode($request->getContent(), true);
+//
+//        $form = $this->createForm(PartieType::class, $partie);
+//        $form->submit($data);
+//
+//        if($form->isSubmitted()){
+//            $this->em->persist($partie);
+//            $this->em->flush();
+//
+//            $response = new JsonResponse("Mise à jour de la partie", 202);
+//            $partieUrl = $this->generateUrl(
+//                'get_partie', array(
+//                'id' => $partie->getId()
+//            ));
+//
+//            $response->headers->set('Location', $partieUrl);
+//
+//            return $response;
+//
+//        }
+//
+//        return new JsonResponse("Echec de la mise à jour");
+//    }
 
     /**
      * @return PartieHandler

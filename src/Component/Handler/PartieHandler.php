@@ -4,6 +4,7 @@ namespace App\Component\Handler;
 
 use App\Component\Constant\ModelType;
 use App\Component\Hydrator\PartieHydrator;
+use App\Component\Transformer\PartieTransformer;
 use App\Entity\Element\Partie;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\Routing\Router;
@@ -20,18 +21,28 @@ class PartieHandler extends BaseHandler
         parent::__construct($em, $router);
     }
 
-    public function getPartie()
+    /**
+     * @param $id
+     * @return mixed
+     */
+    public function getPartie($id)
     {
-        
+        return $this->getEntity($id, ModelType::PARTIE);
     }
+
     public function postPartie()
     {
 
     }
 
-    public function putPartie()
+    /**
+     * @param $partieId
+     * @param $data
+     * @return \App\Component\IO\PersonnageIO|mixed
+     */
+    public function putPartie($partieId, $data)
     {
-        
+        return $this->putEntity($partieId, $data, ModelType::PARTIE);
     }
 
     /**
@@ -77,10 +88,12 @@ class PartieHandler extends BaseHandler
         return new PartieHydrator();
     }
 
-
-//    public function getTransformer() : TexteTransformer
-//    {
-//        return new TexteTransformer();
-//    }
+    /**
+     * @return PartieTransformer
+     */
+    public function getTransformer() : PartieTransformer
+    {
+        return new PartieTransformer();
+    }
 
 }
