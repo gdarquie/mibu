@@ -159,7 +159,7 @@ class PartieController extends BaseController
 
         return new JsonResponse("Echec de la mise à jour");
     }
-    
+
     /**
      * @return PartieHandler
      */

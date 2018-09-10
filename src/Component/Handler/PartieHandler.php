@@ -3,6 +3,7 @@
 namespace App\Component\Handler;
 
 use App\Component\Constant\ModelType;
+use App\Component\Hydrator\PartieHydrator;
 use App\Entity\Element\Partie;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\Routing\Router;
@@ -33,6 +34,10 @@ class PartieHandler extends BaseHandler
         
     }
 
+    /**
+     * @param $partieId
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     */
     public function deletePartie($partieId)
     {
         return $this->deleteEntity($partieId, ModelType::PARTIE);
@@ -63,5 +68,19 @@ class PartieHandler extends BaseHandler
 
         return true;
     }
+
+    /**
+     * @return PartieHydrator
+     */
+    public function getHydrator(): PartieHydrator
+    {
+        return new PartieHydrator();
+    }
+
+
+//    public function getTransformer() : TexteTransformer
+//    {
+//        return new TexteTransformer();
+//    }
 
 }

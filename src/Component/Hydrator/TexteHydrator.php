@@ -10,7 +10,6 @@ class TexteHydrator extends ElementHydrator
     {
         parent::hydrateElement($texte, $data);
 
-//        (isset($data['fiction'])) ? $texte->setFiction($data['fiction']) : '';
         (isset($data['item'])) ? $texte->setItem($data['item']) : '';
 
         return $texte;
