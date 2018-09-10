@@ -27,7 +27,6 @@ class BaseFetcher
                 break;
             default:
                 $entityName = 'App\Entity\Element\\'.ucfirst($modelType);
-//                $entityName = Texte::class;
                 break;
         }
 

@@ -82,13 +82,11 @@ class BaseHandler
     }
 
     /**
-     * @param $modelType
-     * @return PersonnageFetcher
+     * @return BaseFetcher
      */
-    public function getEntityFetcher($modelType) {
+    public function getEntityFetcher() {
 
-        $className = 'App\Component\Fetcher\\'.ucfirst($modelType).'Fetcher';
-        return new $className($this->em);
+        return new BaseFetcher($this->em);
     }
 
     /**
@@ -135,8 +133,8 @@ class BaseHandler
      */
     public function getEntity($entityId, $modelType)
     {
-        $functionName = 'fetch'.$modelType;
-        return $this->getEntityTransformer($modelType)->convertEntityIntoIO($this->getEntityFetcher($modelType)->$functionName($entityId));
+        return $this->getEntityTransformer($modelType)->convertEntityIntoIO($this->getEntityFetcher()->fetch($entityId, $modelType));
+
     }
 
     /**
@@ -167,27 +165,22 @@ class BaseHandler
      */
     public function putEntity($entityId, $data, $modelType)
     {
-        $functionName = 'fetch'.$modelType;
-        $entity = $this->getEntityFetcher($modelType)->$functionName($entityId);
-
-        return $this->changeData($data, $entity, $modelType);
-
+        return $this->changeData($data, $this->getEntityFetcher()->fetch($entityId, $modelType), $modelType);
     }
 
+
     /**
-     * @param $personnageId
+     * @param $entityId
      * @param $modelType
      * @return JsonResponse
      */
-    public function deleteEntity($personnageId, $modelType)
+    public function deleteEntity($entityId, $modelType)
     {
-        $functionName = 'fetch'.$modelType;
-        $this->em->remove($this->getEntityFetcher($modelType)->$functionName($personnageId));
+        $this->em->remove($this->getEntityFetcher()->fetch($entityId, $modelType));
         $this->em->flush();
 
-        return new JsonResponse('Suppression du texte '.$personnageId.'.', 200);
+        return new JsonResponse('Suppression de l\'entité '.$modelType.' '.$entityId.'.', 200);
     }
-
 
     /**
      * @param $data
