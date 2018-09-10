@@ -79,6 +79,6 @@ class PartieControllerTest extends ApiTestCase
         $partie = $this->createPartieFiction($fiction);
 
         $response = $this->client->delete(ApiTestCase::TEST_PREFIX.'/parties/'.$partie->getId());
-        $this->assertEquals(202, $response->getStatusCode());
+        $this->assertEquals(200, $response->getStatusCode());
     }
 }

@@ -2,11 +2,23 @@
 
 namespace App\Component\Handler;
 
+use App\Component\Constant\ModelType;
 use App\Entity\Element\Partie;
 use Doctrine\ORM\EntityManager;
+use Symfony\Component\Routing\Router;
 
-class PartieHandler
+class PartieHandler extends BaseHandler
 {
+    /**
+     * PartieHandler constructor.
+     * @param EntityManager $em
+     * @param Router $router
+     */
+    public function __construct(EntityManager $em, Router $router)
+    {
+        parent::__construct($em, $router);
+    }
+
     public function getPartie()
     {
         
@@ -21,9 +33,9 @@ class PartieHandler
         
     }
 
-    public function detetePartie()
+    public function deletePartie($partieId)
     {
-
+        return $this->deleteEntity($partieId, ModelType::PARTIE);
     }
 
     public function createPartie(EntityManager $em, $data)

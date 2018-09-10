@@ -15,13 +15,28 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class PartieController extends FOSRestController
+class PartieController extends BaseController
 {
 
+
+//    public function postPartie()
+//    {
+//
+//    }
+//
+//    public function putPartie()
+//    {
+//
+//    }
+
     /**
-     * @var EntityManager
+     * @Rest\Delete("/parties/{partieId}",name="delete_partie")
      */
-    protected $em;
+    public function deletePartie($partieId)
+    {
+        return $this->getHandler()->deletePartie($partieId);
+    }
+    
 
     /**
      * @Rest\Get("parties", name="get_parties")
@@ -88,7 +103,7 @@ class PartieController extends FOSRestController
 
         $data = json_decode($request->getContent(), true);
 
-        $handlerPartie = new PartieHandler();
+        $handlerPartie = new PartieHandler($this->getDoctrine()->getManager(), $this->get('router'));
         $partie = $handlerPartie->createPartie($this->em, $data);
         $response = new JsonResponse('Partie sauvegardée', 201);
 
@@ -144,27 +159,13 @@ class PartieController extends FOSRestController
 
         return new JsonResponse("Echec de la mise à jour");
     }
-
+    
     /**
-     * @Rest\Delete("/parties/{partieId}",name="delete_partie")
+     * @return PartieHandler
      */
-    public function deletePartie($partieId)
+    public function getHandler()
     {
-        $this->em = $this->getDoctrine()->getManager();
-
-        $partie = $this->getDoctrine()->getRepository(Partie::class)->findOneById($partieId);
-
-        if (!$partie) {
-            throw $this->createNotFoundException(sprintf(
-                'Pas de partie trouvée avec l\'id "%s"',
-                $partieId
-            ));
-        }
-
-        $this->em->remove($partie);
-        $this->em->flush();
-
-        return new JsonResponse('Suppression de la partie '.$partieId.'.', 202);
+        return new PartieHandler($this->getDoctrine()->getManager(), $this->get('router'));
     }
 
 }
