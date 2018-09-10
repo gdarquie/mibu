@@ -3,6 +3,7 @@
 namespace App\Component\Handler;
 
 use App\Component\Constant\ModelType;
+use App\Component\Fetcher\BaseFetcher;
 use App\Component\Fetcher\FictionFetcher;
 use App\Component\Fetcher\PersonnageFetcher;
 use App\Component\Hydrator\PersonnageHydrator;

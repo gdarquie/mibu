@@ -7,6 +7,26 @@ use Doctrine\ORM\EntityManager;
 
 class EvenementHandler
 {
+    public function getEvenement()
+    {
+        
+    }
+
+    public function postEvenement()
+    {
+        
+    }
+
+    public function putEvenement()
+    {
+        
+    }
+
+    public function deleteEvenement()
+    {
+        
+    }
+    
     public function createEvenement(EntityManager $em, $data)
     {
         $helper = new HelperHandler($data);
