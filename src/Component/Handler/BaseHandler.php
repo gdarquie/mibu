@@ -11,8 +11,10 @@ use App\Component\Hydrator\TexteHydrator;
 use App\Component\Hydrator\FictionHydrator;
 use App\Component\Serializer\CustomSerializer;
 use App\Component\Transformer\PersonnageTransformer;
+use App\Entity\Element\Partie;
 use App\Entity\Element\Personnage;
 use Doctrine\ORM\EntityManager;
+use PhpParser\Node\Expr\AssignOp\Mod;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
@@ -147,6 +149,9 @@ class BaseHandler
         switch ($modelType) {
             case ModelType::PERSONNAGE:
                 $entity = new Personnage($data['titre'], $data['description'], isset($data['itemId']));
+                break;
+            case ModelType::PARTIE:
+                $entity = new Partie($data['titre'], $data['description'], $data['fiction']);
                 break;
             default:
                 throw new UnauthorizedHttpException(sprintf(

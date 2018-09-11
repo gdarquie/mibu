@@ -20,7 +20,7 @@ class PartieControllerTest extends ApiTestCase
             'body' => json_encode($data)
         ]);
 
-        $this->assertEquals(201, $response->getStatusCode());
+        $this->assertEquals(200, $response->getStatusCode());
         $this->assertTrue($response->hasHeader('Location'));
 
         $partieUrl = $response->getHeader('Location');

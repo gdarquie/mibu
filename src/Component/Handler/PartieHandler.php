@@ -30,9 +30,12 @@ class PartieHandler extends BaseHandler
         return $this->getEntity($id, ModelType::PARTIE);
     }
 
-    public function postPartie()
+    /**
+     * @return \App\Component\IO\PersonnageIO|mixed
+     */
+    public function postPartie($data)
     {
-
+        return $this->postEntity($data, ModelType::PARTIE);
     }
 
     /**

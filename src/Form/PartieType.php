@@ -2,7 +2,7 @@
 
 namespace App\Form;
 
-use App\Entity\Element\Partie;
+use App\Component\IO\PartieIO;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -14,7 +14,7 @@ class PartieType extends AbstractType
         $builder
             ->add('titre')
             ->add('description')
-            ->add('fiction')
+            ->add('fictionId')
             ;
     }
 
@@ -24,7 +24,7 @@ class PartieType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => Partie::class
+            'data_class' => PartieIO::class
         ));
     }
 
