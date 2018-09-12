@@ -51,18 +51,19 @@ class Partie extends AbstractItem
      */
     private $children;
 
+
     /**
      * Partie constructor.
      * @param $titre
      * @param $description
-     * @param $fiction
+     * @param null $item
      */
-    public function __construct($titre, $description, $fiction)
+    public function __construct($titre, $description, $item =null)
     {
         parent::__construct();
         $this->setTitre($titre);
         $this->setDescription($description);
-        $this->setFiction($fiction);
+        $this->setItem($item);
     }
 
     /**
@@ -159,6 +160,22 @@ class Partie extends AbstractItem
     public function setChildren($children)
     {
         $this->children = $children;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getItem()
+    {
+        return $this->item;
+    }
+
+    /**
+     * @param mixed $item
+     */
+    public function setItem($item)
+    {
+        $this->item = $item;
     }
 
 }

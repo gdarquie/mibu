@@ -151,7 +151,7 @@ class BaseHandler
                 $entity = new Personnage($data['titre'], $data['description'], isset($data['itemId']));
                 break;
             case ModelType::PARTIE:
-                $entity = new Partie($data['titre'], $data['description'], $data['fiction']);
+                $entity = new Partie($data['titre'], $data['description'], isset($data['itemId']));
                 break;
             default:
                 throw new UnauthorizedHttpException(sprintf(

@@ -287,7 +287,8 @@ class ApiTestCase extends KernelTestCase
 
     protected function createPartieFiction($fiction) {
 
-        $partie = new Partie('Titre de texte','Un exemple de contenu de partie', $fiction);
+        $partie = new Partie('Titre de texte','Un exemple de contenu de partie');
+        $partie->setFiction($fiction);
 
         $this->getService('doctrine')->getManager()->persist($partie);
         $this->getService('doctrine')->getManager()->flush();
