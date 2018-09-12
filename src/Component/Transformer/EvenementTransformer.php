@@ -16,4 +16,16 @@ class EvenementTransformer extends ElementTransformer
         
         return $evenementIO;
     }
+
+    public function convertEntityIntoIO($evenement)
+    {
+        $evenementIO = new EvenementIO();
+        $evenementIO = $this->transformElement($evenement, $evenementIO);
+
+        $evenementIO->setAnneeDebut($evenement->getAnneeDebut());
+        $evenementIO->setAnneeFin($evenement->getAnneeFin());
+
+        return $evenementIO;
+    }
+
 }

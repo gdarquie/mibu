@@ -2,7 +2,7 @@
 
 namespace App\Form;
 
-use App\Entity\Element\Evenement;
+use App\Component\IO\EvenementIO;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -14,7 +14,7 @@ class EvenementType extends AbstractType
         $builder
             ->add('titre')
             ->add('description')
-            ->add('fiction')
+            ->add('fictionId')
             ;
     }
 
@@ -24,7 +24,7 @@ class EvenementType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => Evenement::class
+            'data_class' => EvenementIO::class
         ));
     }
 

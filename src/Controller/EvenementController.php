@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Component\Handler\EvenementHandler;
+use App\Component\IO\EvenementIO;
 use App\Component\Transformer\EvenementTransformer;
 use App\Component\Serializer\CustomSerializer;
 use App\Entity\Concept\Fiction;
@@ -91,31 +92,30 @@ class EvenementController extends BaseController
 
         return $response;
     }
-
+    
     /**
      * @Rest\Post("evenements", name="post_evemement")
      *
-     * @param Request $request
-     * @return JsonResponse
      */
     public function postEvenement(Request $request)
     {
-        $data = json_decode($request->getContent(), true);
+        $data = $this->getData($request);
+        $evenementIO = new EvenementIO();
+        $form = $this->createForm(EvenementType::class, $evenementIO);
+        $form->submit($data);
 
-        $em = $this->getDoctrine()->getManager();
+        if($form->isSubmitted()) {  //remplacer par isValidate
 
-        $evenement = $this->getHandler()->createEvenement($em, $data);
+            $evenementIO = $this->getHandler()->postEvenement($data);
 
-        $response = $this->getEvenement($evenement->getId());
+            return $this->createApiResponse(
+                $evenementIO,
+                200,
+                $this->getHandler()->generateSimpleUrl('get_evenement', ['evenementId' => $evenementIO->getId()])
+            );
+        }
 
-        $evenementUrl = $this->generateUrl(
-            'get_evenement', array(
-            'evenementId' => $evenement->getId()
-        ));
-
-        $response->headers->set('Location', $evenementUrl);
-
-        return $response;
+        return new JsonResponse("Echec de l'insertion", 500);
     }
 
     /**

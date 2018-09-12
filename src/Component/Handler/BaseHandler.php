@@ -11,6 +11,7 @@ use App\Component\Hydrator\TexteHydrator;
 use App\Component\Hydrator\FictionHydrator;
 use App\Component\Serializer\CustomSerializer;
 use App\Component\Transformer\PersonnageTransformer;
+use App\Entity\Element\Evenement;
 use App\Entity\Element\Partie;
 use App\Entity\Element\Personnage;
 use Doctrine\ORM\EntityManager;
@@ -152,6 +153,9 @@ class BaseHandler
                 break;
             case ModelType::PARTIE:
                 $entity = new Partie($data['titre'], $data['description'], isset($data['itemId']));
+                break;
+            case ModelType::EVENEMENT:
+                $entity = new Evenement();
                 break;
             default:
                 throw new UnauthorizedHttpException(sprintf(
