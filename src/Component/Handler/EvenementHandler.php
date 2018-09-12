@@ -2,11 +2,23 @@
 
 namespace App\Component\Handler;
 
+use App\Component\Constant\ModelType;
 use App\Entity\Element\Evenement;
 use Doctrine\ORM\EntityManager;
+use Symfony\Component\Routing\Router;
 
-class EvenementHandler
+class EvenementHandler extends BaseHandler
 {
+    /**
+     * EvenementHandler constructor.
+     * @param EntityManager $em
+     * @param Router $router
+     */
+    public function __construct(EntityManager $em, Router $router)
+    {
+        parent::__construct($em, $router);
+    }
+
     public function getEvenement()
     {
         
@@ -22,9 +34,9 @@ class EvenementHandler
         
     }
 
-    public function deleteEvenement()
+    public function deleteEvenement($evenementId)
     {
-        
+        return $this->deleteEntity($evenementId, ModelType::EVENEMENT);
     }
     
     public function createEvenement(EntityManager $em, $data)

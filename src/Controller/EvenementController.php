@@ -16,7 +16,7 @@ use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\HttpFoundation\Response;
 
-class EvenementController extends FOSRestController
+class EvenementController extends BaseController
 {
 
     /**
@@ -104,8 +104,7 @@ class EvenementController extends FOSRestController
 
         $em = $this->getDoctrine()->getManager();
 
-        $handlerEvenement = new EvenementHandler();
-        $evenement = $handlerEvenement->createEvenement($em, $data);
+        $evenement = $this->getHandler()->createEvenement($em, $data);
 
         $response = $this->getEvenement($evenement->getId());
 
@@ -165,20 +164,16 @@ class EvenementController extends FOSRestController
      */
     public function deleteEvenement($evenementId)
     {
-        $em = $this->getDoctrine()->getManager();
+        return $this->getHandler()->deleteEvenement($evenementId);
 
-        $evenement = $this->getDoctrine()->getRepository(Evenement::class)->findOneById($evenementId);
-
-        if (!$evenement) {
-            throw $this->createNotFoundException(sprintf(
-                'Pas d\'évènement trouvé avec l\'id "%s"',
-                $evenement
-            ));
-        }
-
-        $em->remove($evenement);
-        $em->flush();
-
-        return $this->getEvenements($evenement->getFiction()->getId());
     }
+
+    /**
+     * @return EvenementHandler
+     */
+    public function getHandler()
+    {
+        return new EvenementHandler($this->getDoctrine()->getManager(), $this->get('router'));
+    }
+
 }
