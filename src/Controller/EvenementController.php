@@ -99,6 +99,7 @@ class EvenementController extends BaseController
      */
     public function postEvenement(Request $request)
     {
+
         $data = $this->getData($request);
         $evenementIO = new EvenementIO();
         $form = $this->createForm(EvenementType::class, $evenementIO);
@@ -123,40 +124,14 @@ class EvenementController extends BaseController
      */
     public function putEvenement(Request $request,$evenementId)
     {
-        $em = $this->getDoctrine()->getManager();
+        $data = $this->getData($request);
+        $evenementIO = $this->getHandler()->putEvenement($evenementId, $data);
 
-        $evenement = $this->getDoctrine()
-            ->getRepository(Evenement::class)
-            ->findOneById($evenementId);
-
-        if (!$evenement) {
-            throw $this->createNotFoundException(sprintf(
-                'Pas d\'évènement trouvé avec l\'id "%s"',
-                $evenement
-            ));
-        }
-
-        $data = json_decode($request->getContent(), true);
-
-        $form = $this->createForm(EvenementType::class, $evenement);
-        $form->submit($data);
-
-        if($form->isSubmitted()){
-            $em->persist($evenement);
-            $em->flush();
-
-            $response = new JsonResponse("Mise à jour de l\'évènement ".$evenementId, 202);
-
-            $evenementUrl = $this->generateUrl(
-                'get_evenement', array(
-                'evenementId' => $evenement->getId()
-            ));
-
-            $response->headers->set('Location', $evenementUrl);
-        return $response;
-        }
-
-        return new JsonResponse("Echec de la mise à jour");
+        return $this->createApiResponse(
+            $evenementIO,
+            202,
+            $this->getHandler()->generateSimpleUrl('get_personnage', ['personnageId' => $evenementIO->getId()])
+        );
     }
 
     /**

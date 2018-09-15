@@ -29,9 +29,9 @@ class EvenementHandler extends BaseHandler
         return $this->postEntity($data, ModelType::EVENEMENT);
     }
 
-    public function putEvenement()
+    public function putEvenement($evenementId, $data)
     {
-        
+        return $this->putEntity($evenementId, $data, ModelType::EVENEMENT);
     }
 
     public function deleteEvenement($evenementId)

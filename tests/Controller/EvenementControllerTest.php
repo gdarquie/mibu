@@ -62,7 +62,7 @@ class EvenementControllerTest extends ApiTestCase
             "description" => "Description d'évènement",
             "annee_debut" => "0",
             "annee_fin" => "100",
-            "fiction" => $fiction->getId()
+            "fictionId" => $fiction->getId()
         );
 
         $response = $this->client->put(ApiTestCase::TEST_PREFIX.'/evenements/'.$evenement->getId(), [
