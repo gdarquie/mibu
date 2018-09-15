@@ -6,12 +6,16 @@ use App\Component\Constant\ModelType;
 use App\Component\Fetcher\BaseFetcher;
 use App\Component\Fetcher\FictionFetcher;
 use App\Component\Fetcher\ItemFetcher;
+use App\Component\IO\Pagination\PaginatedCollectionIO;
 use App\Component\Serializer\CustomSerializer;
+use App\Entity\Concept\Fiction;
 use App\Entity\Element\Evenement;
 use App\Entity\Element\Partie;
 use App\Entity\Element\Personnage;
 use App\Entity\Element\Texte;
 use Doctrine\ORM\EntityManager;
+use Pagerfanta\Adapter\ArrayAdapter;
+use Pagerfanta\Pagerfanta;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
@@ -151,6 +155,45 @@ class BaseHandler
     {
         return $this->getEntityTransformer($modelType)->convertEntityIntoIO($this->getEntityFetcher()->fetch($entityId, $modelType));
 
+    }
+
+    public function getElementsCollection($request, $fictionId, $modelType)
+    {
+        $page = $request->query->get('page', 1);
+        $maxPerPage = $request->query->get('maxPerPage', 10);
+
+        $entitiesIO = [];
+        $elements = $this->em->getRepository(Fiction::class)->getElements($fictionId, $modelType);
+
+        $adapter = new ArrayAdapter($elements);
+        $pagerfanta = new Pagerfanta($adapter);
+        $pagerfanta->setMaxPerPage($maxPerPage);
+        $pagerfanta->setCurrentPage($page);
+
+        foreach ($pagerfanta->getCurrentPageResults() as $entity){
+            $entityIO = $this->getEntityTransformer($modelType)->convertEntityIntoIO($entity);
+
+            array_push($entitiesIO, $entityIO);
+        }
+
+        $total = $pagerfanta->getNbResults();
+
+        $collection = new PaginatedCollectionIO($entitiesIO,$total);
+        $routeName = 'get_'.$modelType.'s';
+
+        $collection->addLink('self', $this->generateUrl($routeName, ['fictionId' => $fictionId], $page));
+        $collection->addLink('first', $this->generateUrl($routeName, ['fictionId' => $fictionId], 1));
+        $collection->addLink('last', $this->generateUrl($routeName, ['fictionId' => $fictionId], $pagerfanta->getNbPages()));
+
+        if ($pagerfanta->hasPreviousPage()) {
+            $collection->addLink('previous', $this->generateUrl($routeName, ['fictionId' => $fictionId], $pagerfanta->getPreviousPage()));
+        }
+
+        if ($pagerfanta->hasNextPage()) {
+            $collection->addLink('next', $this->generateUrl($routeName, ['fictionId' => $fictionId], $pagerfanta->getNextPage()));
+        }
+
+        return $collection;
     }
 
     /**

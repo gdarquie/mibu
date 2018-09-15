@@ -34,7 +34,7 @@ class TexteController extends BaseController
     public function getTextes(Request $request, $fictionId)
     {
         return $this->createApiResponse(
-            $this->getHandler()->getTextes($request, $fictionId),
+            $this->getHandler()->getElementsCollection($request, $fictionId, ModelType::TEXTE),
             200,
             $this->getHandler()->generateUrl('get_textes', ['fictionId' => $fictionId], $request->query->get('page', 1))
         );
