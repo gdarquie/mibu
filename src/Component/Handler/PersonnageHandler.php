@@ -26,6 +26,7 @@ class PersonnageHandler extends BaseHandler
 
     public function getPersonnages()
     {
+
     }
 
     /**

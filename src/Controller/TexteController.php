@@ -2,19 +2,14 @@
 
 namespace App\Controller;
 
-use App\Component\Fetcher\TexteFetcher;
 use App\Component\Handler\TexteHandler;
 use App\Component\IO\TexteIO;
-use App\Component\Transformer\TexteTransformer;
-use App\Component\Serializer\CustomSerializer;
 use App\Form\TexteType;
-use Pagerfanta\Adapter\ArrayAdapter;
-use Pagerfanta\Pagerfanta;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use FOS\RestBundle\Controller\Annotations as Rest;
-use FOS\RestBundle\Controller\FOSRestController;
+use App\Component\Constant\ModelType;
+
 
 class TexteController extends BaseController
 {
@@ -24,7 +19,7 @@ class TexteController extends BaseController
      */
     public function getTexte($texteId)
     {
-        $texteIO = $this->getHandler()->getTexte($texteId);
+        $texteIO = $this->getHandler()->getEntity($texteId, modelType::TEXTE);
 
         return $this->createApiResponse(
             $texteIO,

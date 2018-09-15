@@ -2,7 +2,6 @@
 
 namespace App\Component\Handler;
 
-use App\Component\Constant\ModelType;
 use App\Entity\Element\Evenement;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\Routing\Router;
@@ -19,29 +18,9 @@ class EvenementHandler extends BaseHandler
         parent::__construct($em, $router);
     }
 
-    public function getEvenement()
-    {
-        
-    }
-
-    public function postEvenement($data)
-    {
-        return $this->postEntity($data, ModelType::EVENEMENT);
-    }
-
-    public function putEvenement($evenementId, $data)
-    {
-        return $this->putEntity($evenementId, $data, ModelType::EVENEMENT);
-    }
-
-    public function deleteEvenement($evenementId)
-    {
-        return $this->deleteEntity($evenementId, ModelType::EVENEMENT);
-    }
-    
     public function createEvenement(EntityManager $em, $data)
     {
-        $helper = new HelperHandler($data);
+        $helper = new HelperHandler();
         $helper->checkElement($data);
         $fiction = $helper->checkFiction($em, $data);
 

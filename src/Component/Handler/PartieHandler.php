@@ -59,6 +59,7 @@ class PartieHandler extends BaseHandler
 
     public function createPartie(EntityManager $em, $data)
     {
+        //remplacer par un post sans form?
         $helper = new HelperHandler($data);
         $helper->checkElement($data);
         $fiction = $helper->checkFiction($em, $data);

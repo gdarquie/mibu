@@ -2,19 +2,18 @@
 
 namespace App\Controller;
 
+use App\Component\Constant\ModelType;
 use App\Component\Handler\EvenementHandler;
 use App\Component\IO\EvenementIO;
 use App\Component\Transformer\EvenementTransformer;
 use App\Component\Serializer\CustomSerializer;
 use App\Entity\Concept\Fiction;
-use App\Entity\Element\Evenement;
 use App\Form\EvenementType;
 use Pagerfanta\Adapter\ArrayAdapter;
 use Pagerfanta\Pagerfanta;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\Controller\Annotations as Rest;
-use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\HttpFoundation\Response;
 
 class EvenementController extends BaseController
@@ -25,28 +24,13 @@ class EvenementController extends BaseController
      */
     public function getEvenement($evenementId)
     {
-        $em = $this->getDoctrine()->getManager();
-        $evenement = $em->getRepository(Evenement::class)->findOneById($evenementId);
+        $evenementIO = $this->getHandler()->getEntity($evenementId, ModelType::EVENEMENT);
 
-        if (!$evenement) {
-            throw $this->createNotFoundException(sprintf(
-                'Aucun évènement avec l\'id "%s" n\'a été trouvé',
-                $evenementId
-            ));
-        }
-
-        $evenementHydrator = new EvenementTransformer();
-        $evenementIO = $evenementHydrator->hydrateEvenement($evenement);
-
-        $serializer = new CustomSerializer();
-        $evenementIO = $serializer->serialize($evenementIO);
-
-        //ajouter la fiction?
-
-        $response = new Response($evenementIO);
-        $response->headers->set('Content-Type', 'application/json', 201);
-
-        return $response;
+        return $this->createApiResponse(
+            $evenementIO,
+            200,
+            $this->getHandler()->generateSimpleUrl('get_evenement', ['evenementId' => $evenementId])
+        );
     }
 
 
@@ -107,7 +91,7 @@ class EvenementController extends BaseController
 
         if($form->isSubmitted()) {  //remplacer par isValidate
 
-            $evenementIO = $this->getHandler()->postEvenement($data);
+            $evenementIO = $this->getHandler()->postEntity($data, ModelType::EVENEMENT);
 
             return $this->createApiResponse(
                 $evenementIO,
@@ -125,7 +109,7 @@ class EvenementController extends BaseController
     public function putEvenement(Request $request,$evenementId)
     {
         $data = $this->getData($request);
-        $evenementIO = $this->getHandler()->putEvenement($evenementId, $data);
+        $evenementIO = $this->getHandler()->putEntity($evenementId, $data, modelType::EVENEMENT);
 
         return $this->createApiResponse(
             $evenementIO,
@@ -139,7 +123,7 @@ class EvenementController extends BaseController
      */
     public function deleteEvenement($evenementId)
     {
-        return $this->getHandler()->deleteEvenement($evenementId);
+        return $this->getHandler()->deleteEntity($evenementId, modelType::EVENEMENT);
 
     }
 
