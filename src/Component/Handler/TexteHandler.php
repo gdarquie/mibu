@@ -16,7 +16,6 @@ use Symfony\Component\Routing\Router;
 
 class TexteHandler extends BaseHandler
 {
-
     /**
      * TexteHandler constructor.
      * @param EntityManager $em
@@ -82,29 +81,4 @@ class TexteHandler extends BaseHandler
 
         return true;
     }
-
-    /**
-     * @return TexteFetcher
-     */
-    public function getFetcher(): TexteFetcher
-    {
-        return new TexteFetcher($this->em);
-    }
-
-    /**
-     * @return TexteHydrator
-     */
-    public function getHydrator(): TexteHydrator
-    {
-        return new TexteHydrator();
-    }
-
-    /**
-     * @return TexteTransformer
-     */
-    public function getTransformer() : TexteTransformer
-    {
-        return new TexteTransformer();
-    }
-
 }

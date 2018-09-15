@@ -2,15 +2,13 @@
 
 namespace App\Controller;
 
+use App\Component\Constant\ModelType;
 use App\Component\Handler\PartieHandler;
 use App\Component\IO\PartieIO;
 use App\Component\Transformer\PartieTransformer;
 use App\Component\Serializer\CustomSerializer;
-use App\Entity\Concept\Fiction;
 use App\Entity\Element\Partie;
 use App\Form\PartieType;
-use Doctrine\ORM\EntityManager;
-use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,7 +22,7 @@ class PartieController extends BaseController
      */
     public function getPartie($partieId)
     {
-        $partieIO = $this->getHandler()->getPartie($partieId);
+        $partieIO = $this->getHandler()->getEntity($partieId, ModelType::PARTIE);
 
         return $this->createApiResponse(
             $partieIO,
@@ -53,7 +51,7 @@ class PartieController extends BaseController
 
         if($form->isSubmitted()) {  //remplacer par isValidate
 
-            $partieIO = $this->getHandler()->postPartie($data);
+            $partieIO = $this->getHandler()->postEntity($data, ModelType::PARTIE);
 
             return $this->createApiResponse(
                 $partieIO,
@@ -72,7 +70,7 @@ class PartieController extends BaseController
     public function putPartie(Request $request, $partieId)
     {
         $data = $this->getData($request);
-        $partieIO = $this->getHandler()->putPartie($partieId, $data);
+        $partieIO = $this->getHandler()->putEntity($partieId, $data, ModelType::PARTIE);
 
         return $this->createApiResponse(
             $partieIO,
@@ -86,7 +84,7 @@ class PartieController extends BaseController
      */
     public function deletePartie($partieId)
     {
-        return $this->getHandler()->deletePartie($partieId);
+        return $this->getHandler()->deleteEntity($partieId, ModelType::PARTIE);
     }
 
     /**
