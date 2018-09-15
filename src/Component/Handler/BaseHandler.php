@@ -5,17 +5,13 @@ namespace App\Component\Handler;
 use App\Component\Constant\ModelType;
 use App\Component\Fetcher\BaseFetcher;
 use App\Component\Fetcher\FictionFetcher;
-use App\Component\Fetcher\PersonnageFetcher;
-use App\Component\Hydrator\PersonnageHydrator;
-use App\Component\Hydrator\TexteHydrator;
-use App\Component\Hydrator\FictionHydrator;
+use App\Component\Fetcher\ItemFetcher;
 use App\Component\Serializer\CustomSerializer;
-use App\Component\Transformer\PersonnageTransformer;
 use App\Entity\Element\Evenement;
 use App\Entity\Element\Partie;
 use App\Entity\Element\Personnage;
+use App\Entity\Element\Texte;
 use Doctrine\ORM\EntityManager;
-use PhpParser\Node\Expr\AssignOp\Mod;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
@@ -130,6 +126,23 @@ class BaseHandler
     }
 
     /**
+     * @param $itemId
+     * @return mixed
+     */
+    public function getItem($itemId)
+    {
+        $itemFetcher = new ItemFetcher($this->em);
+
+        if(!$itemId) {
+            throw new BadRequestHttpException(sprintf(
+                "Il n'y a pas d'item liée à cet élément."
+            ));
+        }
+
+        return $itemFetcher->fetchItem($itemId);
+    }
+
+    /**
      * @param $entityId
      * @param $modelType
      * @return mixed
@@ -149,13 +162,16 @@ class BaseHandler
     {
         switch ($modelType) {
             case ModelType::PERSONNAGE:
-                $entity = new Personnage($data['titre'], $data['description'], isset($data['itemId']));
+                $entity = new Personnage($data['titre'], $data['description']);
                 break;
             case ModelType::PARTIE:
-                $entity = new Partie($data['titre'], $data['description'], isset($data['itemId']));
+                $entity = new Partie($data['titre'], $data['description']);
                 break;
             case ModelType::EVENEMENT:
                 $entity = new Evenement();
+                break;
+            case ModelType::TEXTE:
+                $entity = new Texte($data['titre'], $data['description'], $data['type']);
                 break;
             default:
                 throw new UnauthorizedHttpException(sprintf(
@@ -202,6 +218,7 @@ class BaseHandler
         $hydrator = $this->getEntityHydrator($modelType);
         $transformer = $this->getEntityTransformer($modelType);
 
+        //devrait se faire dans l'hydrator ??? pb avec l'appel des fetchers pour getFiction
         if(!isset($data['fictionId'])){
             throw new UnauthorizedHttpException(sprintf(
                 "Le champ fictionId n'est pas renseigné."
@@ -209,6 +226,10 @@ class BaseHandler
         }
 
         $data['fiction'] = $this->getFiction($data['fictionId']);
+
+        if(isset($data['itemId'])){
+            $data['item'] = $this->getItem($data['itemId']);
+        }
 
         $functionName = 'hydrate'.$modelType;
         $entity = $hydrator->$functionName($entity, $data);

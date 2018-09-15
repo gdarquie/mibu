@@ -277,7 +277,8 @@ class ApiTestCase extends KernelTestCase
 
     protected function createTexteFiction($fiction) {
 
-        $texte = new Texte('Titre de texte', 'Un contenu de texte', 'promesse',$fiction);
+        $texte = new Texte('Titre de texte', 'Un contenu de texte', 'promesse');
+        $texte->setFiction($fiction);
 
         $this->getService('doctrine')->getManager()->persist($texte);
         $this->getService('doctrine')->getManager()->flush();

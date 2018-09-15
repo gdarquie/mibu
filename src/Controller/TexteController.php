@@ -52,7 +52,7 @@ class TexteController extends BaseController
 
         if($form->isSubmitted()) {  //remplacer par isValidate
 
-            $texteIO = $this->getHandler()->postTexte($data);
+            $texteIO = $this->getHandler()->postEntity($data, modelType::TEXTE);
 
             return $this->createApiResponse(
                 $texteIO,
@@ -71,7 +71,7 @@ class TexteController extends BaseController
     public function putTexte(Request $request, $texteId)
     {
         $data = $this->getData($request);
-        $texteIO = $this->getHandler()->putTexte($texteId, $data);
+        $texteIO = $this->getHandler()->putEntity($texteId, $data, modelType::TEXTE);
 
         return $this->createApiResponse(
             $texteIO,
@@ -85,7 +85,7 @@ class TexteController extends BaseController
      */
     public function deleteAction($texteId)
     {
-        return $this->getHandler()->deleteTexte($texteId);
+        return $this->getHandler()->deleteEntity($texteId, modelType::TEXTE);
     }
 
     /**

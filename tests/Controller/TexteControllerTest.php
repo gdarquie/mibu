@@ -53,12 +53,12 @@ class TexteControllerTest extends ApiTestCase
 
         } catch (RequestException $e ) {
 
-            if ($e->getResponse()->getStatusCode() == '400') {
-                $status = 400;
+            if ($e->getResponse()->getStatusCode() == '401') {
+                $status = 401;
             }
         }
 
-        $this->assertEquals(400, $status, "Créer un texte sans indiquer de fiction devrait produire une erreur 400.");
+        $this->assertEquals(401, $status, "Créer un texte sans indiquer de fiction devrait produire une erreur 401.");
     }
 
     public function testGetTexte()

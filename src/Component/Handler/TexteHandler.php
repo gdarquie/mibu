@@ -3,8 +3,6 @@
 namespace App\Component\Handler;
 
 use App\Component\Constant\ModelType;
-use App\Component\Fetcher\FictionFetcher;
-use App\Component\Fetcher\ItemFetcher;
 use App\Component\Fetcher\TexteFetcher;
 use App\Component\Hydrator\TexteHydrator;
 use App\Component\IO\Pagination\PaginatedCollectionIO;
@@ -13,9 +11,6 @@ use App\Entity\Element\Texte;
 use Doctrine\ORM\EntityManager;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Router;
 
 
@@ -30,15 +25,6 @@ class TexteHandler extends BaseHandler
     public function __construct(EntityManager $em, Router $router)
     {
         parent::__construct($em, $router);
-    }
-
-    /**
-     * @param $id
-     * @return bool|float|int|string
-     */
-    public function getTexte($id)
-    {
-        return $this->getEntity($id, ModelType::TEXTE);
     }
 
     /**
@@ -84,55 +70,6 @@ class TexteHandler extends BaseHandler
     }
 
     /**
-     * @param $data
-     * @return \App\Component\IO\TexteIO|mixed
-     */
-    public function postTexte($data)
-    {
-        $fictionFetcher = new FictionFetcher($this->em);
-
-        if(!isset($data['fictionId'])) {
-            throw new BadRequestHttpException(sprintf(
-                "Il n'y a pas de fiction liée à ce texte."
-            ));
-        }
-
-        $fiction = $fictionFetcher->fetchFiction($data['fictionId']);
-
-        $item = null;
-
-        if (isset($data['itemId'])) {
-            $itemFetcher = new ItemFetcher($this->em);
-            $item = $itemFetcher->fetchItem($data['itemId']);
-        }
-
-        $texte = new Texte($data['titre'], $data['description'], $data['type'], $fiction, $item);
-
-        if(!$this->save($texte)) {
-            throw new NotFoundHttpException(sprintf(
-                "Le texte n'a pas été sauvegardé."
-            ));
-        }
-
-        return $this->getTransformer()->convertEntityIntoIO($texte);
-    }
-    
-    public function putTexte($texteId, $data)
-    {
-        return $this->putEntity($texteId, $data, ModelType::TEXTE);
-    }
-
-
-    /**
-     * @param $texteId
-     * @return JsonResponse
-     */
-    public function deleteTexte($texteId)
-    {
-        return $this->deleteEntity($texteId, ModelType::TEXTE);
-    }
-
-    /**
      * @param $textes
      * @return bool
      */
@@ -140,7 +77,7 @@ class TexteHandler extends BaseHandler
     {
         foreach ($textes as $data)
         {
-            $this->postTexte($data);
+            $this->postEntity($data, modelType::TEXTE);
         }
 
         return true;

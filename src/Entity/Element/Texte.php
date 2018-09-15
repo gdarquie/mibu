@@ -32,17 +32,13 @@ class Texte extends AbstractElement
      * @param $titre
      * @param $description
      * @param $type
-     * @param $fiction
-     * @param null $item
      */
-    public function __construct($titre, $description, $type, $fiction, $item = null)
+    public function __construct($titre, $description, $type)
     {
         parent::__construct();
         $this->setTitre($titre);
         $this->setDescription($description);
         $this->setType($type);
-        $this->setFiction($fiction);
-        $this->setItem($item);
     }
 
     /**
