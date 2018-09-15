@@ -15,6 +15,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Symfony\Component\HttpFoundation\Response;
+use App\Component\Constant\ModelType;
 
 
 class PersonnageController extends BaseController
@@ -24,7 +25,7 @@ class PersonnageController extends BaseController
      */
     public function getPersonnage($personnageId)
     {
-        $personnageIO = $this->getHandler()->getPersonnage($personnageId);
+        $personnageIO = $this->getHandler()->getEntity($personnageId, modelType::PERSONNAGE);
 
         return $this->createApiResponse(
             $personnageIO,
@@ -83,7 +84,7 @@ class PersonnageController extends BaseController
 
         if($form->isSubmitted()) {  //remplacer par isValidate
 
-            $personnageIO = $this->getHandler()->postPersonnage($data);
+            $personnageIO = $this->getHandler()->postEntity($data, modelType::PERSONNAGE);
 
             return $this->createApiResponse(
                 $personnageIO,
@@ -102,7 +103,7 @@ class PersonnageController extends BaseController
     public function putPersonnage(Request $request, $personnageId)
     {
         $data = $this->getData($request);
-        $personnageIO = $this->getHandler()->putPersonnage($personnageId, $data);
+        $personnageIO = $this->getHandler()->putEntity($personnageId, $data, modelType::PERSONNAGE);
 
         return $this->createApiResponse(
             $personnageIO,
@@ -116,7 +117,7 @@ class PersonnageController extends BaseController
      */
     public function deletePersonnage($personnageId)
     {
-        return $this->getHandler()->deletePersonnage($personnageId);
+        return $this->getHandler()->deleteEntity($personnageId, modelType::PERSONNAGE);
 
     }
 
