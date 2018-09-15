@@ -20,7 +20,7 @@ class FictionRepository extends ServiceEntityRepository
      */
     public function getElements($fictionId, $modelType)
     {
-        $class= 'App:Element\Texte';
+        $class= 'App:Element\\'.ucfirst($modelType);
         $query = $this->getEntityManager()->createQuery('SELECT e FROM '.$class.' e JOIN e.fiction f WHERE f.id = :id ORDER BY e.id');
         $query->setParameter('id', $fictionId);
         $textes = $query->getResult();

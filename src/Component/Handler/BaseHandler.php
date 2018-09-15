@@ -164,7 +164,6 @@ class BaseHandler
 
         $entitiesIO = [];
         $elements = $this->em->getRepository(Fiction::class)->getElements($fictionId, $modelType);
-
         $adapter = new ArrayAdapter($elements);
         $pagerfanta = new Pagerfanta($adapter);
         $pagerfanta->setMaxPerPage($maxPerPage);

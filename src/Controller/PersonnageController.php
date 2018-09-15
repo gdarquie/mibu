@@ -4,17 +4,11 @@ namespace App\Controller;
 
 use App\Component\Handler\PersonnageHandler;
 use App\Component\IO\PersonnageIO;
-use App\Component\Transformer\PersonnageTransformer;
-use App\Component\Serializer\CustomSerializer;
-use App\Entity\Concept\Fiction;
 use App\Entity\Element\Personnage;
 use App\Form\PersonnageType;
-use Pagerfanta\Adapter\ArrayAdapter;
-use Pagerfanta\Pagerfanta;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\Controller\Annotations as Rest;
-use Symfony\Component\HttpFoundation\Response;
 use App\Component\Constant\ModelType;
 
 
@@ -37,39 +31,13 @@ class PersonnageController extends BaseController
     /**
      * @Rest\Get("personnages/fiction/{fictionId}", name="get_personnages")
      */
-    public function getPersonnages($fictionId, $page = 1, $maxPerPage = 10)
+    public function getPersonnages(Request $request, $fictionId)
     {
-        $em = $this->getDoctrine()->getManager();
-        $personnages = $em->getRepository(Fiction::class)->getPersonnagesFiction($fictionId);
-
-        if (!$personnages) {
-            throw $this->createNotFoundException(sprintf(
-                'Aucun personnage n\'a été trouvé pour la fiction "%s"',
-                $fictionId
-            ));
-        }
-
-        $personnageHydrator = new PersonnageTransformer();
-        $personnagesIO = [];
-        $adapter = new ArrayAdapter($personnages);
-        $pagerfanta = new Pagerfanta($adapter);
-        $pagerfanta->setMaxPerPage($maxPerPage);
-        $pagerfanta->setCurrentPage($page);
-
-        foreach ($pagerfanta as $personnage){
-            $personnageIO = $personnageHydrator->hydratePersonnage($personnage);
-
-            array_push($personnagesIO, $personnageIO);
-        }
-
-        $serializer = new CustomSerializer();
-        $personnagesIO = $serializer->serialize($personnagesIO);
-
-        $response = new Response($personnagesIO);
-
-        $response->headers->set('Content-Type', 'application/json');
-
-        return $response;
+        return $this->createApiResponse(
+            $this->getHandler()->getElementsCollection($request, $fictionId, ModelType::PERSONNAGE),
+            200,
+            $this->getHandler()->generateUrl('get_textes', ['fictionId' => $fictionId], $request->query->get('page', 1))
+        );
     }
 
     /**
