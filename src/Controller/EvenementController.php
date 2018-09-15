@@ -37,46 +37,15 @@ class EvenementController extends BaseController
     /**
      * @Rest\Get("evenements/fiction/{fictionId}", name="get_evenements")
      */
-    public function getEvenements($fictionId, $page = 1, $maxPerPage = 10)
+    public function getParties(Request $request, $fictionId)
     {
-        $em = $this->getDoctrine()->getManager();
-        $evenementHydrator = new EvenementTransformer();
-
-        $evenements = $em->getRepository(Fiction::class)->getEvenementsFiction($fictionId);
-
-        if (!$evenements) {
-            throw $this->createNotFoundException(sprintf(
-                'Il n\'y a pas d\'èvenements pour la fiction dont l\'id est "%s" ',
-                $fictionId
-            ));
-        }
-
-        $evenementsIO = [];
-
-        $adapter = new ArrayAdapter($evenements);
-        $pagerfanta = new Pagerfanta($adapter);
-        $pagerfanta->setMaxPerPage($maxPerPage);
-        $pagerfanta->setCurrentPage($page);
-
-        foreach ($pagerfanta as $evenement){
-            $evenementIO = $evenementHydrator->hydrateEvenement($evenement);
-
-            array_push($evenementsIO, $evenementIO);
-        }
-
-        $total = $pagerfanta->getNbResults();
-        $count = count($evenementsIO);
-
-        $serializer = new CustomSerializer();
-        $evenementsIO = $serializer->serialize($evenementsIO);
-
-        $response = new Response($evenementsIO);
-
-        $response->headers->set('Content-Type', 'application/json');
-
-        return $response;
+        return $this->createApiResponse(
+            $this->getHandler()->getElementsCollection($request, $fictionId, ModelType::EVENEMENT),
+            200,
+            $this->getHandler()->generateUrl('get_evenements', ['fictionId' => $fictionId], $request->query->get('page', 1))
+        );
     }
-    
+
     /**
      * @Rest\Post("evenements", name="post_evemement")
      *
