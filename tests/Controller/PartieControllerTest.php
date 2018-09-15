@@ -49,6 +49,28 @@ class PartieControllerTest extends ApiTestCase
         echo "\n\n";
     }
 
+    public function testGetParties()
+    {
+        $fiction = $this->createFiction();
+        $element1 = $this->createPartieFiction($fiction);
+        $element2 = $this->createPartieFiction($fiction);
+        $element3 = $this->createPartieFiction($fiction);
+
+        $response = $this->client->get(ApiTestCase::TEST_PREFIX.'/parties/fiction/'.$fiction->getId());
+
+        $payload = json_decode($response->getBody(true), true);
+        $this->assertCount(3, $payload['items']);
+
+        $this->assertArrayHasKey('titre', $payload['items'][0], "Il n'y a pas de champ titre");
+        $this->assertEquals($element1->getId(), $payload['items'][0]['id']);
+        $this->assertEquals($element2->getId(), $payload['items'][1]['id']);
+        $this->assertEquals($element3->getId(), $payload['items'][2]['id']);
+        $this->assertEquals(200, $response->getStatusCode());
+
+        echo $response->getBody();
+        echo "\n\n";
+    }
+
     public function testPutPartie()
     {
         $fiction = $this->createFiction();

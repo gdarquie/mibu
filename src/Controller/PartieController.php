@@ -5,14 +5,10 @@ namespace App\Controller;
 use App\Component\Constant\ModelType;
 use App\Component\Handler\PartieHandler;
 use App\Component\IO\PartieIO;
-use App\Component\Transformer\PartieTransformer;
-use App\Component\Serializer\CustomSerializer;
-use App\Entity\Element\Partie;
 use App\Form\PartieType;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 
 class PartieController extends BaseController
 {
@@ -31,10 +27,17 @@ class PartieController extends BaseController
         );
     }
 
-//    public function getParties()
-//    {
-//
-//    }
+    /**
+     * @Rest\Get("parties/fiction/{fictionId}", name="get_parties")
+     */
+    public function getParties(Request $request, $fictionId)
+    {
+        return $this->createApiResponse(
+            $this->getHandler()->getElementsCollection($request, $fictionId, ModelType::PARTIE),
+            200,
+            $this->getHandler()->generateUrl('get_parties', ['fictionId' => $fictionId], $request->query->get('page', 1))
+        );
+    }
 
     /**
      * @Rest\Post("parties", name="post_partie")
@@ -86,58 +89,6 @@ class PartieController extends BaseController
     {
         return $this->getHandler()->deleteEntity($partieId, ModelType::PARTIE);
     }
-
-    /**
-     * @Rest\Get("parties", name="get_parties")
-     */
-    public function getParties()
-    {
-        $this->em = $this->getDoctrine()->getManager();
-
-        $partieHydrator = new PartieTransformer();
-        $parties = $this->em->getRepository(Partie::class)->findAll();
-        $partiesIO = [];
-
-        foreach ($parties as $partie){
-            $partieIO = $partieHydrator->hydratePartie($partie);
-            array_push($partiesIO, $partieIO);
-        }
-        $serializer = new CustomSerializer();
-        $partiesIO = $serializer->serialize($partiesIO);
-
-        $response = new Response($partiesIO);
-        $response->headers->set('Content-Type', 'application/json');
-
-        return $response;
-    }
-
-//
-//    /**
-//     * @Rest\Post("parties", name="post_partie")
-//     *
-//     * @param Request $request
-//     * @return JsonResponse
-//     */
-//    public function postPartie(Request $request)
-//    {
-//        $this->em = $this->getDoctrine()->getManager();
-//
-//        $data = json_decode($request->getContent(), true);
-//
-//        $handlerPartie = new PartieHandler($this->getDoctrine()->getManager(), $this->get('router'));
-//        $partie = $handlerPartie->createPartie($this->em, $data);
-//        $response = new JsonResponse('Partie sauvegardée', 201);
-//
-//        $partieUrl = $this->generateUrl(
-//            'get_partie', array(
-//            'id' => $partie->getId()
-//        ));
-//
-//        $response->headers->set('Location', $partieUrl);
-//
-//        return $response;
-//
-//    }
 
     /**
      * @return PartieHandler
