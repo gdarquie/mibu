@@ -5,20 +5,13 @@ namespace App\Controller;
 use App\Component\Constant\ModelType;
 use App\Component\Handler\EvenementHandler;
 use App\Component\IO\EvenementIO;
-use App\Component\Transformer\EvenementTransformer;
-use App\Component\Serializer\CustomSerializer;
-use App\Entity\Concept\Fiction;
 use App\Form\EvenementType;
-use Pagerfanta\Adapter\ArrayAdapter;
-use Pagerfanta\Pagerfanta;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\Controller\Annotations as Rest;
-use Symfony\Component\HttpFoundation\Response;
 
 class EvenementController extends BaseController
 {
-
     /**
      * @Rest\Get("evenements/{evenementId}", name="get_evenement")
      */
@@ -32,7 +25,6 @@ class EvenementController extends BaseController
             $this->getHandler()->generateSimpleUrl('get_evenement', ['evenementId' => $evenementId])
         );
     }
-
 
     /**
      * @Rest\Get("evenements/fiction/{fictionId}", name="get_evenements")

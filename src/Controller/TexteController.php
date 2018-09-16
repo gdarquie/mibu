@@ -13,7 +13,6 @@ use App\Component\Constant\ModelType;
 
 class TexteController extends BaseController
 {
-
     /**
      * @Rest\Get("textes/{texteId}", name="get_texte")
      */
