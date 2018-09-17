@@ -35,21 +35,21 @@ class LieuControllerTest extends ApiTestCase
         echo "\n\n";
     }
 
-//    public function testGetEvenement()
-//    {
-//        $fiction = $this->createFiction();
-//        $evenement = $this->createEvenementFiction($fiction);
-//
-//        $response = $this->client->get(ApiTestCase::TEST_PREFIX.'/evenements/'.$evenement->getId());
-//
-//        $payload = json_decode($response->getBody(true), true);
-//        $this->assertArrayHasKey('titre', $payload, "Il n'y a pas de champ titre");
-//        $this->assertEquals($evenement->getId(), $payload['id']);
-//        $this->assertEquals(200, $response->getStatusCode());
-//
-//        echo $response->getBody();
-//        echo "\n\n";
-//    }
+    public function testGetLieu()
+    {
+        $fiction = $this->createFiction();
+        $lieu = $this->createLieuFiction($fiction);
+
+        $response = $this->client->get(ApiTestCase::TEST_PREFIX.'/lieux/'.$lieu->getId());
+
+        $payload = json_decode($response->getBody(true), true);
+        $this->assertArrayHasKey('titre', $payload, "Il n'y a pas de champ titre");
+        $this->assertEquals($lieu->getId(), $payload['id']);
+        $this->assertEquals(200, $response->getStatusCode());
+
+        echo $response->getBody();
+        echo "\n\n";
+    }
 //
 //    public function testGetEvenements()
 //    {

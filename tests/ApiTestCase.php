@@ -3,6 +3,7 @@
 namespace App\Tests;
 
 use App\Entity\Concept\Fiction;
+use App\Entity\Element\Lieu;
 use App\Entity\Element\Partie;
 use App\Entity\Element\Texte;
 use App\Entity\Element\Evenement;
@@ -295,6 +296,21 @@ class ApiTestCase extends KernelTestCase
         $this->getService('doctrine')->getManager()->flush();
 
         return $partie;
+    }
+
+    protected function createLieuFiction($fiction) {
+
+        $lieu = new Lieu();
+        $lieu->setFiction($fiction);
+        $lieu->setTitre('Titre');
+        $lieu->setDescription('Description');
+        $lieu->setLat(10.786);
+        $lieu->setLong(80.766);
+
+        $this->getService('doctrine')->getManager()->persist($lieu);
+        $this->getService('doctrine')->getManager()->flush();
+
+        return $lieu;
     }
 
 
