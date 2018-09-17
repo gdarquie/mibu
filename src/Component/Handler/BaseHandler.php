@@ -10,6 +10,7 @@ use App\Component\IO\Pagination\PaginatedCollectionIO;
 use App\Component\Serializer\CustomSerializer;
 use App\Entity\Concept\Fiction;
 use App\Entity\Element\Evenement;
+use App\Entity\Element\Lieu;
 use App\Entity\Element\Partie;
 use App\Entity\Element\Personnage;
 use App\Entity\Element\Texte;
@@ -215,6 +216,9 @@ class BaseHandler
             case ModelType::TEXTE:
                 $entity = new Texte($data['titre'], $data['description'], $data['type']);
                 break;
+            case ModelType::LIEU:
+                $entity = new Lieu();
+                break;
             default:
                 throw new UnauthorizedHttpException(sprintf(
                     "Aucun modelType n'est renseigné."
@@ -235,11 +239,12 @@ class BaseHandler
         return $this->changeData($data, $this->getEntityFetcher()->fetch($entityId, $modelType), $modelType);
     }
 
-
     /**
      * @param $entityId
      * @param $modelType
      * @return JsonResponse
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function deleteEntity($entityId, $modelType)
     {
@@ -275,7 +280,6 @@ class BaseHandler
 
         $functionName = 'hydrate'.$modelType;
         $entity = $hydrator->$functionName($entity, $data);
-
         $this->save($entity);
 
         return $transformer->convertEntityIntoIO($entity);
