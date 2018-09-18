@@ -28,6 +28,18 @@ class LieuController extends BaseController
     }
 
     /**
+     * @Rest\Get("lieux/fiction/{fictionId}", name="get_lieux")
+     */
+    public function getLieux(Request $request, $fictionId)
+    {
+        return $this->createApiResponse(
+            $this->getHandler()->getElementsCollection($request, $fictionId, ModelType::LIEU),
+            200,
+            $this->getHandler()->generateUrl('get_lieux', ['fictionId' => $fictionId], $request->query->get('page', 1))
+        );
+    }
+
+    /**
      * @Rest\Post("lieux", name="post_lieu")
      *
      * @param Request $request
@@ -52,6 +64,33 @@ class LieuController extends BaseController
         }
 
         return new JsonResponse("Echec de l'insertion", 500);
+    }
+
+    /**
+     * @Rest\Put("lieux/{lieuId}", name="put_lieu")
+     *
+     * @param Request $request
+     * @param $lieuId
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function putLieu(Request $request, $lieuId)
+    {
+        $data = $this->getData($request);
+        $lieuIO = $this->getHandler()->putEntity($lieuId, $data, ModelType::LIEU);
+
+        return $this->createApiResponse(
+            $lieuIO,
+            202,
+            $this->getHandler()->generateSimpleUrl('get_lieu', ['lieuId' => $lieuIO->getId()])
+        );
+    }
+
+    /**
+     * @Rest\Delete("/lieux/{lieuId}",name="delete_lieu")
+     */
+    public function deletePartie($lieuId)
+    {
+        return $this->getHandler()->deleteEntity($lieuId, ModelType::LIEU);
     }
 
     /**

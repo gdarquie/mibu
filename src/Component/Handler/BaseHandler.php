@@ -179,7 +179,14 @@ class BaseHandler
         $total = $pagerfanta->getNbResults();
 
         $collection = new PaginatedCollectionIO($entitiesIO,$total);
-        $routeName = 'get_'.$modelType.'s';
+
+        if($modelType === ModelType::LIEU) {
+            $routeName = 'get_'.$modelType.'x';
+        }
+
+        else {
+            $routeName = 'get_'.$modelType.'s';
+        }
 
         $collection->addLink('self', $this->generateUrl($routeName, ['fictionId' => $fictionId], $page));
         $collection->addLink('first', $this->generateUrl($routeName, ['fictionId' => $fictionId], 1));
