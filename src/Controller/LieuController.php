@@ -88,7 +88,7 @@ class LieuController extends BaseController
     /**
      * @Rest\Delete("/lieux/{lieuId}",name="delete_lieu")
      */
-    public function deletePartie($lieuId)
+    public function deleteLieu($lieuId)
     {
         return $this->getHandler()->deleteEntity($lieuId, ModelType::LIEU);
     }
