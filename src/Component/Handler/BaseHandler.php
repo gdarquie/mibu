@@ -68,6 +68,8 @@ class BaseHandler
     /**
      * @param $entity
      * @return bool
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function save($entity)
     {
