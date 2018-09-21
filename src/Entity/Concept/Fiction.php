@@ -24,6 +24,12 @@ class Fiction extends AbstractConcept
     private $personnages;
 
     /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Concept\Inscrit")
+     * @ORM\JoinColumn(name="inscrit_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
+     */
+    private $inscrit;
+
+    /**
      * @return mixed
      */
     public function getTextes()
@@ -56,12 +62,27 @@ class Fiction extends AbstractConcept
     }
 
     /**
+     * @return mixed
+     */
+    public function getInscrit()
+    {
+        return $this->inscrit;
+    }
+
+    /**
+     * @param mixed $inscrit
+     */
+    public function setInscrit($inscrit): void
+    {
+        $this->inscrit = $inscrit;
+    }
+
+    /**
      * @return string
      */
     public function __toString()
     {
         return (string) $this->getId();
     }
-
 
 }

@@ -34,7 +34,6 @@ class Inscrit extends AbstractConcept
      */
     private $genre;
 
-
     /**
      * @ORM\Column(type="date", name="date_naissance")
      */
@@ -45,8 +44,10 @@ class Inscrit extends AbstractConcept
      */
     private $email;
 
-    // ce sera le reverse d'inscrit pour fiction
-//    private $fictions;
+    /**
+     * @ORM\OneToMany(targetEntity=Inscrit::class, mappedBy="inscrit")
+     */
+    private $fictions;
 
     /**
      * @return string
@@ -127,4 +128,22 @@ class Inscrit extends AbstractConcept
     {
         $this->email = $email;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getFictions()
+    {
+        return $this->fictions;
+    }
+
+    /**
+     * @param mixed $fictions
+     */
+    public function setFictions($fictions): void
+    {
+        $this->fictions = $fictions;
+    }
+
+
 }
