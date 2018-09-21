@@ -7,6 +7,7 @@
         "doctrine/doctrine-migrations-bundle": "^1.0",
         "friendsofsymfony/rest-bundle": "^2.3",
         "guzzlehttp/guzzle": "~6.0",
+        "lexik/jwt-authentication-bundle": "^2.5",
         "nelmio/cors-bundle": "^1.5",
         "sensiolabs/security-checker": "^4.1",
         "stof/doctrine-extensions-bundle": "^1.3",
