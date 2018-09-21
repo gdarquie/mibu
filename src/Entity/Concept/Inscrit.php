@@ -46,7 +46,7 @@ class Inscrit extends AbstractConcept
     private $email;
 
     // ce sera le reverse d'inscrit pour fiction
-    private $fictions;
+//    private $fictions;
 
     /**
      * @return string
