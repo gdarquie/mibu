@@ -50,6 +50,13 @@ class Inscrit extends AbstractConcept
     private $fictions;
 
     /**
+     * @var array
+     *
+     * @ORM\Column(name="roles", type="array")
+     */
+    private $roles;
+
+    /**
      * @return string
      */
     public function getNom(): string
@@ -145,5 +152,20 @@ class Inscrit extends AbstractConcept
         $this->fictions = $fictions;
     }
 
+    /**
+     * @return array
+     */
+    public function getRoles(): array
+    {
+        return $this->roles;
+    }
+
+    /**
+     * @param array $roles
+     */
+    public function setRoles(array $roles): void
+    {
+        $this->roles = $roles;
+    }
 
 }
