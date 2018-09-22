@@ -6,7 +6,7 @@ use App\Entity\Concept\Inscrit;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-class FictionFetcher
+class InscritFetcher
 {
     private $em;
 
