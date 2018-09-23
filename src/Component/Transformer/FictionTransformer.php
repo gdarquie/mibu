@@ -6,7 +6,7 @@ use App\Component\IO\FictionIO;
 use Doctrine\ORM\EntityManager;
 
 
-class FictionTransformer
+class FictionTransformer extends ConceptTransformer
 {
     //récupérer l'em directement ici
 
@@ -27,14 +27,7 @@ class FictionTransformer
 //        $evenements = $this->em->getRepository('App:Concept\Fiction')->getEvenementsFiction($fictionId);
 
         $fictionIO = new FictionIO();
-
-        $fictionIO->setId($fiction->getId());
-        $fictionIO->setTitre($fiction->getTitre());
-        $fictionIO->setDescription($fiction->getDescription());
-        $fictionIO->setUuid($fiction->getUuid());
-        //todo : retravailler les dates - renvoyer dans un format compréhensible
-        $fictionIO->setDateCreation($fiction->getDateCreation());
-        $fictionIO->setDateModification($fiction->getDateModification());
+        $fictionIO = $this->transformConcept($fiction, $fictionIO);
 
 //        if($textes){
 //            $fictionIO->setTextes($textes);

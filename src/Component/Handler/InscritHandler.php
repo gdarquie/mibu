@@ -21,24 +21,8 @@ class InscritHandler extends BaseHandler
 
         //add a check for testing if valid? (add a form)
         $inscritIO = $this->saveInscrit($inscrit);
-        dump($inscritIO);die;
 
-        //todo = refacto en une seule fonction
-        if(isset($data['textes'])){
-
-            if($data['textes'] !== null){
-                for ($i = 0; $i < count($data['textes']); $i++) {
-                    $data['textes'][0]['fictionId'] =  $fiction->getId();
-                }
-
-                $texteHandler = new TexteHandler($this->em, $this->router);
-                $texteHandler->createTextes($this->em, $data['textes']);
-
-            }
-
-        dump('hello');die;
-        return true;
-        }
+        return $inscritIO;
     }
 
     public function saveInscrit($inscrit)
@@ -48,7 +32,7 @@ class InscritHandler extends BaseHandler
 
         //transform into IO
         $inscritIO = $this->getEntityTransformer(ModelType::INSCRIT)->convertEntityIntoIO($inscrit);
-dump($inscritIO);die;
+
         return $inscritIO;
     }
 

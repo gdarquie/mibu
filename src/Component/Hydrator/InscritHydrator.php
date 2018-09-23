@@ -13,8 +13,7 @@ class InscritHydrator extends ConceptHydrator
         $inscrit->setPrenom($data['prenom']);
         $inscrit->setNom($data['nom']);
         $inscrit->setGenre($data['genre']);
-//        $inscrit->setDateNaissance($data['dateNaissance']);
-        $inscrit->setDateNaissance(null);
+        $inscrit->setDateNaissance(new \DateTime($data['dateNaissance']));
         $inscrit->setEmail($data['email']);
 
         return $inscrit;

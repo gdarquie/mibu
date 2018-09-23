@@ -13,6 +13,11 @@ use FOS\RestBundle\Controller\Annotations as Rest;
 
 class InscritController extends BaseController
 {
+    public function getInscrit()
+    {
+        
+    }
+    
     /**
      * @Rest\Post("inscrits", name="post_inscrit")
      *
@@ -31,7 +36,6 @@ class InscritController extends BaseController
 
         if($form->isSubmitted()) {  //remplacer par isValidate
             $inscritIO = $this->getHandler()->postInscrit($data);
-
             $url = $this->createRouteGetFiction(json_decode($inscritIO)->id);
             $response = $this->createResponse($inscritIO, $url);
 
@@ -75,7 +79,7 @@ class InscritController extends BaseController
     public function createRouteGetFiction($id)
     {
         $url = $this->generateUrl(
-            'get_fiction', array(
+            'get_inscrit', array(
             'id' => $id
         ));
 
