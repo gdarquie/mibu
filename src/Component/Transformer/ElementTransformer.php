@@ -4,18 +4,13 @@ namespace App\Component\Transformer;
 
 use App\Entity\Modele\AbstractElement;
 
-class ElementTransformer
+class ElementTransformer extends ConceptTransformer
 {
-    //todo : ajouter un ConceptTransformer? | penser composition plutôt que hiérarchie?
-    public function transformElement(AbstractElement $element, $io)
+    public function transformElement(AbstractElement $element, $elementIO)
     {
-        $io->setId($element->getId());
-        $io->setTitre($element->getTitre());
-        $io->setDescription($element->getDescription());
+        $io = $this->transformConcept($element, $elementIO);
+
         ($element->getFiction()) ? $io->setFictionId($element->getFiction()) : $io->setFictionId(null); //faut-il forcer l'ajout d'une fiction pour la création d'un élément?
-        $io->setUuid($element->getUuid());
-        $io->setDateCreation($element->getDateCreation());
-        $io->setDateModification($element->getDateModification());
 
         return $io;
     }

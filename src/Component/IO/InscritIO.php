@@ -17,6 +17,11 @@ class InscritIO extends AbstractConceptIO
     /**
      * @var string
      */
+    private $genre;
+
+    /**
+     * @var string
+     */
     private $dateNaissance;
 
     /**
@@ -74,6 +79,22 @@ class InscritIO extends AbstractConceptIO
     }
 
     /**
+     * @return null|string
+     */
+    public function getGenre(): ?string
+    {
+        return $this->genre;
+    }
+
+    /**
+     * @param string $genre
+     */
+    public function setGenre(string $genre): void
+    {
+        $this->genre = $genre;
+    }
+
+    /**
      * @return mixed
      */
     public function getEmail()
@@ -88,6 +109,5 @@ class InscritIO extends AbstractConceptIO
     {
         $this->email = $email;
     }
-
 
 }

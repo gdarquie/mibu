@@ -30,12 +30,12 @@ class Inscrit extends AbstractConcept
     /**
      * @var string
      *
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", nullable=true)
      */
     private $genre;
 
     /**
-     * @ORM\Column(type="date", name="date_naissance")
+     * @ORM\Column(type="date", name="date_naissance", nullable=true)
      */
     private $dateNaissance;
 
