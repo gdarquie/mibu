@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-
+use App\Component\Constant\ModelType;
 use App\Component\Handler\InscritHandler;
 use App\Component\IO\InscritIO;
 use App\Form\InscritType;
@@ -13,10 +13,22 @@ use FOS\RestBundle\Controller\Annotations as Rest;
 
 class InscritController extends BaseController
 {
-    public function getInscrit()
+    /**
+     * @Rest\GET("inscrits/{inscritId}", name="get_inscrit")
+     */
+    public function getInscrit($inscritId)
     {
-        
+        $inscritIO = $this->getHandler()->getEntity($inscritId, ModelType::INSCRIT);
+        dump($inscritIO);
+        return $inscritIO;
+
+//        return $this->createApiResponse(
+//            $evenementIO,
+//            200,
+//            $this->getHandler()->generateSimpleUrl('get_evenement', ['evenementId' => $evenementId])
+//        );
     }
+
     
     /**
      * @Rest\Post("inscrits", name="post_inscrit")
@@ -35,15 +47,20 @@ class InscritController extends BaseController
         $form->submit($data);
 
         if($form->isSubmitted()) {  //remplacer par isValidate
-            $inscritIO = $this->getHandler()->postInscrit($data);
-            $url = $this->createRouteGetFiction(json_decode($inscritIO)->id);
-            $response = $this->createResponse($inscritIO, $url);
+            $inscritIO = $this->getHandler()->postEntity($data, ModelType::INSCRIT);
 
-            return $response;
+            return $this->createApiResponse(
+                $inscritIO,
+                200,
+                $this->getHandler()->generateSimpleUrl('get_inscrit', ['inscritId' => $inscritIO->getId()])
+            );
         }
 
         return new JsonResponse("Echec de l'insertion", 500);
+
     }
+
+
 
     /**
      * @return InscritHandler
@@ -52,6 +69,7 @@ class InscritController extends BaseController
     {
         //get service
         $inscritHandler = new InscritHandler($this->getDoctrine()->getManager(), $this->get('router'));
+
         return $inscritHandler;
     }
 

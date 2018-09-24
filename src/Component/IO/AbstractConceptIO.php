@@ -17,6 +17,11 @@ abstract class AbstractConceptIO extends AbstractIdIO
     /**
      * @var string
      */
+    private $modelType;
+
+    /**
+     * @var string
+     */
     private $uuid;
 
     /**
@@ -59,6 +64,22 @@ abstract class AbstractConceptIO extends AbstractIdIO
     public function setDescription($description)
     {
         $this->description = $description;
+    }
+
+    /**
+     * @return string
+     */
+    public function getModelType(): string
+    {
+        return $this->modelType;
+    }
+
+    /**
+     * @param string $modelType
+     */
+    public function setModelType(string $modelType): void
+    {
+        $this->modelType = $modelType;
     }
 
     /**

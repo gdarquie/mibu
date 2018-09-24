@@ -39,11 +39,15 @@ class LieuController extends BaseController
         );
     }
 
+
+
     /**
      * @Rest\Post("lieux", name="post_lieu")
      *
      * @param Request $request
-     * @return JsonResponse
+     * @return JsonResponse|\Symfony\Component\HttpFoundation\Response
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function postLieu(Request $request)
     {

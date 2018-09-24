@@ -9,6 +9,7 @@ use App\Component\Fetcher\ItemFetcher;
 use App\Component\IO\Pagination\PaginatedCollectionIO;
 use App\Component\Serializer\CustomSerializer;
 use App\Entity\Concept\Fiction;
+use App\Entity\Concept\Inscrit;
 use App\Entity\Element\Evenement;
 use App\Entity\Element\Lieu;
 use App\Entity\Element\Partie;
@@ -208,7 +209,9 @@ class BaseHandler
     /**
      * @param $data
      * @param $modelType
-     * @return \App\Component\IO\PersonnageIO|mixed
+     * @return mixed
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function postEntity($data, $modelType)
     {
@@ -228,6 +231,12 @@ class BaseHandler
             case ModelType::LIEU:
                 $entity = new Lieu();
                 break;
+            case ModelType::INSCRIT;
+                $entity = new Inscrit();
+                return $this->postConcept($data, $entity, $modelType);
+            case ModelType::FICTION;
+                $entity = new Fiction();
+                return $this->postConcept($data, $entity, $modelType);
             default:
                 throw new UnauthorizedHttpException(sprintf(
                     "Aucun modelType n'est renseigné."
@@ -241,7 +250,9 @@ class BaseHandler
      * @param $entityId
      * @param $data
      * @param $modelType
-     * @return \App\Component\IO\PersonnageIO|mixed
+     * @return mixed
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function putEntity($entityId, $data, $modelType)
     {
@@ -263,11 +274,35 @@ class BaseHandler
         return new JsonResponse('Suppression de l\'entité '.$modelType.' '.$entityId.'.', 200);
     }
 
+
     /**
      * @param $data
      * @param $entity
      * @param $modelType
      * @return mixed
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function postConcept($data, $entity, $modelType)
+    {
+        $hydrator = $this->getEntityHydrator($modelType);
+        $transformer = $this->getEntityTransformer($modelType);
+
+        $functionName = 'hydrate'.$modelType;
+        $entity = $hydrator->$functionName($entity, $data);
+        $this->save($entity);
+
+        return $transformer->convertEntityIntoIO($entity);
+
+    }
+
+    /**
+     * @param $data
+     * @param $entity
+     * @param $modelType
+     * @return mixed
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function changeData($data, $entity, $modelType)
     {

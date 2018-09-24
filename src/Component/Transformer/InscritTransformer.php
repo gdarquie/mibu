@@ -3,6 +3,7 @@
 namespace App\Component\Transformer;
 
 
+use App\Component\Constant\ModelType;
 use App\Component\IO\InscritIO;
 
 class InscritTransformer extends ConceptTransformer
@@ -10,7 +11,7 @@ class InscritTransformer extends ConceptTransformer
     public function convertEntityIntoIO($inscrit)
     {
         $inscritIO = new InscritIO();
-        $inscritIO = $this->transformConcept($inscrit, $inscritIO);
+        $inscritIO = $this->transformConcept($inscrit, $inscritIO, ModelType::INSCRIT);
 
         $inscritIO->setPrenom($inscrit->getPrenom());
         $inscritIO->setNom($inscrit->getNom());
