@@ -10,7 +10,12 @@ class InscritControllerTest extends ApiTestCase
     {
         $data = array(
             "titre" => "Ajout de titre d'inscrit",
-            "description" => "Une description d'inscrit comme exemple"
+            "description" => "Une description d'inscrit comme exemple",
+            "prenom" => "admin",
+            "nom" => "Istrateur",
+            "genre" => "femme",
+            "email" => "okita@gmail.com",
+            "dateNaissance"=> "1982-09-06"
         );
 
         $response = $this->client->post(ApiTestCase::TEST_PREFIX.'/inscrits', [
@@ -19,15 +24,15 @@ class InscritControllerTest extends ApiTestCase
 
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertTrue($response->hasHeader('Location'));
-//
-//        $fictionUrl = $response->getHeader('Location');
-//        $response = $this->client->get($fictionUrl[0]);
-//
-//        $payload = json_decode($response->getBody(true), true);
-//        $this->assertArrayHasKey('titre', $payload, "Il n'y a pas de champ titre");
-//
-//        echo $response->getBody();
-//        echo "\n\n";
+
+        $fictionUrl = $response->getHeader('Location');
+        $response = $this->client->get($fictionUrl[0]);
+
+        $payload = json_decode($response->getBody(true), true);
+        $this->assertArrayHasKey('titre', $payload, "Il n'y a pas de champ titre");
+
+        echo $response->getBody();
+        echo "\n\n";
 
     }
 //

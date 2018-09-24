@@ -19,17 +19,14 @@ class InscritController extends BaseController
     public function getInscrit($inscritId)
     {
         $inscritIO = $this->getHandler()->getEntity($inscritId, ModelType::INSCRIT);
-        dump($inscritIO);
-        return $inscritIO;
 
-//        return $this->createApiResponse(
-//            $evenementIO,
-//            200,
-//            $this->getHandler()->generateSimpleUrl('get_evenement', ['evenementId' => $evenementId])
-//        );
+        return $this->createApiResponse(
+            $inscritIO,
+            200,
+            $this->getHandler()->generateSimpleUrl('get_inscrit', ['inscritId' => $inscritId])
+        );
     }
 
-    
     /**
      * @Rest\Post("inscrits", name="post_inscrit")
      *
@@ -60,47 +57,13 @@ class InscritController extends BaseController
 
     }
 
-
-
     /**
      * @return InscritHandler
      */
     public function getHandler()
     {
-        //get service
-        $inscritHandler = new InscritHandler($this->getDoctrine()->getManager(), $this->get('router'));
-
-        return $inscritHandler;
+        return new InscritHandler($this->getDoctrine()->getManager(), $this->get('router'));
     }
 
-    /**
-     * @param $io
-     * @param null $url
-     * @return Response
-     */
-    public function createResponse($io, $url = null)
-    {
-        $response = new Response($io);
-        $response->headers->set('Content-Type', 'application/json');
 
-        if (isset($url)) {
-            $response->headers->set('Location', $url);
-        }
-
-        return $response;
-    }
-
-    /**
-     * @param $id
-     * @return string
-     */
-    public function createRouteGetFiction($id)
-    {
-        $url = $this->generateUrl(
-            'get_inscrit', array(
-            'id' => $id
-        ));
-
-        return $url;
-    }
 }

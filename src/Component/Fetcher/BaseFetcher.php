@@ -2,7 +2,9 @@
 
 namespace App\Component\Fetcher;
 
+use App\Component\Constant\ModelType;
 use App\Entity\Concept\Fiction;
+use App\Entity\Concept\Inscrit;
 use App\Entity\Element\Evenement;
 use App\Entity\Element\Texte;
 use App\Entity\Element\Partie;
@@ -22,8 +24,11 @@ class BaseFetcher
     public function fetch($id, $modelType)
     {
         switch ($modelType) {
-            case 'Fiction':
+            case ModelType::FICTION:
                 $entityName = 'App\Entity\Concept\Fiction';
+                break;
+            case ModelType::INSCRIT:
+                $entityName = 'App\Entity\Concept\Inscrit';
                 break;
             default:
                 $entityName = 'App\Entity\Element\\'.ucfirst($modelType);

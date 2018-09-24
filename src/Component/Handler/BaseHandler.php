@@ -157,7 +157,8 @@ class BaseHandler
      */
     public function getEntity($entityId, $modelType)
     {
-        return $this->getEntityTransformer($modelType)->convertEntityIntoIO($this->getEntityFetcher()->fetch($entityId, $modelType));
+        $entity = $this->getEntityFetcher()->fetch($entityId, $modelType);
+        return $this->getEntityTransformer($modelType)->convertEntityIntoIO($entity);
 
     }
 
