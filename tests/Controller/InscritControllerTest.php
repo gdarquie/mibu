@@ -35,36 +35,7 @@ class InscritControllerTest extends ApiTestCase
         echo "\n\n";
 
     }
-//
-//    public function testPostFictionWithTextes()
-//    {
-//        $data = array(
-//            'titre' => 'Nouvel exemple de titre de fiction',
-//            'description' => 'Une description de fiction comme exemple'
-//        );
-//
-//        $data['textes'][0]['titre'] = 'Test 1';
-//        $data['textes'][0]['description'] = 'Description 1';
-//        $data['textes'][0]['type'] = 'promesse';
-//
-//        $response = $this->client->post(ApiTestCase::TEST_PREFIX.'/fictions', [
-//            'body' => json_encode($data)
-//        ]);
-//
-//        $this->assertEquals(200, $response->getStatusCode());
-//
-//        $this->assertTrue($response->hasHeader('Location'));
-//        $fictionUrl = $response->getHeader('Location');
-//
-//        $response = $this->client->get($fictionUrl[0]);
-//
-//        $payload = json_decode($response->getBody(true), true);
-//        $this->assertArrayHasKey('titre', $payload, "Il n'y a pas de champ titre");
-//
-//        echo $response->getBody();
-//        echo "\n\n";
-//    }
-//
+
 //    public function testGetFictions()
 //    {
 //       for ($i = 0; $i<25; $i++) {
@@ -141,11 +112,11 @@ class InscritControllerTest extends ApiTestCase
 //
 //    }
 //
-//    public function testDeleteFiction()
-//    {
-//        $fiction = $this->createFiction();
-//
-//        $response = $this->client->delete(ApiTestCase::TEST_PREFIX.'/fictions/'.$fiction->getId());
-//        $this->assertEquals(202, $response->getStatusCode());
-//    }
+    public function testDeleteInscrit()
+    {
+        $fiction = $this->createInscrit();
+
+        $response = $this->client->delete(ApiTestCase::TEST_PREFIX.'/inscrits/'.$fiction->getId());
+        $this->assertEquals(200, $response->getStatusCode());
+    }
 }

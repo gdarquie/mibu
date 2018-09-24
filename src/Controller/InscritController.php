@@ -58,6 +58,14 @@ class InscritController extends BaseController
     }
 
     /**
+     * @Rest\Delete("/inscrits/{inscritId}",name="delete_inscrit")
+     */
+    public function deleteInscrit($inscritId)
+    {
+        return $this->getHandler()->deleteEntity($inscritId, ModelType::INSCRIT);
+    }
+
+    /**
      * @return InscritHandler
      */
     public function getHandler()

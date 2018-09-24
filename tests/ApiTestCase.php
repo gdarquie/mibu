@@ -3,6 +3,7 @@
 namespace App\Tests;
 
 use App\Entity\Concept\Fiction;
+use App\Entity\Concept\Inscrit;
 use App\Entity\Element\Lieu;
 use App\Entity\Element\Partie;
 use App\Entity\Element\Texte;
@@ -246,6 +247,24 @@ class ApiTestCase extends KernelTestCase
         $this->getService('doctrine')->getManager()->flush();
 
         return $fiction;
+    }
+
+    protected function createInscrit()
+    {
+        $inscrit = new Inscrit();
+
+        $inscrit->setTitre('Titre');
+        $inscrit->setDescription('Description');
+        $inscrit->setPrenom('Prénom');
+        $inscrit->setNom('Nom');
+        $inscrit->setGenre('Femme');
+        $inscrit->setEmail('mon@email.fr');
+        $inscrit->setDateNaissance(new \DateTime('1982-01-01'));
+
+        $this->getService('doctrine')->getManager()->persist($inscrit);
+        $this->getService('doctrine')->getManager()->flush();
+
+        return $inscrit;
     }
 
     protected function createEvenementFiction($fiction) {
