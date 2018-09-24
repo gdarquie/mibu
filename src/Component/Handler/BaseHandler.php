@@ -231,10 +231,10 @@ class BaseHandler
             case ModelType::LIEU:
                 $entity = new Lieu();
                 break;
-            case ModelType::INSCRIT;
+            case ModelType::INSCRIT:
                 $entity = new Inscrit();
                 return $this->postConcept($data, $entity, $modelType);
-            case ModelType::FICTION;
+            case ModelType::FICTION:
                 $entity = new Fiction();
                 return $this->postConcept($data, $entity, $modelType);
             default:

@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Component\Constant\ModelType;
 use App\Component\Handler\FictionHandler;
 use App\Component\IO\FictionIO;
 use App\Form\FictionType;
@@ -25,12 +26,12 @@ class FictionController extends BaseController
     }
 
     /**
-     * @Rest\Get("fictions/{id}", name="get_fiction")
+     * @Rest\Get("fictions/{fictionId}", name="get_fiction")
      */
-    public function getFiction($id): Response
+    public function getFiction($fictionId): Response
     {
         return $this->createResponse(
-            $this->getHandler()->getFiction($id)
+            $this->getHandler()->getFiction($fictionId)
         );
     }
 
@@ -46,19 +47,19 @@ class FictionController extends BaseController
     public function postFiction(Request $request)
     {
         $data = $this->getData($request);
-
         $fictionIO = new FictionIO();
         $form = $this->createForm(FictionType::class, $fictionIO);
         $form->submit($data);
 
         if($form->isSubmitted()) {  //remplacer par isValidate
 
-            $fictionIO = $this->getHandler()->postFiction($data);
+            $fictionIO = $this->getHandler()->postEntity($data, ModelType::FICTION);
 
-            $url = $this->createRouteGetFiction(json_decode($fictionIO)->id);
-            $response = $this->createResponse($fictionIO, $url);
-
-            return $response;
+            return $this->createApiResponse(
+                $fictionIO,
+                200,
+                $this->getHandler()->generateSimpleUrl('get_fiction', ['fictionId' => $fictionIO->getId()])
+            );
         }
 
         return new JsonResponse("Echec de l'insertion", 500);
@@ -121,7 +122,7 @@ class FictionController extends BaseController
     {
         $url = $this->generateUrl(
             'get_fiction', array(
-            'id' => $id
+            'fictionId' => $id
         ));
 
         return $url;

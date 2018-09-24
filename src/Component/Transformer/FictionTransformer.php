@@ -9,18 +9,6 @@ use Doctrine\ORM\EntityManager;
 
 class FictionTransformer extends ConceptTransformer
 {
-    //récupérer l'em directement ici
-
-    /**
-     * @var EntityManager
-     */
-    protected $em;
-
-
-    public function __construct(EntityManager $em) {
-        $this->em = $em;
-    }
-
     public function convertEntityIntoIO($fiction)
     {
 //        $textes = $this->em->getRepository('App:Concept\Fiction')->getTextesFiction($fictionId);
