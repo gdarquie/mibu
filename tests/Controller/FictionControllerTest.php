@@ -126,7 +126,7 @@ class FictionControllerTest extends ApiTestCase
             'body' => json_encode($data)
         ]);
 
-        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals(202, $response->getStatusCode());
 
         $response = $this->client->get(ApiTestCase::TEST_PREFIX.'/fictions/'.$fiction->getId());
 

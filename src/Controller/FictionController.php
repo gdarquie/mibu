@@ -57,7 +57,7 @@ class FictionController extends BaseController
 
             return $this->createApiResponse(
                 $fictionIO,
-                200,
+                202,
                 $this->getHandler()->generateSimpleUrl('get_fiction', ['fictionId' => $fictionIO->getId()])
             );
         }
@@ -71,11 +71,13 @@ class FictionController extends BaseController
     public function putFiction(Request $request, $fictionId)
     {
         $data = $this->getData($request);
-        $fictionIO = $this->getHandler()->putFiction($fictionId, $data);
-        $url = $this->createRouteGetFiction($fictionId);
-        $response = $this->createResponse($fictionIO, $url);
+        $fictionIO = $this->getHandler()->putEntity($fictionId, $data, ModelType::FICTION);
 
-        return $response;
+        return $this->createApiResponse(
+            $fictionIO,
+            202,
+            $this->getHandler()->generateSimpleUrl('get_fiction', ['fictionId' => $fictionIO->getId()])
+        );
 
     }
 
