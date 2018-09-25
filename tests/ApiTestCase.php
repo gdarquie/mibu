@@ -249,11 +249,11 @@ class ApiTestCase extends KernelTestCase
         return $fiction;
     }
 
-    protected function createInscrit()
+    protected function createInscrit($titre = 'Titre')
     {
         $inscrit = new Inscrit();
 
-        $inscrit->setTitre('Titre');
+        $inscrit->setTitre($titre);
         $inscrit->setDescription('Description');
         $inscrit->setPrenom('Prénom');
         $inscrit->setNom('Nom');

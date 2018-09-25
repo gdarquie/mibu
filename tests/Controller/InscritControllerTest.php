@@ -36,58 +36,58 @@ class InscritControllerTest extends ApiTestCase
 
     }
 
-//    public function testGetFictions()
-//    {
-//       for ($i = 0; $i<25; $i++) {
-//           $this->createFiction('Fiction '.$i);
-//       }
-//
-//       //page 1
-//        $response = $this->client->get(ApiTestCase::TEST_PREFIX.'/fictions');
-//        $this->assertEquals(200, $response->getStatusCode());
-//        $payload = json_decode($response->getBody(true), true);
-//
-//        $this->assertEquals('Fiction 5', $payload['items'][5]['titre']);
-//        $this->assertEquals(10, $payload['count'], "Il n'y a pas le bon compte de fictions");
-//        $this->assertEquals(25, $payload['total'], "Il n'y a pas le bon total de fictions");
-//        $this->assertArrayHasKey('links', $payload, "Il n'y a pas de champ links");
-//        $this->assertArrayHasKey('next', $payload['links'], "Il n'y a pas de champ links.next");
-//
-//        //page 2
-//        $nextLink = $payload['links']['next'];
-//        $response = $this->client->get($nextLink);
-//        $payloadNext = json_decode($response->getBody(true), true);
-//
-//        $this->assertEquals('Fiction 15', $payloadNext['items'][5]['titre']);
-//        $this->assertEquals(10, count($payloadNext['items']), "Il n'y a pas le bon compte de fictions");
-//        $this->assertArrayHasKey('links', $payloadNext, "Il n'y a pas de champ links");
-//        $this->assertArrayHasKey('next', $payloadNext['links'], "Il n'y a pas de champ links.next");
-//
-//        //last
-//        $lastLink = $payload['links']['last'];
-//        $response = $this->client->get($lastLink);
-//        $payloadLast = json_decode($response->getBody(true), true);
-//
-//        $this->assertEquals(200, $response->getStatusCode());
-//        $this->assertEquals('Fiction 24', $payloadLast['items'][4]['titre']);
-//
-//    }
-//
-//    public function testGetFiction()
-//    {
-//        $fiction = $this->createFiction();
-//
-//        $response = $this->client->get(ApiTestCase::TEST_PREFIX.'/fictions/'.$fiction->getId());
-//
-//        $payload = json_decode($response->getBody(true), true);
-//        $this->assertArrayHasKey('titre', $payload, "Il n'y a pas de champ titre");
-//        $this->assertEquals($fiction->getId(), $payload['id']);
-//        $this->assertEquals(200, $response->getStatusCode());
-//
-//        echo $response->getBody();
-//        echo "\n\n";
-//    }
-//
+    public function testGetInscrits()
+    {
+       for ($i = 0; $i<25; $i++) {
+           $this->createInscrit('Inscrit '.$i);
+       }
+
+       //page 1
+        $response = $this->client->get(ApiTestCase::TEST_PREFIX.'/inscrits');
+        $this->assertEquals(200, $response->getStatusCode());
+        $payload = json_decode($response->getBody(true), true);
+
+        $this->assertEquals('Inscrit 5', $payload['items'][5]['titre']);
+        $this->assertEquals(10, $payload['count'], "Il n'y a pas le bon compte d'inscrits");
+        $this->assertEquals(25, $payload['total'], "Il n'y a pas le bon total d'inscrits");
+        $this->assertArrayHasKey('links', $payload, "Il n'y a pas de champ links");
+        $this->assertArrayHasKey('next', $payload['links'], "Il n'y a pas de champ links.next");
+
+        //page 2
+        $nextLink = $payload['links']['next'];
+        $response = $this->client->get($nextLink);
+        $payloadNext = json_decode($response->getBody(true), true);
+
+        $this->assertEquals('Inscrit 15', $payloadNext['items'][5]['titre']);
+        $this->assertEquals(10, count($payloadNext['items']), "Il n'y a pas le bon compte d'inscrits");
+        $this->assertArrayHasKey('links', $payloadNext, "Il n'y a pas de champ links");
+        $this->assertArrayHasKey('next', $payloadNext['links'], "Il n'y a pas de champ links.next");
+
+        //last
+        $lastLink = $payload['links']['last'];
+        $response = $this->client->get($lastLink);
+        $payloadLast = json_decode($response->getBody(true), true);
+
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals('Inscrit 24', $payloadLast['items'][4]['titre']);
+
+    }
+
+    public function testGetInscrit()
+    {
+        $inscrit = $this->createInscrit();
+
+        $response = $this->client->get(ApiTestCase::TEST_PREFIX.'/inscrits/'.$inscrit->getId());
+
+        $payload = json_decode($response->getBody(true), true);
+        $this->assertArrayHasKey('titre', $payload, "Il n'y a pas de champ titre");
+        $this->assertEquals($inscrit->getId(), $payload['id']);
+        $this->assertEquals(200, $response->getStatusCode());
+
+        echo $response->getBody();
+        echo "\n\n";
+    }
+
     public function testPutInscrit()
     {
         $inscrit = $this->createInscrit();
