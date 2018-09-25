@@ -26,11 +26,15 @@ class InscritController extends BaseController
             $this->getHandler()->generateSimpleUrl('get_inscrit', ['inscritId' => $inscritId])
         );
     }
-//
-//    public function getInscrits()
-//    {
-//
-//    }
+
+    public function getInscrits()
+    {
+//        return $this->createApiResponse(
+//            $this->getHandler()->getFictions($request),
+//            200,
+//            $this->getHandler()->generateUrl('get_fictions', [], $request->query->get('page', 1))
+//        );
+    }
 
     /**
      * @Rest\Post("inscrits", name="post_inscrit")
