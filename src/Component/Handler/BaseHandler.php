@@ -234,18 +234,17 @@ class BaseHandler
                 break;
             case ModelType::INSCRIT:
                 $entity = new Inscrit();
-                return $this->postConcept($data, $entity, $modelType);
+                return $this->changeConcept($data, $entity, $modelType);
             case ModelType::FICTION:
                 $entity = new Fiction();
-                return $this->postConcept($data, $entity, $modelType);
+                return $this->changeConcept($data, $entity, $modelType);
             default:
                 throw new UnauthorizedHttpException(sprintf(
                     "Aucun modelType n'est renseigné."
                 ));
         }
-        return $this->changeData($data, $entity, $modelType);
+        return $this->changeElement($data, $entity, $modelType);
     }
-
 
     /**
      * @param $entityId
@@ -257,10 +256,11 @@ class BaseHandler
      */
     public function putEntity($entityId, $data, $modelType)
     {
-        if($modelType === ModelType::INSCRIT || ModelType::FICTION) {
-            return $this->putConcept($data, $this->getEntityFetcher()->fetch($entityId, $modelType), $modelType);
+        if($modelType === ModelType::INSCRIT || $modelType === ModelType::FICTION) {
+            return $this->changeConcept($data, $this->getEntityFetcher()->fetch($entityId, $modelType), $modelType);
         }
-        return $this->putElement($data, $this->getEntityFetcher()->fetch($entityId, $modelType), $modelType);
+
+        return $this->changeElement($data, $this->getEntityFetcher()->fetch($entityId, $modelType), $modelType);
     }
 
     /**
@@ -278,7 +278,6 @@ class BaseHandler
         return new JsonResponse('Suppression de l\'entité '.$modelType.' '.$entityId.'.', 200);
     }
 
-
     /**
      * @param $data
      * @param $entity
@@ -287,7 +286,7 @@ class BaseHandler
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function postConcept($data, $entity, $modelType)
+    public function changeConcept($data, $entity, $modelType)
     {
         $hydrator = $this->getEntityHydrator($modelType);
         $transformer = $this->getEntityTransformer($modelType);
@@ -307,7 +306,7 @@ class BaseHandler
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function putElement($data, $entity, $modelType)
+    public function changeElement($data, $entity, $modelType)
     {
         $hydrator = $this->getEntityHydrator($modelType);
         $transformer = $this->getEntityTransformer($modelType);
@@ -332,24 +331,6 @@ class BaseHandler
         return $transformer->convertEntityIntoIO($entity);
     }
 
-    /**
-     * @param $data
-     * @param $entity
-     * @param $modelType
-     * @return mixed
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     */
-    public function putConcept($data, $entity, $modelType)
-    {
-        $hydrator = $this->getEntityHydrator($modelType);
-        $transformer = $this->getEntityTransformer($modelType);
 
-        $functionName = 'hydrate'.$modelType;
-        $entity = $hydrator->$functionName($entity, $data);
-        $this->save($entity);
-
-        return $transformer->convertEntityIntoIO($entity);
-    }
 
 }
