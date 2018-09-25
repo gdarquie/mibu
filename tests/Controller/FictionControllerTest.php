@@ -142,6 +142,6 @@ class FictionControllerTest extends ApiTestCase
         $fiction = $this->createFiction();
 
         $response = $this->client->delete(ApiTestCase::TEST_PREFIX.'/fictions/'.$fiction->getId());
-        $this->assertEquals(202, $response->getStatusCode());
+        $this->assertEquals(200, $response->getStatusCode());
     }
 }

@@ -88,10 +88,15 @@ class FictionController extends BaseController
 
     /**
      * @Rest\Delete("/fictions/{fictionId}",name="delete_fiction")
+     *
+     * @param $fictionId
+     * @return JsonResponse
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function deleteAction($fictionId)
     {
-        return $this->getHandler()->deleteFiction($fictionId);
+        return $this->getHandler()->deleteEntity($fictionId, ModelType::FICTION);
     }
 
     /**
@@ -99,9 +104,7 @@ class FictionController extends BaseController
      */
     public function getHandler()
     {
-        //get service
-        $fictionHandler = new FictionHandler($this->getDoctrine()->getManager(), $this->get('router'));
-        return $fictionHandler;
+        return new FictionHandler($this->getDoctrine()->getManager(), $this->get('router'));
     }
 
     /**
