@@ -8,7 +8,7 @@ use App\Entity\Element\Texte;
 use App\Entity\Element\Personnage;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\InscritRepository")
  * @ORM\Table(name="inscrit")
  */
 class Inscrit extends AbstractConcept
@@ -155,7 +155,7 @@ class Inscrit extends AbstractConcept
     /**
      * @return array
      */
-    public function getRoles(): array
+    public function getRoles(): ?array
     {
         return $this->roles;
     }

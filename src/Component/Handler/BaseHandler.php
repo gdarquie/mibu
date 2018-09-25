@@ -56,6 +56,11 @@ class BaseHandler
         );
     }
 
+    /**
+     * @param $route
+     * @param array $params
+     * @return string
+     */
     public function generateSimpleUrl($route, array $params)
     {
         return $this->router->generate(
@@ -162,18 +167,24 @@ class BaseHandler
 
     }
 
+    /**
+     * @param $request
+     * @param $fictionId
+     * @param $modelType
+     * @return PaginatedCollectionIO
+     */
     public function getElementsCollection($request, $fictionId, $modelType)
     {
         $page = $request->query->get('page', 1);
         $maxPerPage = $request->query->get('maxPerPage', 10);
 
-        $entitiesIO = [];
         $elements = $this->em->getRepository(Fiction::class)->getElements($fictionId, $modelType);
         $adapter = new ArrayAdapter($elements);
         $pagerfanta = new Pagerfanta($adapter);
         $pagerfanta->setMaxPerPage($maxPerPage);
         $pagerfanta->setCurrentPage($page);
 
+        $entitiesIO = [];
         foreach ($pagerfanta->getCurrentPageResults() as $entity){
             $entityIO = $this->getEntityTransformer($modelType)->convertEntityIntoIO($entity);
 
@@ -205,6 +216,52 @@ class BaseHandler
         }
 
         return $collection;
+    }
+
+    /**
+     * @param $request
+     * @param $modelType
+     * @return PaginatedCollectionIO
+     */
+    public function getConceptsCollection($request, $modelType)
+    {
+        $page = $request->query->get('page', 1);
+        $maxPerPage = $request->query->get('maxPerPage', 10);
+
+        $entityClassName = 'App\Entity\Concept\\'.ucfirst($modelType);
+
+        $concepts = $this->em->getRepository($entityClassName)->findAll();
+        //getIO
+        $adapter = new ArrayAdapter($concepts);
+        $pagerfanta = new Pagerfanta($adapter);
+        $pagerfanta->setMaxPerPage($maxPerPage);
+        $pagerfanta->setCurrentPage($page);
+
+        $entitiesIO = [];
+        foreach ($pagerfanta->getCurrentPageResults() as $entity) {
+            $entityIO = $this->getEntityTransformer($modelType)->convertEntityIntoIO($entity);
+            array_push($entitiesIO, $entityIO);
+        }
+
+        $total = $pagerfanta->getNbResults();
+
+        $collection = new PaginatedCollectionIO($entitiesIO,$total);
+        $routeName = 'get_'.$modelType.'s';
+
+        $collection->addLink('self', $this->generateUrl($routeName, [], $page));
+        $collection->addLink('first', $this->generateUrl($routeName, [], 1));
+        $collection->addLink('last', $this->generateUrl($routeName, [], $pagerfanta->getNbPages()));
+
+        if ($pagerfanta->hasPreviousPage()) {
+            $collection->addLink('previous', $this->generateUrl($routeName, [], $pagerfanta->getPreviousPage()));
+        }
+
+        if ($pagerfanta->hasNextPage()) {
+            $collection->addLink('next', $this->generateUrl($routeName, [], $pagerfanta->getNextPage()));
+        }
+
+        return $collection;
+
     }
 
     /**

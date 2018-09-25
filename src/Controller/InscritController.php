@@ -13,8 +13,21 @@ use FOS\RestBundle\Controller\Annotations as Rest;
 
 class InscritController extends BaseController
 {
+
     /**
-     * @Rest\GET("inscrits/{inscritId}", name="get_inscrit")
+     * @Rest\Get("inscrits", name="get_inscrits")
+     */
+    public function getInscrits(Request $request): Response
+    {
+        return $this->createApiResponse(
+            $this->getHandler()->getConceptsCollection($request, ModelType::INSCRIT),
+            200,
+            $this->getHandler()->generateUrl('get_inscrits', [], $request->query->get('page', 1))
+        );
+    }
+
+    /**
+     * @Rest\Get("inscrits/{inscritId}", name="get_inscrit")
      */
     public function getInscrit($inscritId)
     {
@@ -25,15 +38,6 @@ class InscritController extends BaseController
             200,
             $this->getHandler()->generateSimpleUrl('get_inscrit', ['inscritId' => $inscritId])
         );
-    }
-
-    public function getInscrits()
-    {
-//        return $this->createApiResponse(
-//            $this->getHandler()->getFictions($request),
-//            200,
-//            $this->getHandler()->generateUrl('get_fictions', [], $request->query->get('page', 1))
-//        );
     }
 
     /**
