@@ -10,7 +10,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 class BaseController extends FOSRestController
 {
-
     /**
      * @param $request
      * @return mixed

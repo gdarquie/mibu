@@ -19,7 +19,7 @@ class FictionController extends BaseController
     public function getFictions(Request $request): Response
     {
         return $this->createApiResponse(
-            $this->getHandler()->getFictions($request),
+            $this->getHandler()->getConceptsCollection($request, ModelType::FICTION),
             200,
             $this->getHandler()->generateUrl('get_fictions', [], $request->query->get('page', 1))
         );
@@ -30,9 +30,14 @@ class FictionController extends BaseController
      */
     public function getFiction($fictionId): Response
     {
-        return $this->createResponse(
-            $this->getHandler()->getFiction($fictionId)
+        $fictionIO = $this->getHandler()->getEntity($fictionId, ModelType::FICTION);
+
+        return $this->createApiResponse(
+            $fictionIO,
+            200,
+            $this->getHandler()->generateSimpleUrl('get_fiction', ['fictionId' => $fictionId])
         );
+
     }
 
     /**
