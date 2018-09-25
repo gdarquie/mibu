@@ -43,7 +43,9 @@ class PartieController extends BaseController
      * @Rest\Post("parties", name="post_partie")
      *
      * @param Request $request
-     * @return JsonResponse
+     * @return JsonResponse|\Symfony\Component\HttpFoundation\Response
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function postPartie(Request $request)
     {

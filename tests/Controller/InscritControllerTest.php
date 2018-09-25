@@ -88,35 +88,42 @@ class InscritControllerTest extends ApiTestCase
 //        echo "\n\n";
 //    }
 //
-//    public function testPutFiction()
-//    {
-//        $fiction = $this->createFiction();
-//
-//        $data = array(
-//            'titre' => 'Titre de la fiction modifié',
-//            "description" => "Description test"
-//        );
-//
-//        $response = $this->client->put(ApiTestCase::TEST_PREFIX.'/fictions/'.$fiction->getId(), [
-//            'body' => json_encode($data)
-//        ]);
-//
-//        $this->assertEquals(200, $response->getStatusCode());
-//
-//        $response = $this->client->get(ApiTestCase::TEST_PREFIX.'/fictions/'.$fiction->getId());
-//
-//        $payload = json_decode($response->getBody(true), true);
-//        $this->assertArrayHasKey('titre', $payload, "Il n'y a pas de champ surnom");
-//        $this->assertEquals( $data['titre'], $payload['titre']);
-//        $this->assertEquals(200, $response->getStatusCode());
-//
-//    }
-//
+    public function testPutInscrit()
+    {
+        $inscrit = $this->createInscrit();
+
+        $data = array(
+            "titre" => "Titre d'inscrit maj",
+            "description" => "Description 1",
+            "prenom" => "Misa",
+            "nom" => "Jour",
+            "genre" => "femme",
+            "email" => "okita@gmail.com",
+            "dateNaissance"=> "1982-09-06"
+        );
+
+        $response = $this->client->put(ApiTestCase::TEST_PREFIX.'/inscrits/'.$inscrit->getId(), [
+            'body' => json_encode($data)
+        ]);
+
+        $this->assertEquals(202, $response->getStatusCode());
+
+        $response = $this->client->get(ApiTestCase::TEST_PREFIX.'/inscrits/'.$inscrit->getId());
+
+        $payload = json_decode($response->getBody(true), true);
+        $this->assertArrayHasKey('titre', $payload, "Il n'y a pas de champ titre");
+        $this->assertEquals( $data['titre'], $payload['titre']);
+        $this->assertEquals( $data['prenom'], $payload['prenom']);
+        $this->assertEquals( $data['genre'], $payload['genre']);
+        $this->assertEquals(200, $response->getStatusCode());
+
+    }
+
     public function testDeleteInscrit()
     {
-        $fiction = $this->createInscrit();
+        $inscrit = $this->createInscrit();
 
-        $response = $this->client->delete(ApiTestCase::TEST_PREFIX.'/inscrits/'.$fiction->getId());
+        $response = $this->client->delete(ApiTestCase::TEST_PREFIX.'/inscrits/'.$inscrit->getId());
         $this->assertEquals(200, $response->getStatusCode());
     }
 }

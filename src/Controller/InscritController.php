@@ -26,6 +26,11 @@ class InscritController extends BaseController
             $this->getHandler()->generateSimpleUrl('get_inscrit', ['inscritId' => $inscritId])
         );
     }
+//
+//    public function getInscrits()
+//    {
+//
+//    }
 
     /**
      * @Rest\Post("inscrits", name="post_inscrit")
@@ -54,8 +59,30 @@ class InscritController extends BaseController
         }
 
         return new JsonResponse("Echec de l'insertion", 500);
-
     }
+
+    /**
+     * @Rest\Put("inscrits/{inscritId}", name="put_inscrit")
+     *
+     *
+     * @param Request $request
+     * @param $inscritId
+     * @return Response
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function putInscrit(Request $request, $inscritId)
+    {
+        $data = $this->getData($request);
+        $inscritIO = $this->getHandler()->putEntity($inscritId, $data, ModelType::INSCRIT);
+
+        return $this->createApiResponse(
+            $inscritIO,
+            202,
+            $this->getHandler()->generateSimpleUrl('get_inscrit', ['inscritId' => $inscritIO->getId()])
+        );
+    }
+    
 
     /**
      * @Rest\Delete("/inscrits/{inscritId}",name="delete_inscrit")
