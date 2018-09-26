@@ -2,6 +2,8 @@
 
 namespace App\Component\IO;
 
+use Symfony\Component\Validator\Constraints as Assert;
+
 class InscritIO extends AbstractConceptIO
 {
     /**
@@ -25,6 +27,8 @@ class InscritIO extends AbstractConceptIO
     private $dateNaissance;
 
     /**
+     * @Assert\NotBlank(message="Email obligatoire")
+     *
      * @var string
      */
     private $email;

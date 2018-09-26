@@ -13,17 +13,12 @@ use FOS\RestBundle\Controller\Annotations as Rest;
 
 class InscritController extends BaseController
 {
-
     /**
      * @Rest\Get("inscrits", name="get_inscrits")
      */
     public function getInscrits(Request $request): Response
     {
-        return $this->createApiResponse(
-            $this->getHandler()->getConceptsCollection($request, ModelType::INSCRIT),
-            200,
-            $this->getHandler()->generateUrl('get_inscrits', [], $request->query->get('page', 1))
-        );
+        return $this->getAllAction($request, ModelType::INSCRIT);
     }
 
     /**
@@ -31,13 +26,7 @@ class InscritController extends BaseController
      */
     public function getInscrit($inscritId)
     {
-        $inscritIO = $this->getHandler()->getEntity($inscritId, ModelType::INSCRIT);
-
-        return $this->createApiResponse(
-            $inscritIO,
-            200,
-            $this->getHandler()->generateSimpleUrl('get_inscrit', ['inscritId' => $inscritId])
-        );
+        return $this->getAction($inscritId, ModelType::INSCRIT);
     }
 
     /**
@@ -55,6 +44,10 @@ class InscritController extends BaseController
         $inscritIO = new InscritIO();
         $form = $this->createForm(InscritType::class, $inscritIO);
         $form->submit($data);
+
+//        if(!$form->isValid()) {
+//            return $this->createValidationErrorResponse($form);
+//        }
 
         if($form->isSubmitted()) {  //remplacer par isValidate
             $inscritIO = $this->getHandler()->postEntity($data, ModelType::INSCRIT);
