@@ -40,26 +40,7 @@ class InscritController extends BaseController
      */
     public function postInscrit(Request $request)
     {
-        $data = $this->getData($request);
-        $inscritIO = new InscritIO();
-        $form = $this->createForm(InscritType::class, $inscritIO);
-        $form->submit($data);
-
-//        if(!$form->isValid()) {
-//            return $this->createValidationErrorResponse($form);
-//        }
-
-        if($form->isSubmitted()) {  //remplacer par isValidate
-            $inscritIO = $this->getHandler()->postEntity($data, ModelType::INSCRIT);
-
-            return $this->createApiResponse(
-                $inscritIO,
-                200,
-                $this->getHandler()->generateSimpleUrl('get_inscrit', ['inscritId' => $inscritIO->getId()])
-            );
-        }
-
-        return new JsonResponse("Echec de l'insertion", 500);
+        return $this->postAction($request, ModelType::INSCRIT);
     }
 
     /**
@@ -90,7 +71,7 @@ class InscritController extends BaseController
      */
     public function deleteInscrit($inscritId)
     {
-        return $this->getHandler()->deleteEntity($inscritId, ModelType::INSCRIT);
+        return $this->deleteAction($inscritId, ModelType::INSCRIT);
     }
 
     /**

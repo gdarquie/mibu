@@ -2,9 +2,9 @@
 
 namespace App\Controller;
 
-
 use App\Component\Constant\ModelType;
 use App\Component\Serializer\CustomSerializer;
+use App\Form\InscritType;
 use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -48,6 +48,50 @@ class BaseController extends FOSRestController
             200,
             $this->getHandler()->generateSimpleUrl('get_'.$modelType, [$modelType.'Id' => $id])
         );
+    }
+
+    /**
+     * @param $request
+     * @param $modelType
+     * @return JsonResponse|Response
+     */
+    public function postAction($request, $modelType)
+    {
+        $data = $this->getData($request);
+
+        $classname = 'App\Component\IO\\'.ucfirst($modelType).'IO';
+        $io = new $classname();
+
+        $formType = 'App\Form\\'.ucfirst($modelType).'Type';
+
+        $form = $this->createForm($formType, $io);
+        $form->submit($data);
+
+//        if(!$form->isValid()) {
+//            return $this->createValidationErrorResponse($form);
+//        }
+
+        if($form->isSubmitted()) {  //remplacer par isValidate
+            $io = $this->getHandler()->postEntity($data, $modelType);
+
+            return $this->createApiResponse(
+                $io,
+                200,
+                $this->getHandler()->generateSimpleUrl('get_'.$modelType, [$modelType.'Id' => $io->getId()])
+            );
+        }
+
+        return new JsonResponse("Echec de l'insertion", 500);
+    }
+
+    /**
+     * @param $id
+     * @param $modelType
+     * @return mixed
+     */
+    public function deleteAction($id, $modelType)
+    {
+        return $this->getHandler()->deleteEntity($id, $modelType);
     }
 
     /**

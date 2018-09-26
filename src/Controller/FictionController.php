@@ -94,7 +94,7 @@ class FictionController extends BaseController
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function deleteAction($fictionId)
+    public function deleteFiction($fictionId)
     {
         return $this->getHandler()->deleteEntity($fictionId, ModelType::FICTION);
     }

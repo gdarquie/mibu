@@ -82,7 +82,7 @@ class TexteController extends BaseController
     /**
      * @Rest\Delete("/textes/{texteId}",name="delete_texte")
      */
-    public function deleteAction($texteId)
+    public function deleteTexte($texteId)
     {
         return $this->getHandler()->deleteEntity($texteId, modelType::TEXTE);
     }
