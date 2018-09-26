@@ -13,6 +13,15 @@ use App\Entity\Element\Personnage;
  */
 class Inscrit extends AbstractConcept
 {
+    //unique
+    private $pseudo;
+
+    //mot de passe
+    private $mdp;
+
+    //unique
+    private $slug;
+
     /**
      * @var string
      *
