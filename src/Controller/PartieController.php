@@ -12,13 +12,17 @@ use Symfony\Component\HttpFoundation\Request;
 
 class PartieController extends BaseController
 {
+    /**
+     * @var string
+     */
+    public $modelType = ModelType::PARTIE;
 
     /**
      * @Rest\Get("parties/{partieId}", name="get_partie")
      */
     public function getPartie($partieId)
     {
-        return $this->getAction($partieId, ModelType::PARTIE);
+        return $this->getAction($partieId, $this->modelType);
     }
 
     /**
@@ -27,7 +31,7 @@ class PartieController extends BaseController
     public function getParties(Request $request, $fictionId)
     {
         return $this->createApiResponse(
-            $this->getHandler()->getElementsCollection($request, $fictionId, ModelType::PARTIE),
+            $this->getHandler()->getElementsCollection($request, $fictionId, $this->modelType),
             200,
             $this->getHandler()->generateUrl('get_parties', ['fictionId' => $fictionId], $request->query->get('page', 1))
         );
@@ -38,7 +42,7 @@ class PartieController extends BaseController
      */
     public function postPartie(Request $request)
     {
-        return $this->postAction($request, ModelType::PARTIE);
+        return $this->postAction($request, $this->modelType);
     }
 
 
@@ -47,7 +51,7 @@ class PartieController extends BaseController
      */
     public function putPartie(Request $request, $partieId)
     {
-        return $this->putAction($request, $partieId, ModelType::PARTIE);
+        return $this->putAction($request, $partieId, $this->modelType);
 
     }
 
@@ -56,7 +60,7 @@ class PartieController extends BaseController
      */
     public function deletePartie($partieId)
     {
-        return $this->deleteAction($partieId, ModelType::PARTIE);
+        return $this->deleteAction($partieId, $this->modelType);
     }
 
     /**

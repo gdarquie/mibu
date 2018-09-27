@@ -3,24 +3,25 @@
 namespace App\Controller;
 
 use App\Component\Handler\PersonnageHandler;
-use App\Component\IO\PersonnageIO;
-use App\Entity\Element\Personnage;
-use App\Form\PersonnageType;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use App\Component\Constant\ModelType;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 
 class PersonnageController extends BaseController
 {
     /**
+     * @var string
+     */
+    public $modelType = ModelType::PERSONNAGE;
+
+    /**
      * @Rest\Get("personnages/{personnageId}", name="get_personnage")
      */
     public function getPersonnage($personnageId)
     {
-        return $this->getAction($personnageId, ModelType::PERSONNAGE);
-
+        return $this->getAction($personnageId, $this->modelType);
     }
 
     /**
@@ -29,7 +30,7 @@ class PersonnageController extends BaseController
     public function getPersonnages(Request $request, $fictionId)
     {
         return $this->createApiResponse(
-            $this->getHandler()->getElementsCollection($request, $fictionId, ModelType::PERSONNAGE),
+            $this->getHandler()->getElementsCollection($request, $fictionId, $this->modelType),
             200,
             $this->getHandler()->generateUrl('get_textes', ['fictionId' => $fictionId], $request->query->get('page', 1))
         );
@@ -40,7 +41,7 @@ class PersonnageController extends BaseController
      */
     public function postPersonnage(Request $request)
     {
-        return $this->postAction($request, ModelType::PERSONNAGE);
+        return $this->postAction($request, $this->modelType);
     }
 
     /**
@@ -48,8 +49,7 @@ class PersonnageController extends BaseController
      */
     public function putPersonnage(Request $request, $personnageId)
     {
-        return $this->putAction($request, $personnageId, ModelType::PERSONNAGE);
-
+        return $this->putAction($request, $personnageId, $this->modelType);
     }
 
     /**
@@ -57,43 +57,20 @@ class PersonnageController extends BaseController
      */
     public function deletePersonnage($personnageId)
     {
-        return $this->deleteAction($personnageId, ModelType::PERSONNAGE);
-
+        return $this->deleteAction($personnageId, $this->modelType);
     }
 
     /**
-     * @Rest\Post("personnages/generation", name="generate_personnages")
-     *
-     * @param $limite
-     * @return array
+     * @Rest\Post("personnages/generation/fiction={fictionId}/{limit}", name="generate_personnages")
      */
-    public function generatePersonnages($limite=10) :array
+    public function generatePersonnages($fictionId, $limit=10) :array
     {
-        $personnages = [];
+        if (!$this->getHandler()->generatePersonnages($fictionId, $limit)) {
+            throw new BadRequestHttpException(sprintf(
+                "Une erreur s'est produite, aucune personnage n'a été généré."
+            ));        }
 
-        $personnage = new Personnage('Original', 'Le personnage original');
-
-        for($i= 0; $i < $limite; $i++) {
-            $clone = clone $personnage;
-            //changeId
-            $clone->setTitre('Clone n°'.($i+1));
-            $clone->setDescription('Un clone');
-            $genre = (rand(0,1)>0) ?$genre = 'M' :$genre = 'F';
-            $clone->setGenre($genre);
-            $clone->setAuto(TRUE);
-
-
-            array_push($personnages, $clone);
-
-            //save every perso
-        }
-
-        dump($personnages);die;
-
-        //ajouter quelque chose dans la bd pour savoir si le perso a été générée?
-
-        //convert into json
-        return $personnages;
+        return $this->redirectToRoute('get_personnages', array('fictionId'=> $fictionId));
     }
 
     //new function for deleting all the generating characters for a fiction
