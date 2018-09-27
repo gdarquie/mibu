@@ -18,13 +18,7 @@ class PartieController extends BaseController
      */
     public function getPartie($partieId)
     {
-        $partieIO = $this->getHandler()->getEntity($partieId, ModelType::PARTIE);
-
-        return $this->createApiResponse(
-            $partieIO,
-            200,
-            $this->getHandler()->generateSimpleUrl('get_partie', ['partieId' => $partieId])
-        );
+        return $this->getAction($partieId, ModelType::PARTIE);
     }
 
     /**
@@ -41,31 +35,10 @@ class PartieController extends BaseController
 
     /**
      * @Rest\Post("parties", name="post_partie")
-     *
-     * @param Request $request
-     * @return JsonResponse|\Symfony\Component\HttpFoundation\Response
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function postPartie(Request $request)
     {
-        $data = $this->getData($request);
-        $partieIO = new PartieIO();
-        $form = $this->createForm(PartieType::class, $partieIO);
-        $form->submit($data);
-
-        if($form->isSubmitted()) {  //remplacer par isValidate
-
-            $partieIO = $this->getHandler()->postEntity($data, ModelType::PARTIE);
-
-            return $this->createApiResponse(
-                $partieIO,
-                200,
-                $this->getHandler()->generateSimpleUrl('get_partie', ['partieId' => $partieIO->getId()])
-            );
-        }
-
-        return new JsonResponse("Echec de l'insertion", 500);
+        return $this->postAction($request, ModelType::PARTIE);
     }
 
 
@@ -74,14 +47,8 @@ class PartieController extends BaseController
      */
     public function putPartie(Request $request, $partieId)
     {
-        $data = $this->getData($request);
-        $partieIO = $this->getHandler()->putEntity($partieId, $data, ModelType::PARTIE);
+        return $this->putAction($request, $partieId, ModelType::PARTIE);
 
-        return $this->createApiResponse(
-            $partieIO,
-            202,
-            $this->getHandler()->generateSimpleUrl('get_partie', ['partieId' => $partieIO->getId()])
-        );
     }
 
     /**
@@ -89,7 +56,7 @@ class PartieController extends BaseController
      */
     public function deletePartie($partieId)
     {
-        return $this->getHandler()->deleteEntity($partieId, ModelType::PARTIE);
+        return $this->deleteAction($partieId, ModelType::PARTIE);
     }
 
     /**
