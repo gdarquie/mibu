@@ -82,10 +82,32 @@ class PersonnageHandler extends BaseHandler
 
     public function generateNomAtalaire()
     {
-        //nb de syllabe 1 à 3
-        // assemblage de syllabe
-        $prenom = 'Atalaire';
+        // calculer le nombre de syllabes
+        $rand = rand(1,100);
 
-        return $prenom;
+        if($rand < 30) {
+            $nbSyllables = 1;
+        }
+
+        else if($rand > 30 && $rand <70) {
+            $nbSyllables = 2;
+        }
+
+        else {
+            $nbSyllables = 3;
+        }
+
+        // liste des syllabes
+        $syllables = ['ba', 'rius', 'a', 'ta', 'lai', 're', 'da', 'mu', 'ni','no','so', 'mo', 'do', 'lne', 'sa'];
+
+        // assemblage des syllabes
+        for ($i = 0; $i < $nbSyllables; $i++) {
+            $nom[] = $syllables[array_rand($syllables, 1)];
+        }
+
+        // créer le prénom
+        $prenom = ucfirst(implode($nom));
+
+        return $nom;
     }
 }
