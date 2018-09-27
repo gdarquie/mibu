@@ -63,12 +63,13 @@ class PersonnageController extends BaseController
     /**
      * @Rest\Post("personnages/generation/fiction={fictionId}/{limit}", name="generate_personnages")
      */
-    public function generatePersonnages($fictionId, $limit=10) :array
+    public function generatePersonnages($fictionId, $limit=10)
     {
         if (!$this->getHandler()->generatePersonnages($fictionId, $limit)) {
             throw new BadRequestHttpException(sprintf(
                 "Une erreur s'est produite, aucune personnage n'a été généré."
-            ));        }
+            ));
+        }
 
         return $this->redirectToRoute('get_personnages', array('fictionId'=> $fictionId));
     }
