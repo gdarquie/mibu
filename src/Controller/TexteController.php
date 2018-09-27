@@ -18,13 +18,8 @@ class TexteController extends BaseController
      */
     public function getTexte($texteId)
     {
-        $texteIO = $this->getHandler()->getEntity($texteId, modelType::TEXTE);
+        return $this->getAction($texteId, ModelType::TEXTE);
 
-        return $this->createApiResponse(
-            $texteIO,
-            200,
-            $this->getHandler()->generateSimpleUrl('get_texte', ['texteId' => $texteId])
-            );
     }
 
     /**
@@ -44,24 +39,7 @@ class TexteController extends BaseController
      */
     public function postTexte(Request $request)
     {
-        $data = $this->getData($request);
-        $texteIO = new TexteIO();
-        $form = $this->createForm(TexteType::class, $texteIO);
-        $form->submit($data);
-
-        if($form->isSubmitted()) {  //remplacer par isValidate
-
-            $texteIO = $this->getHandler()->postEntity($data, modelType::TEXTE);
-
-            return $this->createApiResponse(
-                $texteIO,
-                200,
-                $this->getHandler()->generateSimpleUrl('get_texte', ['texteId' => $texteIO->getId()])
-            );
-        }
-
-        return new JsonResponse("Echec de l'insertion", 500);
-
+        return $this->postAction($request, ModelType::TEXTE);
     }
 
     /**
@@ -69,14 +47,7 @@ class TexteController extends BaseController
      */
     public function putTexte(Request $request, $texteId)
     {
-        $data = $this->getData($request);
-        $texteIO = $this->getHandler()->putEntity($texteId, $data, modelType::TEXTE);
-
-        return $this->createApiResponse(
-            $texteIO,
-            202,
-            $this->getHandler()->generateSimpleUrl('get_texte', ['texteId' => $texteIO->getId()])
-        );
+        return $this->putAction($request, $texteId, ModelType::TEXTE);
     }
 
     /**
@@ -84,7 +55,7 @@ class TexteController extends BaseController
      */
     public function deleteTexte($texteId)
     {
-        return $this->getHandler()->deleteEntity($texteId, modelType::TEXTE);
+        return $this->deleteAction($texteId, ModelType::TEXTE);
     }
 
     /**
