@@ -19,13 +19,8 @@ class PersonnageController extends BaseController
      */
     public function getPersonnage($personnageId)
     {
-        $personnageIO = $this->getHandler()->getEntity($personnageId, modelType::PERSONNAGE);
+        return $this->getAction($personnageId, ModelType::PERSONNAGE);
 
-        return $this->createApiResponse(
-            $personnageIO,
-            200,
-            $this->getHandler()->generateSimpleUrl('get_personnage', ['personnageId' => $personnageId])
-        );
     }
 
     /**
@@ -45,24 +40,7 @@ class PersonnageController extends BaseController
      */
     public function postPersonnage(Request $request)
     {
-        $data = $this->getData($request);
-        $personnageIO = new PersonnageIO();
-        $form = $this->createForm(PersonnageType::class, $personnageIO);
-        $form->submit($data);
-
-        if($form->isSubmitted()) {  //remplacer par isValidate
-
-            $personnageIO = $this->getHandler()->postEntity($data, modelType::PERSONNAGE);
-
-            return $this->createApiResponse(
-                $personnageIO,
-                200,
-                $this->getHandler()->generateSimpleUrl('get_personnage', ['personnageId' => $personnageIO->getId()])
-            );
-        }
-
-        return new JsonResponse("Echec de l'insertion", 500);
-
+        return $this->postAction($request, ModelType::PERSONNAGE);
     }
 
     /**
@@ -70,14 +48,8 @@ class PersonnageController extends BaseController
      */
     public function putPersonnage(Request $request, $personnageId)
     {
-        $data = $this->getData($request);
-        $personnageIO = $this->getHandler()->putEntity($personnageId, $data, modelType::PERSONNAGE);
+        return $this->putAction($request, $personnageId, ModelType::PERSONNAGE);
 
-        return $this->createApiResponse(
-            $personnageIO,
-            202,
-            $this->getHandler()->generateSimpleUrl('get_personnage', ['personnageId' => $personnageIO->getId()])
-        );
     }
 
     /**
@@ -85,7 +57,7 @@ class PersonnageController extends BaseController
      */
     public function deletePersonnage($personnageId)
     {
-        return $this->getHandler()->deleteEntity($personnageId, modelType::PERSONNAGE);
+        return $this->deleteAction($personnageId, ModelType::PERSONNAGE);
 
     }
 
