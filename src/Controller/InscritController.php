@@ -6,6 +6,7 @@ use App\Component\Constant\ModelType;
 use App\Component\Handler\InscritHandler;
 use App\Component\IO\InscritIO;
 use App\Form\InscritType;
+use PhpParser\Node\Expr\AssignOp\Mod;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -55,14 +56,7 @@ class InscritController extends BaseController
      */
     public function putInscrit(Request $request, $inscritId)
     {
-        $data = $this->getData($request);
-        $inscritIO = $this->getHandler()->putEntity($inscritId, $data, ModelType::INSCRIT);
-
-        return $this->createApiResponse(
-            $inscritIO,
-            202,
-            $this->getHandler()->generateSimpleUrl('get_inscrit', ['inscritId' => $inscritIO->getId()])
-        );
+        return $this->putAction($request, $inscritId, ModelType::INSCRIT);
     }
     
 

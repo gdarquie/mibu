@@ -51,6 +51,24 @@ class BaseController extends FOSRestController
     }
 
     /**
+     * @param Request $request
+     * @param $id
+     * @param $modelType
+     * @return Response
+     */
+    public function putAction(Request $request,$id, $modelType)
+    {
+        $data = $this->getData($request);
+        $io = $this->getHandler()->putEntity($id, $data, $modelType);
+
+        return $this->createApiResponse(
+            $io,
+            202,
+            $this->getHandler()->generateSimpleUrl('get_'.$modelType, [$modelType.'Id' => $io->getId()])
+        );
+    }
+
+    /**
      * @param $request
      * @param $modelType
      * @return JsonResponse|Response
