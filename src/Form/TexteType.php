@@ -26,7 +26,8 @@ class TexteType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => TexteIO::class
+            'data_class' => TexteIO::class,
+            'csrf_protection' => false,
         ));
     }
 

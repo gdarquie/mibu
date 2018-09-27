@@ -29,7 +29,8 @@ class PersonnageType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => PersonnageIO::class
+            'data_class' => PersonnageIO::class,
+            'csrf_protection' => false,
         ));
     }
 

@@ -23,7 +23,8 @@ class FictionType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => FictionIO::class
+            'data_class' => FictionIO::class,
+            'csrf_protection' => false,
         ));
     }
 

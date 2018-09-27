@@ -24,7 +24,8 @@ class PartieType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => PartieIO::class
+            'data_class' => PartieIO::class,
+            'csrf_protection' => false,
         ));
     }
 

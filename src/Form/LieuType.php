@@ -26,7 +26,8 @@ class LieuType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => LieuIO::class
+            'data_class' => LieuIO::class,
+            'csrf_protection' => false,
         ));
     }
 

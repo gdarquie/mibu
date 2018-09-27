@@ -105,7 +105,7 @@ class PersonnageHandler extends BaseHandler
             $nom[] = $syllables[array_rand($syllables, 1)];
         }
 
-        // créer le prénom
+        // créer le nom
         $prenom = ucfirst(implode($nom));
 
         return $nom;

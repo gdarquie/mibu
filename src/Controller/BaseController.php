@@ -85,21 +85,17 @@ class BaseController extends FOSRestController
         $form = $this->createForm($formType, $io);
         $form->submit($data);
 
-//        if(!$form->isValid()) {
-//            return $this->createValidationErrorResponse($form);
-//        }
-
-        if($form->isSubmitted()) {  //remplacer par isValidate
-            $io = $this->getHandler()->postEntity($data, $modelType);
-
-            return $this->createApiResponse(
-                $io,
-                200,
-                $this->getHandler()->generateSimpleUrl('get_'.$modelType, [$modelType.'Id' => $io->getId()])
-            );
+        if(!$form->isValid()) {
+            return $this->createValidationErrorResponse($form);
         }
 
-        return new JsonResponse("Echec de l'insertion", 500);
+        $io = $this->getHandler()->postEntity($data, $modelType);
+
+        return $this->createApiResponse(
+            $io,
+            200,
+            $this->getHandler()->generateSimpleUrl('get_'.$modelType, [$modelType.'Id' => $io->getId()])
+        );
     }
 
     /**
