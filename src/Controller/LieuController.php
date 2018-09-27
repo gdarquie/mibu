@@ -18,13 +18,8 @@ class LieuController extends BaseController
      */
     public function getLieu($lieuId)
     {
-        $lieuIO = $this->getHandler()->getEntity($lieuId, ModelType::LIEU);
+        return $this->getAction($lieuId, ModelType::LIEU);
 
-        return $this->createApiResponse(
-            $lieuIO,
-            200,
-            $this->getHandler()->generateSimpleUrl('get_lieu', ['lieuId' => $lieuId])
-        );
     }
 
     /**
@@ -39,54 +34,21 @@ class LieuController extends BaseController
         );
     }
 
-
-
     /**
      * @Rest\Post("lieux", name="post_lieu")
-     *
-     * @param Request $request
-     * @return JsonResponse|\Symfony\Component\HttpFoundation\Response
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function postLieu(Request $request)
     {
-        $data = $this->getData($request);
-        $lieuIO = new LieuIO();
-        $form = $this->createForm(LieuType::class, $lieuIO);
-        $form->submit($data);
+        return $this->postAction($request, ModelType::LIEU);
 
-        if($form->isSubmitted()) {  //remplacer par isValidate
-
-            $lieuIO = $this->getHandler()->postEntity($data, ModelType::LIEU);
-
-            return $this->createApiResponse(
-                $lieuIO,
-                200,
-                $this->getHandler()->generateSimpleUrl('get_lieu', ['lieuId' => $lieuIO->getId()])
-            );
-        }
-
-        return new JsonResponse("Echec de l'insertion", 500);
     }
 
     /**
      * @Rest\Put("lieux/{lieuId}", name="put_lieu")
-     *
-     * @param Request $request
-     * @param $lieuId
-     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function putLieu(Request $request, $lieuId)
     {
-        $data = $this->getData($request);
-        $lieuIO = $this->getHandler()->putEntity($lieuId, $data, ModelType::LIEU);
-
-        return $this->createApiResponse(
-            $lieuIO,
-            202,
-            $this->getHandler()->generateSimpleUrl('get_lieu', ['lieuId' => $lieuIO->getId()])
-        );
+        return $this->putAction($request, $lieuId, ModelType::LIEU);
     }
 
     /**
@@ -94,7 +56,7 @@ class LieuController extends BaseController
      */
     public function deleteLieu($lieuId)
     {
-        return $this->getHandler()->deleteEntity($lieuId, ModelType::LIEU);
+        return $this->deleteAction($lieuId, ModelType::LIEU);
     }
 
     /**
