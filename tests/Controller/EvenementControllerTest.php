@@ -22,7 +22,6 @@ class EvenementControllerTest extends ApiTestCase
             'body' => json_encode($data)
         ]);
 
-
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertTrue($response->hasHeader('Location'));
 

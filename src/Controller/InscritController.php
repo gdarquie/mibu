@@ -4,9 +4,6 @@ namespace App\Controller;
 
 use App\Component\Constant\ModelType;
 use App\Component\Handler\InscritHandler;
-use App\Component\IO\InscritIO;
-use App\Form\InscritType;
-use PhpParser\Node\Expr\AssignOp\Mod;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

@@ -4,9 +4,6 @@ namespace App\Controller;
 
 use App\Component\Constant\ModelType;
 use App\Component\Handler\EvenementHandler;
-use App\Component\IO\EvenementIO;
-use App\Form\EvenementType;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\Controller\Annotations as Rest;
 
@@ -17,13 +14,8 @@ class EvenementController extends BaseController
      */
     public function getEvenement($evenementId)
     {
-        $evenementIO = $this->getHandler()->getEntity($evenementId, ModelType::EVENEMENT);
+        return $this->getAction($evenementId, ModelType::EVENEMENT);
 
-        return $this->createApiResponse(
-            $evenementIO,
-            200,
-            $this->getHandler()->generateSimpleUrl('get_evenement', ['evenementId' => $evenementId])
-        );
     }
 
     /**
@@ -44,24 +36,7 @@ class EvenementController extends BaseController
      */
     public function postEvenement(Request $request)
     {
-
-        $data = $this->getData($request);
-        $evenementIO = new EvenementIO();
-        $form = $this->createForm(EvenementType::class, $evenementIO);
-        $form->submit($data);
-
-        if($form->isSubmitted()) {  //remplacer par isValidate
-
-            $evenementIO = $this->getHandler()->postEntity($data, ModelType::EVENEMENT);
-
-            return $this->createApiResponse(
-                $evenementIO,
-                200,
-                $this->getHandler()->generateSimpleUrl('get_evenement', ['evenementId' => $evenementIO->getId()])
-            );
-        }
-
-        return new JsonResponse("Echec de l'insertion", 500);
+        return $this->postAction($request, ModelType::EVENEMENT);
     }
 
     /**
@@ -69,14 +44,7 @@ class EvenementController extends BaseController
      */
     public function putEvenement(Request $request,$evenementId)
     {
-        $data = $this->getData($request);
-        $evenementIO = $this->getHandler()->putEntity($evenementId, $data, modelType::EVENEMENT);
-
-        return $this->createApiResponse(
-            $evenementIO,
-            202,
-            $this->getHandler()->generateSimpleUrl('get_personnage', ['personnageId' => $evenementIO->getId()])
-        );
+        return $this->putAction($request, $evenementId, ModelType::EVENEMENT);
     }
 
     /**
@@ -84,7 +52,7 @@ class EvenementController extends BaseController
      */
     public function deleteEvenement($evenementId)
     {
-        return $this->getHandler()->deleteEntity($evenementId, modelType::EVENEMENT);
+        return $this->deleteAction($evenementId, ModelType::EVENEMENT);
 
     }
 
