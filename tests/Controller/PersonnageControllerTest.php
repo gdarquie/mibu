@@ -15,8 +15,8 @@ class PersonnageControllerTest extends ApiTestCase
             "description" => "Le Sage",
             "prenom" => "Barius",
             "nom" => "Le Sage",
-            "annee_naissance" => 0,
-            "annee_mort" => 120,
+            "anneeNaissance" => 0,
+            "anneeMort" => 120,
             "genre" => "h",
             "fictionId" => $fiction->getId()
         );
