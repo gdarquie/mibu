@@ -14,15 +14,13 @@ class InscritType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->add('pseudo')
             ->add('titre')
             ->add('description')
             ->add('prenom')
             ->add('nom')
             ->add('genre')
-            ->add('dateNaissance', DateType::class, array(
-                'input' => 'string',
-                'format' => 'yyyy-MM-dd',
-            ))
+            ->add('dateNaissance')
             ->add('email', EmailType::class)
             ;
     }

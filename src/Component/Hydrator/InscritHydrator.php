@@ -10,6 +10,7 @@ class InscritHydrator extends ConceptHydrator
     {
         $inscrit = parent::hydrateConcept($inscrit, $data);
 
+        $inscrit->setPseudo($data['pseudo']);
         $inscrit->setPrenom($data['prenom']);
         $inscrit->setNom($data['nom']);
         $inscrit->setGenre($data['genre']);

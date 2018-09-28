@@ -249,16 +249,17 @@ class ApiTestCase extends KernelTestCase
         return $fiction;
     }
 
-    protected function createInscrit($titre = 'Titre')
+    protected function createInscrit($titre = 'Titre', $pseudo = 'Okita', $email = 'mon@email.fr')
     {
         $inscrit = new Inscrit();
 
+        $inscrit->setPseudo($pseudo);
         $inscrit->setTitre($titre);
         $inscrit->setDescription('Description');
         $inscrit->setPrenom('Prénom');
         $inscrit->setNom('Nom');
         $inscrit->setGenre('Femme');
-        $inscrit->setEmail('mon@email.fr');
+        $inscrit->setEmail($email);
         $inscrit->setDateNaissance(new \DateTime('1982-01-01'));
 
         $this->getService('doctrine')->getManager()->persist($inscrit);

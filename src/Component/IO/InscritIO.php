@@ -9,6 +9,11 @@ class InscritIO extends AbstractConceptIO
     /**
      * @var string
      */
+    private $pseudo;
+
+    /**
+     * @var string
+     */
     private $nom;
 
     /**
@@ -33,6 +38,21 @@ class InscritIO extends AbstractConceptIO
      */
     private $email;
 
+    /**
+     * @return string
+     */
+    public function getPseudo(): ?string
+    {
+        return $this->pseudo;
+    }
+
+    /**
+     * @param string $pseudo
+     */
+    public function setPseudo(string $pseudo): void
+    {
+        $this->pseudo = $pseudo;
+    }
 
     /**
      * @return mixed

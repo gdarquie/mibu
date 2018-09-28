@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Component\Constant\ModelType;
 use App\Component\Handler\InscritHandler;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use FOS\RestBundle\Controller\Annotations as Rest;
@@ -29,12 +28,6 @@ class InscritController extends BaseController
 
     /**
      * @Rest\Post("inscrits", name="post_inscrit")
-     *
-     *
-     * @param Request $request
-     * @return JsonResponse|Response
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function postInscrit(Request $request)
     {
@@ -43,13 +36,6 @@ class InscritController extends BaseController
 
     /**
      * @Rest\Put("inscrits/{inscritId}", name="put_inscrit")
-     *
-     *
-     * @param Request $request
-     * @param $inscritId
-     * @return Response
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function putInscrit(Request $request, $inscritId)
     {

@@ -4,23 +4,19 @@ namespace App\Entity\Concept;
 
 use Doctrine\ORM\Mapping as ORM;
 use App\Entity\Modele\AbstractConcept;
-use App\Entity\Element\Texte;
-use App\Entity\Element\Personnage;
+use Symfony\Component\Security\Core\Role\Role;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\InscritRepository")
  * @ORM\Table(name="inscrit")
  */
-class Inscrit extends AbstractConcept
+class Inscrit extends AbstractConcept implements UserInterface
 {
-    //unique
+    /**
+     * @ORM\Column(type="string", unique=true)
+     */
     private $pseudo;
-
-    //mot de passe
-    private $mdp;
-
-    //unique
-    private $slug;
 
     /**
      * @var string
@@ -49,7 +45,7 @@ class Inscrit extends AbstractConcept
     private $dateNaissance;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", unique=true)
      */
     private $email;
 
@@ -58,12 +54,43 @@ class Inscrit extends AbstractConcept
      */
     private $fictions;
 
+    public function getUsername()
+    {
+        return $this->pseudo;
+    }
+
     /**
-     * @var array
-     *
-     * @ORM\Column(name="roles", type="array")
+     * @return mixed
      */
-    private $roles;
+    public function getPseudo()
+    {
+        return $this->pseudo;
+    }
+
+    /**
+     * @param mixed $pseudo
+     */
+    public function setPseudo($pseudo): void
+    {
+        $this->pseudo = $pseudo;
+    }
+
+    public function getRoles()
+    {
+        return ['ROLE_USER'];
+    }
+
+    public function getPassword()
+    {
+    }
+
+    public function getSalt()
+    {
+    }
+
+    public function eraseCredentials()
+    {
+    }
 
     /**
      * @return string
@@ -159,22 +186,6 @@ class Inscrit extends AbstractConcept
     public function setFictions($fictions): void
     {
         $this->fictions = $fictions;
-    }
-
-    /**
-     * @return array
-     */
-    public function getRoles(): ?array
-    {
-        return $this->roles;
-    }
-
-    /**
-     * @param array $roles
-     */
-    public function setRoles(array $roles): void
-    {
-        $this->roles = $roles;
     }
 
 }

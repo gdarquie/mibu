@@ -9,6 +9,7 @@ class InscritControllerTest extends ApiTestCase
     public function testPostInscrit()
     {
         $data = array(
+            "pseudo" => "Okita",
             "titre" => "Ajout de titre d'inscrit",
             "description" => "Une description d'inscrit comme exemple",
             "prenom" => "admin",
@@ -39,7 +40,7 @@ class InscritControllerTest extends ApiTestCase
     public function testGetInscrits()
     {
        for ($i = 0; $i<25; $i++) {
-           $this->createInscrit('Inscrit '.$i);
+           $this->createInscrit('Inscrit '.$i, 'Okita'.$i, 'mon'.$i.'@email.fr');
        }
 
        //page 1
@@ -93,6 +94,7 @@ class InscritControllerTest extends ApiTestCase
         $inscrit = $this->createInscrit();
 
         $data = array(
+            "pseudo" => "Okita",
             "titre" => "Titre d'inscrit maj",
             "description" => "Description 1",
             "prenom" => "Misa",
