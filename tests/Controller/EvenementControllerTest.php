@@ -13,8 +13,8 @@ class EvenementControllerTest extends ApiTestCase
         $data = array(
             "titre" => "Titre d'évènement via post évènement",
             "description" => "Description d'évènement",
-            "annee_debut" => "0",
-            "annee_fin" => "100",
+            "anneeDebut" => "0",
+            "anneeFin" => "100",
             "fictionId" => $fiction->getId()
         );
 

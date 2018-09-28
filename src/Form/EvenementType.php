@@ -14,6 +14,8 @@ class EvenementType extends AbstractType
         $builder
             ->add('titre')
             ->add('description')
+            ->add('anneeDebut')
+            ->add('anneeFin')
             ->add('fictionId')
             ;
     }
