@@ -18,8 +18,14 @@ class TexteControllerTest extends ApiTestCase
             'fictionId' => $fiction->getId()
         );
 
+        $token = $this->getService('lexik_jwt_authentication.encoder')
+            ->encode(['pseduo' => 'Okita']);
+
         $response = $this->client->post(ApiTestCase::TEST_PREFIX.'/textes', [
-            'body' => json_encode($data)
+            'body' => json_encode($data),
+            'headers' => [
+                'Authorization' => 'Bearer '.$token
+            ]
         ]);
 
         $this->assertEquals(200, $response->getStatusCode());

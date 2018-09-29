@@ -20,15 +20,10 @@ class JetonControllerTest extends ApiTestCase
             'body' => json_encode($data)
         ]);
 
-//        $credentials = base64_encode('Okita:password');
-//        $response = $this->client->post(ApiTestCase::TEST_PREFIX.'/jetons', [
-//            'Authorization' => ['Basic '.$credentials]
-//        ]);
         $payload = json_decode($response->getBody(true), true);
 
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertArrayHasKey('token', $payload);
-
     }
 
     public function testPostCreateJetonInvalidCredentials()
