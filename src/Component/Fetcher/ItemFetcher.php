@@ -4,7 +4,6 @@ namespace App\Component\Fetcher;
 
 use App\Entity\Modele\AbstractItem;
 use Doctrine\ORM\EntityManager;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class ItemFetcher
 {
@@ -21,7 +20,7 @@ class ItemFetcher
         $item = $this->em->getRepository(AbstractItem::class)->findOneById($itemId);
 
         if (!$item) {
-            throw new NotFoundHttpException(sprintf(
+            throw $this->createNotFoundException(sprintf(
                 'Aucune fiction avec l\'id "%s" n\'a été trouvée',
                 $itemId
             ));

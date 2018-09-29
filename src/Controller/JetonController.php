@@ -15,7 +15,6 @@ class JetonController extends BaseController
      **/
     public function postJeton(Request $request)
     {
-
         $data = json_decode($request->getContent(), true);
 
         $inscrit = $this->getDoctrine()
@@ -23,7 +22,9 @@ class JetonController extends BaseController
             ->findOneBy(['pseudo' => $data['pseudo']]); //récupérer dynamiquement par le biais de la request
 
         if (!$inscrit) {
-            throw $this->createNotFoundException();
+            throw $this->createNotFoundException(sprintf(
+                'Aucun inscrit correspondant')
+            );
         }
 
         $token = $this->get('lexik_jwt_authentication.encoder')
