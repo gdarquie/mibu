@@ -10,7 +10,19 @@ class JetonControllerTest extends ApiTestCase
     {
         $this->createInscrit();
 
-        $response = $this->client->post(ApiTestCase::TEST_PREFIX.'/jetons');
+        $data = array(
+            "pseudo" => "Okita",
+            "mdp" => "password"
+        );
+
+        $response = $this->client->post(ApiTestCase::TEST_PREFIX.'/jetons', [
+            'body' => json_encode($data)
+        ]);
+
+//        $credentials = base64_encode('Okita:password');
+//        $response = $this->client->post(ApiTestCase::TEST_PREFIX.'/jetons', [
+//            'Authorization' => ['Basic '.$credentials]
+//        ]);
 
         $this->assertEquals(200, $response->getStatusCode());
     }
