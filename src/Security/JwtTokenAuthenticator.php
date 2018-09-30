@@ -7,6 +7,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\Encoder\JWTEncoderInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\Exception\JWTDecodeFailureException;
 use Lexik\Bundle\JWTAuthenticationBundle\TokenExtractor\AuthorizationHeaderTokenExtractor;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
@@ -89,8 +90,7 @@ class JwtTokenAuthenticator extends AbstractGuardAuthenticator
 
     public function start(Request $request, AuthenticationException $authException = null)
     {
-//        dump($request->getContent(true, false));die;
-//        return true;
+        return new JsonResponse("Accès interdit");
     }
 
 }
