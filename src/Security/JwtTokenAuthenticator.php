@@ -3,12 +3,11 @@
 namespace App\Security;
 
 use App\Entity\Concept\Inscrit;
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\Encoder\JWTEncoderInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\Exception\JWTDecodeFailureException;
 use Lexik\Bundle\JWTAuthenticationBundle\TokenExtractor\AuthorizationHeaderTokenExtractor;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
@@ -24,9 +23,9 @@ class JwtTokenAuthenticator extends AbstractGuardAuthenticator
     /**
      * JwtTokenAuthenticator constructor.
      * @param JWTEncoderInterface $jwtEncoder
-     * @param EntityManager $em
+     * @param EntityManagerInterface $em
      */
-    public function __construct(JWTEncoderInterface $jwtEncoder, EntityManager $em)
+    public function __construct(JWTEncoderInterface $jwtEncoder, EntityManagerInterface $em)
     {
         $this->jwtEncoder = $jwtEncoder;
         $this->em = $em;
@@ -90,7 +89,8 @@ class JwtTokenAuthenticator extends AbstractGuardAuthenticator
 
     public function start(Request $request, AuthenticationException $authException = null)
     {
-        // TODO: Implement start() method.
+//        dump($request->getContent(true, false));die;
+//        return true;
     }
 
 }

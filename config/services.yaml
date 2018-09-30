@@ -28,3 +28,10 @@ services:
     # please note that last definitions always *replace* previous ones
 
     App\Component\Handler\BaseHandler: '@handler.default'
+
+    #JWT Authenticator
+    App\Security\JwtTokenAuthenticator\:
+        resource: '../src/Security/JwtTokenAuthenticator.php'
+        autowire: true
+        arguments:
+            em: "@doctrine.orm.entity_manager"

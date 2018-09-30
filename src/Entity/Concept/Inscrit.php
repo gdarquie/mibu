@@ -4,7 +4,6 @@ namespace App\Entity\Concept;
 
 use Doctrine\ORM\Mapping as ORM;
 use App\Entity\Modele\AbstractConcept;
-use Symfony\Component\Security\Core\Role\Role;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**

@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Component\Constant\ModelType;
 use App\Component\Serializer\CustomSerializer;
-use App\Form\InscritType;
 use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -20,6 +19,8 @@ class BaseController extends FOSRestController
      */
     public function getAllAction(Request $request, $modelType)
     {
+//        $this->denyAccessUnlessGranted('ROLE_USER');
+
         if($modelType === ModelType::LIEU) {
             $suffixe = 'x';
         }
@@ -41,7 +42,7 @@ class BaseController extends FOSRestController
      */
     public function getAction($id, $modelType)
     {
-        $io = $this->getHandler()->getEntity($id, $modelType);
+            $io = $this->getHandler()->getEntity($id, $modelType);
 
         return $this->createApiResponse(
             $io,
