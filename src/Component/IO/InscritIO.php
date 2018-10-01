@@ -14,6 +14,11 @@ class InscritIO extends AbstractConceptIO
     /**
      * @var string
      */
+    private $password;
+
+    /**
+     * @var string
+     */
     private $nom;
 
     /**
@@ -52,6 +57,22 @@ class InscritIO extends AbstractConceptIO
     public function setPseudo(string $pseudo): void
     {
         $this->pseudo = $pseudo;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPassword(): ?string
+    {
+        return $this->password;
+    }
+
+    /**
+     * @param string $password
+     */
+    public function setPassword(string $password): void
+    {
+        $this->password = $password;
     }
 
     /**

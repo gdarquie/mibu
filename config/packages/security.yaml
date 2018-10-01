@@ -27,8 +27,8 @@ security:
 
             guard:
                 authenticators:
-                - 'App\Security\JwtTokenAuthenticator'
-#                - 'lexik_jwt_authentication.jwt_token_authenticator'
+#                - 'App\Security\JwtTokenAuthenticator'
+                - 'App\Security\LoginFormAuthenticator'
 
             # activate different ways to authenticate
 
@@ -43,3 +43,7 @@ security:
     access_control:
 #        - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
 #        - { path: ^/, role: IS_AUTHENTICATED_ANONYMOUSLY, methods: [POST, PUT, DELETE] }
+
+    encoders:
+        App\Entity\Inscrit:
+            algorithm: bcrypt

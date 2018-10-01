@@ -35,3 +35,9 @@ services:
         autowire: true
         arguments:
             em: "@doctrine.orm.entity_manager"
+
+    App\Component\Hydrator\InscritHydrator\:
+        resource: '../src/Component/Hydrator/InscritHydrator.php'
+        autowire: true
+        arguments:
+            passwordEncoder: "@UserPasswordEncoderInterface"

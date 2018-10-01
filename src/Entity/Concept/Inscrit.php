@@ -18,6 +18,11 @@ class Inscrit extends AbstractConcept implements UserInterface
     private $pseudo;
 
     /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $password;
+
+    /**
      * @var string
      *
      * @ORM\Column(type="string")
@@ -101,22 +106,32 @@ class Inscrit extends AbstractConcept implements UserInterface
         $this->roles = $roles;
         return $this;
     }
+
     /**
-     * @see UserInterface
+     * @return mixed
      */
     public function getPassword()
-
     {
-        // not needed for apps that do not check user passwords
+        return $this->password;
     }
+
+    /**
+     * @param mixed $password
+     */
+    public function setPassword($password): void
+    {
+        $this->password = $password;
+    }
+
     /**
      * @see UserInterface
      */
     public function getSalt()
 
     {
-        // not needed for apps that do not check user passwords
+        // not needed when using bcrypt or argon
     }
+
     /**
      * @see UserInterface
      */

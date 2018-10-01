@@ -15,6 +15,7 @@ class InscritType extends AbstractType
     {
         $builder
             ->add('pseudo')
+            ->add('password')
             ->add('titre')
             ->add('description')
             ->add('prenom')

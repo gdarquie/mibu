@@ -22,6 +22,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\Routing\Router;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class BaseHandler
 {
