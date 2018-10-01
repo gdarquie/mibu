@@ -8,15 +8,17 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20180922071058 extends AbstractMigration
+final class Version20181001181643 extends AbstractMigration
 {
     public function up(Schema $schema) : void
     {
         // this up() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'postgresql', 'Migration can only be executed safely on \'postgresql\'.');
 
-        $this->addSql('ALTER TABLE inscrit ADD roles TEXT NOT NULL');
-        $this->addSql('COMMENT ON COLUMN inscrit.roles IS \'(DC2Type:array)\'');
+        $this->addSql('ALTER TABLE inscrit ADD pseudo VARCHAR(255) NOT NULL');
+        $this->addSql('ALTER TABLE inscrit ADD roles JSON NOT NULL');
+        $this->addSql('ALTER TABLE inscrit ALTER email TYPE VARCHAR(180)');
+        $this->addSql('CREATE UNIQUE INDEX UNIQ_927FA36586CC499D ON inscrit (pseudo)');
     }
 
     public function down(Schema $schema) : void
@@ -25,6 +27,9 @@ final class Version20180922071058 extends AbstractMigration
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'postgresql', 'Migration can only be executed safely on \'postgresql\'.');
 
         $this->addSql('CREATE SCHEMA public');
+        $this->addSql('DROP INDEX UNIQ_927FA36586CC499D');
+        $this->addSql('ALTER TABLE inscrit DROP pseudo');
         $this->addSql('ALTER TABLE inscrit DROP roles');
+        $this->addSql('ALTER TABLE inscrit ALTER email TYPE VARCHAR(255)');
     }
 }

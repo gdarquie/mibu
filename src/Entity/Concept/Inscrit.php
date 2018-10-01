@@ -44,15 +44,25 @@ class Inscrit extends AbstractConcept implements UserInterface
     private $dateNaissance;
 
     /**
-     * @ORM\Column(type="string", unique=true)
+     * @ORM\Column(type="string", length=180, unique=true)
      */
     private $email;
+
+    /**
+     * @ORM\Column(type="json")
+     */
+    private $roles = [];
 
     /**
      * @ORM\OneToMany(targetEntity=Inscrit::class, mappedBy="inscrit")
      */
     private $fictions;
 
+    /**
+     * A visual identifier that represents this user.
+     *
+     * @see UserInterface
+     */
     public function getUsername()
     {
         return $this->pseudo;
@@ -74,21 +84,47 @@ class Inscrit extends AbstractConcept implements UserInterface
         $this->pseudo = $pseudo;
     }
 
-    public function getRoles()
-    {
-        return ['ROLE_USER'];
-    }
+    /**
+     * @see UserInterface
+     */
+    public function getRoles(): array
 
+    {
+        $roles = $this->roles;
+        // guarantee every user at least has ROLE_USER
+        $roles[] = 'ROLE_USER';
+        return array_unique($roles);
+    }
+    public function setRoles(array $roles): self
+
+    {
+        $this->roles = $roles;
+        return $this;
+    }
+    /**
+     * @see UserInterface
+     */
     public function getPassword()
-    {
-    }
 
+    {
+        // not needed for apps that do not check user passwords
+    }
+    /**
+     * @see UserInterface
+     */
     public function getSalt()
-    {
-    }
 
-    public function eraseCredentials()
     {
+        // not needed for apps that do not check user passwords
+    }
+    /**
+     * @see UserInterface
+     */
+    public function eraseCredentials()
+
+    {
+        // If you store any temporary, sensitive data on the user, clear it here
+        // $this->plainPassword = null;
     }
 
     /**
@@ -156,19 +192,23 @@ class Inscrit extends AbstractConcept implements UserInterface
     }
 
     /**
-     * @return mixed
+     * @return null|string
      */
-    public function getEmail()
+    public function getEmail(): ?string
+
     {
         return $this->email;
     }
 
     /**
-     * @param mixed $email
+     * @param string $email
+     * @return Inscrit
      */
-    public function setEmail($email): void
+    public function setEmail(string $email): self
+
     {
         $this->email = $email;
+        return $this;
     }
 
     /**
@@ -186,5 +226,7 @@ class Inscrit extends AbstractConcept implements UserInterface
     {
         $this->fictions = $fictions;
     }
+
+
 
 }
