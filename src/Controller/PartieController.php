@@ -31,9 +31,9 @@ class PartieController extends BaseController
     public function getParties(Request $request, $fictionId)
     {
         return $this->createApiResponse(
-            $this->getHandler()->getElementsCollection($request, $fictionId, $this->modelType),
+            $this->getHandler($this->modelType)->getElementsCollection($request, $fictionId, $this->modelType),
             200,
-            $this->getHandler()->generateUrl('get_parties', ['fictionId' => $fictionId], $request->query->get('page', 1))
+            $this->getHandler($this->modelType)->generateUrl('get_parties', ['fictionId' => $fictionId], $request->query->get('page', 1))
         );
     }
 
@@ -61,14 +61,6 @@ class PartieController extends BaseController
     public function deletePartie($partieId)
     {
         return $this->deleteAction($partieId, $this->modelType);
-    }
-
-    /**
-     * @return PartieHandler
-     */
-    public function getHandler()
-    {
-        return new PartieHandler($this->getDoctrine()->getManager(), $this->get('router'));
     }
 
 }

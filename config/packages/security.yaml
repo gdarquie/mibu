@@ -5,7 +5,7 @@ security:
     # used to reload user from session & other features (e.g. switch_user)
         app_user_provider:
             entity:
-                class: App\Entity\Inscrit
+                class: App\Entity\Concept\Inscrit
                 property: pseudo
 
     firewalls:
@@ -45,5 +45,5 @@ security:
 #        - { path: ^/, role: IS_AUTHENTICATED_ANONYMOUSLY, methods: [POST, PUT, DELETE] }
 
     encoders:
-        App\Entity\Inscrit:
+        App\Entity\Concept\Inscrit:
             algorithm: bcrypt

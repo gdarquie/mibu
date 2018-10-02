@@ -30,9 +30,9 @@ class PersonnageController extends BaseController
     public function getPersonnages(Request $request, $fictionId)
     {
         return $this->createApiResponse(
-            $this->getHandler()->getElementsCollection($request, $fictionId, $this->modelType),
+            $this->getHandler($this->modelType)->getElementsCollection($request, $fictionId, $this->modelType),
             200,
-            $this->getHandler()->generateUrl('get_textes', ['fictionId' => $fictionId], $request->query->get('page', 1))
+            $this->getHandler($this->modelType)->generateUrl('get_textes', ['fictionId' => $fictionId], $request->query->get('page', 1))
         );
     }
 
@@ -79,12 +79,5 @@ class PersonnageController extends BaseController
     {
         return 'Deleted';
     }
-
-    /**
-     * @return PersonnageHandler
-     */
-    public function getHandler()
-    {
-        return new PersonnageHandler($this->getDoctrine()->getManager(), $this->get('router'));
-    }
+    
 }

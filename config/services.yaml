@@ -40,4 +40,5 @@ services:
         resource: '../src/Component/Hydrator/InscritHydrator.php'
         autowire: true
         arguments:
-            passwordEncoder: "@UserPasswordEncoderInterface"
+#            passwordEncoder: "@UserPasswordEncoderInterface"
+            - "@UserPasswordEncoderInterface"

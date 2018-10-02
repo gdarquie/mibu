@@ -10,6 +10,7 @@ class InscritControllerTest extends ApiTestCase
     {
         $data = array(
             "pseudo" => "Okita",
+            "password" => "motdepasse",
             "titre" => "Ajout de titre d'inscrit",
             "description" => "Une description d'inscrit comme exemple",
             "prenom" => "admin",
@@ -95,6 +96,7 @@ class InscritControllerTest extends ApiTestCase
 
         $data = array(
             "pseudo" => "Okita",
+            "password" => "motdepasse",
             "titre" => "Titre d'inscrit maj",
             "description" => "Description 1",
             "prenom" => "Misa",

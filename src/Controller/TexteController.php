@@ -14,11 +14,16 @@ use App\Component\Constant\ModelType;
 class TexteController extends BaseController
 {
     /**
+     * @var string
+     */
+    public $modelType = ModelType::TEXTE;
+
+    /**
      * @Rest\Get("textes/{texteId}", name="get_texte")
      */
     public function getTexte($texteId)
     {
-        return $this->getAction($texteId, ModelType::TEXTE);
+        return $this->getAction($texteId, $this->modelType);
 
     }
 
@@ -28,9 +33,9 @@ class TexteController extends BaseController
     public function getTextes(Request $request, $fictionId)
     {
         return $this->createApiResponse(
-            $this->getHandler()->getElementsCollection($request, $fictionId, ModelType::TEXTE),
+            $this->getHandler($this->modelType)->getElementsCollection($request, $fictionId, $this->modelType),
             200,
-            $this->getHandler()->generateUrl('get_textes', ['fictionId' => $fictionId], $request->query->get('page', 1))
+            $this->getHandler($this->modelType)->generateUrl('get_textes', ['fictionId' => $fictionId], $request->query->get('page', 1))
         );
     }
 
@@ -39,7 +44,7 @@ class TexteController extends BaseController
      */
     public function postTexte(Request $request)
     {
-        return $this->postAction($request, ModelType::TEXTE);
+        return $this->postAction($request, $this->modelType);
     }
 
     /**
@@ -47,7 +52,7 @@ class TexteController extends BaseController
      */
     public function putTexte(Request $request, $texteId)
     {
-        return $this->putAction($request, $texteId, ModelType::TEXTE);
+        return $this->putAction($request, $texteId, $this->modelType);
     }
 
     /**
@@ -55,15 +60,7 @@ class TexteController extends BaseController
      */
     public function deleteTexte($texteId)
     {
-        return $this->deleteAction($texteId, ModelType::TEXTE);
-    }
-
-    /**
-     * @return TexteHandler
-     */
-    public function getHandler()
-    {
-        return new TexteHandler($this->getDoctrine()->getManager(), $this->get('router'));
+        return $this->deleteAction($texteId, $this->modelType);
     }
 
 }

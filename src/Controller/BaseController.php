@@ -9,9 +9,17 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class BaseController extends FOSRestController
 {
+    private $passwordEncoder;
+
+    public function __construct(UserPasswordEncoderInterface $passwordEncoder)
+    {
+        $this->passwordEncoder = $passwordEncoder;
+    }
+
     /**
      * @param Request $request
      * @param $modelType
@@ -29,9 +37,9 @@ class BaseController extends FOSRestController
         }
 
         return $this->createApiResponse(
-            $this->getHandler()->getConceptsCollection($request, $modelType),
+            $this->getHandler($modelType)->getConceptsCollection($request, $modelType),
             200,
-            $this->getHandler()->generateUrl('get_'.$modelType.$suffixe, [], $request->query->get('page', 1))
+            $this->getHandler($modelType)->generateUrl('get_'.$modelType.$suffixe, [], $request->query->get('page', 1))
         );
     }
 
@@ -42,12 +50,12 @@ class BaseController extends FOSRestController
      */
     public function getAction($id, $modelType)
     {
-            $io = $this->getHandler()->getEntity($id, $modelType);
+            $io = $this->getHandler($modelType)->getEntity($id, $modelType);
 
         return $this->createApiResponse(
             $io,
             200,
-            $this->getHandler()->generateSimpleUrl('get_'.$modelType, [$modelType.'Id' => $id])
+            $this->getHandler($modelType)->generateSimpleUrl('get_'.$modelType, [$modelType.'Id' => $id])
         );
     }
 
@@ -60,12 +68,12 @@ class BaseController extends FOSRestController
     public function putAction(Request $request,$id, $modelType)
     {
         $data = $this->getData($request);
-        $io = $this->getHandler()->putEntity($id, $data, $modelType);
+        $io = $this->getHandler($modelType)->putEntity($id, $data, $modelType);
 
         return $this->createApiResponse(
             $io,
             202,
-            $this->getHandler()->generateSimpleUrl('get_'.$modelType, [$modelType.'Id' => $io->getId()])
+            $this->getHandler($modelType)->generateSimpleUrl('get_'.$modelType, [$modelType.'Id' => $io->getId()])
         );
     }
 
@@ -90,12 +98,12 @@ class BaseController extends FOSRestController
             return $this->createValidationErrorResponse($form);
         }
 
-        $io = $this->getHandler()->postEntity($data, $modelType);
+        $io = $this->getHandler($modelType)->postEntity($data, $modelType);
 
         return $this->createApiResponse(
             $io,
             200,
-            $this->getHandler()->generateSimpleUrl('get_'.$modelType, [$modelType.'Id' => $io->getId()])
+            $this->getHandler($modelType)->generateSimpleUrl('get_'.$modelType, [$modelType.'Id' => $io->getId()])
         );
     }
 
@@ -106,7 +114,7 @@ class BaseController extends FOSRestController
      */
     public function deleteAction($id, $modelType)
     {
-        return $this->getHandler()->deleteEntity($id, $modelType);
+        return $this->getHandler($modelType)->deleteEntity($id, $modelType);
     }
 
     /**
@@ -181,4 +189,14 @@ class BaseController extends FOSRestController
         return new JsonResponse($data, 400);
     }
 
+    /**
+     * @param $modelType
+     * @return mixed
+     */
+    protected function getHandler($modelType) {
+
+        $className =  'App\Component\Handler\\'.ucfirst($modelType).'Handler';
+        return new $className($this->getDoctrine()->getManager(), $this->get('router'), $this->passwordEncoder);
+
+    }
 }

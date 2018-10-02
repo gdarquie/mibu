@@ -11,14 +11,19 @@ use FOS\RestBundle\Controller\Annotations as Rest;
 class FictionController extends BaseController
 {
     /**
+     * @var string
+     */
+    public $modelType = ModelType::FICTION;
+
+    /**
      * @Rest\Get("fictions", name="get_fictions")
      */
     public function getFictions(Request $request): Response
     {
         return $this->createApiResponse(
-            $this->getHandler()->getConceptsCollection($request, ModelType::FICTION),
+            $this->getHandler($this->modelType)->getConceptsCollection($request, $this->modelType),
             200,
-            $this->getHandler()->generateUrl('get_fictions', [], $request->query->get('page', 1))
+            $this->getHandler($this->modelType)->generateUrl('get_fictions', [], $request->query->get('page', 1))
         );
     }
 
@@ -27,7 +32,7 @@ class FictionController extends BaseController
      */
     public function getFiction($fictionId): Response
     {
-        return $this->getAction($fictionId, ModelType::FICTION);
+        return $this->getAction($fictionId, $this->modelType);
     }
 
     /**
@@ -35,7 +40,7 @@ class FictionController extends BaseController
      */
     public function postFiction(Request $request)
     {
-        return $this->postAction($request, ModelType::FICTION);
+        return $this->postAction($request, $this->modelType);
     }
 
     /**
@@ -43,7 +48,7 @@ class FictionController extends BaseController
      */
     public function putFiction(Request $request, $fictionId)
     {
-        return $this->putAction($request, $fictionId, ModelType::FICTION);
+        return $this->putAction($request, $fictionId, $this->modelType);
     }
 
     /**
@@ -51,14 +56,6 @@ class FictionController extends BaseController
      */
     public function deleteFiction($fictionId)
     {
-        return $this->deleteAction($fictionId, ModelType::FICTION);
-    }
-
-    /**
-     * @return FictionHandler
-     */
-    public function getHandler()
-    {
-        return new FictionHandler($this->getDoctrine()->getManager(), $this->get('router'));
+        return $this->deleteAction($fictionId, $this->modelType);
     }
 }

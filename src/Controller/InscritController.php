@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Component\Constant\ModelType;
-use App\Component\Handler\InscritHandler;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use FOS\RestBundle\Controller\Annotations as Rest;
@@ -11,11 +10,16 @@ use FOS\RestBundle\Controller\Annotations as Rest;
 class InscritController extends BaseController
 {
     /**
+     * @var string
+     */
+    public $modelType = ModelType::INSCRIT;
+
+    /**
      * @Rest\Get("inscrits", name="get_inscrits")
      */
     public function getInscrits(Request $request): Response
     {
-        return $this->getAllAction($request, ModelType::INSCRIT);
+        return $this->getAllAction($request, $this->modelType);
     }
 
     /**
@@ -23,7 +27,7 @@ class InscritController extends BaseController
      */
     public function getInscrit($inscritId)
     {
-        return $this->getAction($inscritId, ModelType::INSCRIT);
+        return $this->getAction($inscritId,  $this->modelType);
     }
 
     /**
@@ -31,7 +35,7 @@ class InscritController extends BaseController
      */
     public function postInscrit(Request $request)
     {
-        return $this->postAction($request, ModelType::INSCRIT);
+        return $this->postAction($request,  $this->modelType);
     }
 
     /**
@@ -39,7 +43,7 @@ class InscritController extends BaseController
      */
     public function putInscrit(Request $request, $inscritId)
     {
-        return $this->putAction($request, $inscritId, ModelType::INSCRIT);
+        return $this->putAction($request, $inscritId,  $this->modelType);
     }
     
 
@@ -48,16 +52,7 @@ class InscritController extends BaseController
      */
     public function deleteInscrit($inscritId)
     {
-        return $this->deleteAction($inscritId, ModelType::INSCRIT);
+        return $this->deleteAction($inscritId,  $this->modelType);
     }
-
-    /**
-     * @return InscritHandler
-     */
-    public function getHandler()
-    {
-        return new InscritHandler($this->getDoctrine()->getManager(), $this->get('router'));
-    }
-
 
 }

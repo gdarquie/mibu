@@ -10,12 +10,16 @@ use FOS\RestBundle\Controller\Annotations as Rest;
 class EvenementController extends BaseController
 {
     /**
+     * @var string
+     */
+    public $modelType = ModelType::EVENEMENT;
+
+    /**
      * @Rest\Get("evenements/{evenementId}", name="get_evenement")
      */
     public function getEvenement($evenementId)
     {
-        return $this->getAction($evenementId, ModelType::EVENEMENT);
-
+        return $this->getAction($evenementId, $this->modelType);
     }
 
     /**
@@ -24,9 +28,9 @@ class EvenementController extends BaseController
     public function getParties(Request $request, $fictionId)
     {
         return $this->createApiResponse(
-            $this->getHandler()->getElementsCollection($request, $fictionId, ModelType::EVENEMENT),
+            $this->getHandler($this->modelType)->getElementsCollection($request, $fictionId, $this->modelType),
             200,
-            $this->getHandler()->generateUrl('get_evenements', ['fictionId' => $fictionId], $request->query->get('page', 1))
+            $this->getHandler($this->modelType)->generateUrl('get_evenements', ['fictionId' => $fictionId], $request->query->get('page', 1))
         );
     }
 
@@ -36,7 +40,7 @@ class EvenementController extends BaseController
      */
     public function postEvenement(Request $request)
     {
-        return $this->postAction($request, ModelType::EVENEMENT);
+        return $this->postAction($request, $this->modelType);
     }
 
     /**
@@ -44,7 +48,7 @@ class EvenementController extends BaseController
      */
     public function putEvenement(Request $request,$evenementId)
     {
-        return $this->putAction($request, $evenementId, ModelType::EVENEMENT);
+        return $this->putAction($request, $evenementId, $this->modelType);
     }
 
     /**
@@ -52,16 +56,8 @@ class EvenementController extends BaseController
      */
     public function deleteEvenement($evenementId)
     {
-        return $this->deleteAction($evenementId, ModelType::EVENEMENT);
+        return $this->deleteAction($evenementId, $this->modelType);
 
-    }
-
-    /**
-     * @return EvenementHandler
-     */
-    public function getHandler()
-    {
-        return new EvenementHandler($this->getDoctrine()->getManager(), $this->get('router'));
     }
 
 }

@@ -28,17 +28,20 @@ class BaseHandler
 {
     protected $em;
     protected $router;
+    protected $passwordEncoder;
 
     /**
      * BaseHandler constructor.
      * @param EntityManager $em
      * @param Router $router
      */
-    public function __construct(EntityManager $em, Router $router)
+    public function __construct(EntityManager $em, Router $router, UserPasswordEncoderInterface $passwordEncoder)
     {
         $this->em = $em;
         $this->router = $router;
+        $this->passwordEncoder = $passwordEncoder;
     }
+
 
     /**
      * @param $route

@@ -14,6 +14,11 @@ use FOS\RestBundle\Controller\Annotations as Rest;
 class LieuController extends BaseController
 {
     /**
+     * @var string
+     */
+    public $modelType = ModelType::LIEU;
+
+    /**
      * @Rest\Get("lieux/{lieuId}", name="get_lieu")
      */
     public function getLieu($lieuId)
@@ -28,9 +33,9 @@ class LieuController extends BaseController
     public function getLieux(Request $request, $fictionId)
     {
         return $this->createApiResponse(
-            $this->getHandler()->getElementsCollection($request, $fictionId, ModelType::LIEU),
+            $this->getHandler($this->modelType)->getElementsCollection($request, $fictionId, $this->modelType),
             200,
-            $this->getHandler()->generateUrl('get_lieux', ['fictionId' => $fictionId], $request->query->get('page', 1))
+            $this->getHandler($this->modelType)->generateUrl('get_lieux', ['fictionId' => $fictionId], $request->query->get('page', 1))
         );
     }
 
@@ -39,7 +44,7 @@ class LieuController extends BaseController
      */
     public function postLieu(Request $request)
     {
-        return $this->postAction($request, ModelType::LIEU);
+        return $this->postAction($request, $this->modelType);
 
     }
 
@@ -48,7 +53,7 @@ class LieuController extends BaseController
      */
     public function putLieu(Request $request, $lieuId)
     {
-        return $this->putAction($request, $lieuId, ModelType::LIEU);
+        return $this->putAction($request, $lieuId, $this->modelType);
     }
 
     /**
@@ -56,16 +61,7 @@ class LieuController extends BaseController
      */
     public function deleteLieu($lieuId)
     {
-        return $this->deleteAction($lieuId, ModelType::LIEU);
+        return $this->deleteAction($lieuId, $this->modelType);
     }
-
-    /**
-     * @return LieuHandler
-     */
-    public function getHandler()
-    {
-        return new LieuHandler($this->getDoctrine()->getManager(), $this->get('router'));
-    }
-
 
 }
