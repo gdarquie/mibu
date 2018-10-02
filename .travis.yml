@@ -35,7 +35,8 @@ before_script:
 
 script:
   - php bin/console doctrine:database:create --env=test
-  - php bin/console --no-interaction doctrine:migrations:migrate  --env=test
+#  - php bin/console --no-interaction doctrine:migrations:migrate  --env=test
+  - php bin/console --no-interaction doctrine:schema:update  --force --env=test
   - ./bin/phpunit
   # this checks that the source code follows the Symfony Code Syntax rules
   - '[[ "$TRAVIS_PHP_VERSION" == "nightly" ]] || ./vendor/bin/php-cs-fixer fix --diff --dry-run -v'
