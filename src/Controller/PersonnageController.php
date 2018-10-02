@@ -79,5 +79,5 @@ class PersonnageController extends BaseController
     {
         return 'Deleted';
     }
-    
+
 }

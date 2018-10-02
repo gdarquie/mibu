@@ -6,8 +6,8 @@ cache:
     - $HOME/.composer/cache/files
     - ./bin/.phpunit
 
-services:
-  - postgresql
+#services:
+#  - postgresql
 
 addons:
   postgresql: "9.6"
