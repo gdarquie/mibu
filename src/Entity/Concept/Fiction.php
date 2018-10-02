@@ -25,9 +25,9 @@ class Fiction extends AbstractConcept
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Concept\Inscrit")
-     * @ORM\JoinColumn(name="inscrit_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
+     * @ORM\JoinColumn(name="inscrit_id", referencedColumnName="id", nullable=true, onDelete="CASCADE")
      */
-    private $inscrit;
+    private $inscrit; //nullable false quand inscrits ok
 
     /**
      * @return mixed
