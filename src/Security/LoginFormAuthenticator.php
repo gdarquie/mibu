@@ -63,12 +63,13 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
 
     public function checkCredentials($credentials, UserInterface $user)
     {
-        return true;
+        return $this->passwordEncoder->isPasswordValid($user, $credentials['password']);
     }
 
     public function supports(Request $request)
     {
-        // todo
+        return $request->attributes->get('_route') === 'login'
+            && $request->isMethod('POST');
     }
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)

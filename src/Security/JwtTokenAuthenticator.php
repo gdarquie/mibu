@@ -10,6 +10,7 @@ use Lexik\Bundle\JWTAuthenticationBundle\TokenExtractor\AuthorizationHeaderToken
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -20,16 +21,18 @@ class JwtTokenAuthenticator extends AbstractGuardAuthenticator
 {
     private $jwtEncoder;
     private $em;
+    private $passwordEncoder;
 
     /**
      * JwtTokenAuthenticator constructor.
      * @param JWTEncoderInterface $jwtEncoder
      * @param EntityManagerInterface $em
      */
-    public function __construct(JWTEncoderInterface $jwtEncoder, EntityManagerInterface $em)
+    public function __construct(JWTEncoderInterface $jwtEncoder, EntityManagerInterface $em, UserPasswordEncoderInterface $passwordEncoder)
     {
         $this->jwtEncoder = $jwtEncoder;
         $this->em = $em;
+        $this->passwordEncoder = $passwordEncoder;
     }
 
     public function getCredentials(Request $request)
@@ -65,7 +68,7 @@ class JwtTokenAuthenticator extends AbstractGuardAuthenticator
 
     public function checkCredentials($credentials, UserInterface $user)
     {
-        return true;
+        return $this->passwordEncoder->isPasswordValid($user, $credentials['password']);
     }
 
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception)
