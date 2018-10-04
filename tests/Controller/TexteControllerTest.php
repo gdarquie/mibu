@@ -9,6 +9,8 @@ class TexteControllerTest extends ApiTestCase
 {
     public function testPostTexte()
     {
+        $inscrit = $this->createInscrit();
+
         $fiction = $this->createFiction();
 
         $data = array(

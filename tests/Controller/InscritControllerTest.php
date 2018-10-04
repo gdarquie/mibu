@@ -49,9 +49,9 @@ class InscritControllerTest extends ApiTestCase
         $this->assertEquals(200, $response->getStatusCode());
         $payload = json_decode($response->getBody(true), true);
 
-        $this->assertEquals('Inscrit 5', $payload['items'][5]['titre']);
+        $this->assertEquals('Inscrit 4', $payload['items'][5]['titre']);
         $this->assertEquals(10, $payload['count'], "Il n'y a pas le bon compte d'inscrits");
-        $this->assertEquals(25, $payload['total'], "Il n'y a pas le bon total d'inscrits");
+        $this->assertEquals(26, $payload['total'], "Il n'y a pas le bon total d'inscrits");
         $this->assertArrayHasKey('links', $payload, "Il n'y a pas de champ links");
         $this->assertArrayHasKey('next', $payload['links'], "Il n'y a pas de champ links.next");
 
@@ -60,7 +60,7 @@ class InscritControllerTest extends ApiTestCase
         $response = $this->client->get($nextLink);
         $payloadNext = json_decode($response->getBody(true), true);
 
-        $this->assertEquals('Inscrit 15', $payloadNext['items'][5]['titre']);
+        $this->assertEquals('Inscrit 14', $payloadNext['items'][5]['titre']);
         $this->assertEquals(10, count($payloadNext['items']), "Il n'y a pas le bon compte d'inscrits");
         $this->assertArrayHasKey('links', $payloadNext, "Il n'y a pas de champ links");
         $this->assertArrayHasKey('next', $payloadNext['links'], "Il n'y a pas de champ links.next");
@@ -71,7 +71,7 @@ class InscritControllerTest extends ApiTestCase
         $payloadLast = json_decode($response->getBody(true), true);
 
         $this->assertEquals(200, $response->getStatusCode());
-        $this->assertEquals('Inscrit 24', $payloadLast['items'][4]['titre']);
+        $this->assertEquals('Inscrit 23', $payloadLast['items'][4]['titre']);
 
     }
 

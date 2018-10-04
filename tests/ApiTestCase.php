@@ -62,11 +62,12 @@ class ApiTestCase extends KernelTestCase
 
     public function setup()
     {
-
         $this->client = self::$staticClient;
         // reset the history
         self::$history = array();
         $this->purgeDatabase();
+
+        $this->createInscrit('gaetan','gaetan', 'gaetan@interlivre.fr');
     }
 
     /**
