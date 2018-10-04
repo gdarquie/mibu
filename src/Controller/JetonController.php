@@ -6,6 +6,7 @@ use App\Entity\Concept\Inscrit;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Exception\BadCredentialsException;
 
 class JetonController extends BaseController
 {
@@ -25,6 +26,13 @@ class JetonController extends BaseController
             throw $this->createNotFoundException(sprintf(
                 'Aucun inscrit correspondant')
             );
+        }
+
+        $isValid = $this->get('security.password_encoder')
+            ->isPasswordValid($inscrit, $data['password']);
+
+        if (!$isValid) {
+            throw new BadCredentialsException();
         }
 
         $token = $this->get('lexik_jwt_authentication.encoder')

@@ -79,8 +79,6 @@ class BaseHandler
     /**
      * @param $entity
      * @return bool
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function save($entity)
     {
@@ -273,8 +271,6 @@ class BaseHandler
      * @param $data
      * @param $modelType
      * @return mixed
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function postEntity($data, $modelType)
     {
@@ -345,8 +341,6 @@ class BaseHandler
      * @param $entity
      * @param $modelType
      * @return mixed
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function changeConcept($data, $entity, $modelType)
     {
@@ -365,8 +359,6 @@ class BaseHandler
      * @param $entity
      * @param $modelType
      * @return mixed
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function changeElement($data, $entity, $modelType)
     {
