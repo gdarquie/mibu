@@ -29,6 +29,34 @@ services:
 
     App\Component\Handler\BaseHandler: '@handler.default'
 
+    App\Component\Handler\PersonnageHandler:
+        autowire: true
+        public: true
+
+    App\Component\Handler\EvenementHandler:
+        autowire: true
+        public: true
+
+    App\Component\Handler\FictionHandler:
+        autowire: true
+        public: true
+
+    App\Component\Handler\InscritHandler:
+        autowire: true
+        public: true
+
+    App\Component\Handler\LieuHandler:
+        autowire: true
+        public: true
+
+    App\Component\Handler\PartieHandler:
+        autowire: true
+        public: true
+
+    App\Component\Handler\TexteHandler:
+        autowire: true
+        public: true
+
     #JWT Authenticator
     App\Security\JwtTokenAuthenticator\:
         resource: '../src/Security/JwtTokenAuthenticator.php'

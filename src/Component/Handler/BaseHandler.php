@@ -15,13 +15,13 @@ use App\Entity\Element\Lieu;
 use App\Entity\Element\Partie;
 use App\Entity\Element\Personnage;
 use App\Entity\Element\Texte;
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Pagerfanta\Adapter\ArrayAdapter;
 use Pagerfanta\Pagerfanta;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
-use Symfony\Component\Routing\Router;
+use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class BaseHandler
@@ -32,10 +32,11 @@ class BaseHandler
 
     /**
      * BaseHandler constructor.
-     * @param EntityManager $em
-     * @param Router $router
+     * @param EntityManagerInterface $em
+     * @param RouterInterface $router
+     * @param UserPasswordEncoderInterface $passwordEncoder
      */
-    public function __construct(EntityManager $em, Router $router, UserPasswordEncoderInterface $passwordEncoder)
+    public function __construct(EntityManagerInterface $em, RouterInterface $router, UserPasswordEncoderInterface $passwordEncoder)
     {
         $this->em = $em;
         $this->router = $router;

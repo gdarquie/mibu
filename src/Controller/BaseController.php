@@ -195,8 +195,6 @@ class BaseController extends FOSRestController
      */
     protected function getHandler($modelType) {
 
-        $className =  'App\Component\Handler\\'.ucfirst($modelType).'Handler';
-        return new $className($this->getDoctrine()->getManager(), $this->get('router'), $this->passwordEncoder);
-
+        return $this->get('App\Component\Handler\\'.ucfirst($modelType).'Handler');
     }
 }
