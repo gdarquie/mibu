@@ -4,6 +4,7 @@
 /public/bundles/
 /var/
 /vendor/
+/config/jwt/*
 ###< symfony/framework-bundle ###
 
 ###> symfony/webpack-encore-pack ###
