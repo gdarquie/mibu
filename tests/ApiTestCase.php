@@ -252,11 +252,10 @@ class ApiTestCase extends KernelTestCase
     protected function createInscrit($titre = 'Titre', $pseudo = 'Okita', $email = 'mon@email.fr')
     {
         $inscrit = new Inscrit();
-
         $inscrit->setPseudo($pseudo);
         $inscrit->setTitre($titre);
-        $inscrit->setPassword('password');
         $inscrit->setPassword('$2y$13$myvhVtV3pOJJt5wa8Y1Nteh0vprdUQQkupB/z4qXtxMeCPpWnpvZa'); // motdepasse
+//        $inscrit->setPassword($this->get('security.password_encoder')->encodePassword($inscrit, 'motdepasse')); // motdepasse
         $inscrit->setDescription('Description');
         $inscrit->setPrenom('Prénom');
         $inscrit->setNom('Nom');
