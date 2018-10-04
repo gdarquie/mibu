@@ -13,7 +13,7 @@ class JetonControllerTest extends ApiTestCase
 
         $data = array(
             "pseudo" => "Okita",
-            "mdp" => "password"
+            "password" => "motdepasse"
         );
 
         $response = $this->client->post(ApiTestCase::TEST_PREFIX.'/jetons', [
@@ -32,7 +32,7 @@ class JetonControllerTest extends ApiTestCase
 
         $data = array(
             "pseudo" => "Mauvais",
-            "mdp" => "User"
+            "password" => "User"
         );
 
         try {

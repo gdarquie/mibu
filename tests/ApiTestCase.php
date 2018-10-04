@@ -256,6 +256,7 @@ class ApiTestCase extends KernelTestCase
         $inscrit->setPseudo($pseudo);
         $inscrit->setTitre($titre);
         $inscrit->setPassword('password');
+        $inscrit->setPassword('$2y$13$myvhVtV3pOJJt5wa8Y1Nteh0vprdUQQkupB/z4qXtxMeCPpWnpvZa'); // motdepasse
         $inscrit->setDescription('Description');
         $inscrit->setPrenom('Prénom');
         $inscrit->setNom('Nom');
