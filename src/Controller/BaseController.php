@@ -57,7 +57,9 @@ class BaseController extends FOSRestController
      */
     public function getAction($id, $modelType)
     {
-            $io = $this->getHandler($modelType)->getEntity($id, $modelType);
+        //        $this->denyAccessUnlessGranted('ROLE_USER');
+
+        $io = $this->getHandler($modelType)->getEntity($id, $modelType);
 
         return $this->createApiResponse(
             $io,
@@ -74,6 +76,8 @@ class BaseController extends FOSRestController
      */
     public function putAction(Request $request,$id, $modelType)
     {
+        //        $this->denyAccessUnlessGranted('ROLE_USER');
+
         $data = $this->getData($request);
         $io = $this->getHandler($modelType)->putEntity($id, $data, $modelType);
 
@@ -91,6 +95,8 @@ class BaseController extends FOSRestController
      */
     public function postAction($request, $modelType)
     {
+        //        $this->denyAccessUnlessGranted('ROLE_USER');
+
         $data = $this->getData($request);
 
         $classname = 'App\Component\IO\\'.ucfirst($modelType).'IO';
@@ -121,6 +127,8 @@ class BaseController extends FOSRestController
      */
     public function deleteAction($id, $modelType)
     {
+        //        $this->denyAccessUnlessGranted('ROLE_USER');
+
         return $this->getHandler($modelType)->deleteEntity($id, $modelType);
     }
 
