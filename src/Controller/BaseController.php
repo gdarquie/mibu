@@ -57,7 +57,7 @@ class BaseController extends FOSRestController
      */
     public function getAction($id, $modelType)
     {
-        //        $this->denyAccessUnlessGranted('ROLE_USER');
+        $this->denyAccessUnlessGranted('ROLE_USER');
 
         $io = $this->getHandler($modelType)->getEntity($id, $modelType);
 
@@ -95,7 +95,7 @@ class BaseController extends FOSRestController
      */
     public function postAction($request, $modelType)
     {
-        //        $this->denyAccessUnlessGranted('ROLE_USER');
+//        $this->denyAccessUnlessGranted('ROLE_USER');
 
         $data = $this->getData($request);
 

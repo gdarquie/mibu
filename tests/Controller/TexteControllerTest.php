@@ -9,8 +9,6 @@ class TexteControllerTest extends ApiTestCase
 {
     public function testPostTexte()
     {
-        $inscrit = $this->createInscrit();
-
         $fiction = $this->createFiction();
 
         $data = array(
@@ -21,7 +19,7 @@ class TexteControllerTest extends ApiTestCase
         );
 
         $token = $this->getService('lexik_jwt_authentication.encoder')
-            ->encode(['pseduo' => 'Okita']);
+            ->encode(['pseudo' => 'gaetan']);
 
         $response = $this->client->post(ApiTestCase::TEST_PREFIX.'/textes', [
             'body' => json_encode($data),
@@ -74,7 +72,14 @@ class TexteControllerTest extends ApiTestCase
         $fiction = $this->createFiction();
         $texte = $this->createTexteFiction($fiction);
 
-        $response = $this->client->get(ApiTestCase::TEST_PREFIX.'/textes/'.$texte->getId());
+        $token = $this->getService('lexik_jwt_authentication.encoder')
+            ->encode(['pseudo' => 'gaetan']);
+
+        $response = $this->client->get(ApiTestCase::TEST_PREFIX.'/textes/'.$texte->getId(), [
+            'headers' => [
+                'Authorization' => 'Bearer '.$token
+            ]
+        ]);
 
         $payload = json_decode($response->getBody(true), true);
         $this->assertArrayHasKey('titre', $payload, "Il n'y a pas de champ titre");
