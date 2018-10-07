@@ -9,6 +9,7 @@ use Lexik\Bundle\JWTAuthenticationBundle\Exception\JWTDecodeFailureException;
 use Lexik\Bundle\JWTAuthenticationBundle\TokenExtractor\AuthorizationHeaderTokenExtractor;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
@@ -17,17 +18,25 @@ use Symfony\Component\Security\Guard\Authenticator\AbstractFormLoginAuthenticato
 class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
 {
     private $jwtEncoder;
+    private $passwordEncoder;
     private $em;
 
     /**
      * JwtTokenAuthenticator constructor.
      * @param JWTEncoderInterface $jwtEncoder
      * @param EntityManagerInterface $em
+     * @param UserPasswordEncoderInterface $passwordEncoder
      */
-    public function __construct(JWTEncoderInterface $jwtEncoder, EntityManagerInterface $em)
+    public function __construct(JWTEncoderInterface $jwtEncoder, EntityManagerInterface $em, UserPasswordEncoderInterface $passwordEncoder)
     {
         $this->jwtEncoder = $jwtEncoder;
         $this->em = $em;
+        $this->passwordEncoder = $passwordEncoder;
+    }
+
+    public function supports(Request $request)
+    {
+        return $request->attributes->get('_route') !== 'post_jeton';
     }
 
     public function getCredentials(Request $request)
@@ -53,24 +62,17 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
         } catch (JWTDecodeFailureException $e) {
             throw new CustomUserMessageAuthenticationException('Invalid Token');
         }
-
-        $pseudo = $data['pseudo'];
-
+        
         return $this->em
             ->getRepository(Inscrit::class)
-            ->findOneBy(['pseudo' => $pseudo]);
+            ->findOneBy(['pseudo' => $data['username']]);
     }
 
     public function checkCredentials($credentials, UserInterface $user)
     {
-        return $this->passwordEncoder->isPasswordValid($user, $credentials['password']);
+        return true;
     }
 
-    public function supports(Request $request)
-    {
-        return $request->attributes->get('_route') === 'login'
-            && $request->isMethod('POST');
-    }
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
     {

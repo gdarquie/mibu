@@ -88,7 +88,8 @@ class JwtTokenAuthenticator extends AbstractGuardAuthenticator
 
     public function supports(Request $request)
     {
-
+        return $request->attributes->get('_route') === 'login'
+            && $request->isMethod('POST');
     }
 
     public function start(Request $request, AuthenticationException $authException = null)
