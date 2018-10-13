@@ -57,13 +57,6 @@ services:
         autowire: true
         public: true
 
-    #JWT Authenticator
-    App\Security\JwtTokenAuthenticator\:
-        resource: '../src/Security/JwtTokenAuthenticator.php'
-        autowire: true
-        arguments:
-            em: "@doctrine.orm.entity_manager"
-
     App\Component\Hydrator\InscritHydrator\:
         resource: '../src/Component/Hydrator/InscritHydrator.php'
         autowire: true

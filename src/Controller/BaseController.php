@@ -34,7 +34,7 @@ class BaseController extends FOSRestController
      */
     public function getAllAction(Request $request, $modelType)
     {
-//        $this->denyAccessUnlessGranted('ROLE_USER');
+        $this->denyAccessUnlessGranted('ROLE_USER');
 
         if($modelType === ModelType::LIEU) {
             $suffixe = 'x';
