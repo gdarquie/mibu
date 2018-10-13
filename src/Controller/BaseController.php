@@ -10,7 +10,11 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
+/**
+ * @Security("is_granted('ROLE_USER')")
+ */
 class BaseController extends FOSRestController
 {
     /**
@@ -34,7 +38,7 @@ class BaseController extends FOSRestController
      */
     public function getAllAction(Request $request, $modelType)
     {
-        $this->denyAccessUnlessGranted('ROLE_USER');
+//        $this->denyAccessUnlessGranted('ROLE_USER');
 
         if($modelType === ModelType::LIEU) {
             $suffixe = 'x';
@@ -57,7 +61,7 @@ class BaseController extends FOSRestController
      */
     public function getAction($id, $modelType)
     {
-        $this->denyAccessUnlessGranted('ROLE_USER');
+//        $this->denyAccessUnlessGranted('ROLE_USER');
 
         $io = $this->getHandler($modelType)->getEntity($id, $modelType);
 

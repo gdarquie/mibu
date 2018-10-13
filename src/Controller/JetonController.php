@@ -16,6 +16,7 @@ class JetonController extends BaseController
      **/
     public function postJeton(Request $request)
     {
+        //récupérer autrement les valeurs de l'user?
         $data = json_decode($request->getContent(), true);
 
         $inscrit = $this->getDoctrine()
@@ -37,7 +38,7 @@ class JetonController extends BaseController
 
         $token = $this->get('lexik_jwt_authentication.encoder')
             ->encode([
-                'username' => $inscrit->getPseudo(),
+                'pseudo' => $inscrit->getPseudo(),
                 'exp' => time() + 3600 // 1 hour expiration
             ]);
 

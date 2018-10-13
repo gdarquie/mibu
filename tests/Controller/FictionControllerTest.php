@@ -15,6 +15,7 @@ class FictionControllerTest extends ApiTestCase
         );
 
         $response = $this->client->post(ApiTestCase::TEST_PREFIX.'/fictions', [
+            'headers' => $this->getAuthorizedHeaders('gaetan'),
             'body' => json_encode($data)
         ]);
 
@@ -22,7 +23,10 @@ class FictionControllerTest extends ApiTestCase
         $this->assertTrue($response->hasHeader('Location'));
 
         $fictionUrl = $response->getHeader('Location');
-        $response = $this->client->get($fictionUrl[0]);
+
+        $response = $this->client->get($fictionUrl[0], [
+            'headers' => $this->getAuthorizedHeaders('gaetan'),
+        ]);
 
         $payload = json_decode($response->getBody(true), true);
         $this->assertArrayHasKey('titre', $payload, "Il n'y a pas de champ titre");
@@ -43,7 +47,11 @@ class FictionControllerTest extends ApiTestCase
         $data['textes'][0]['description'] = 'Description 1';
         $data['textes'][0]['type'] = 'promesse';
 
+        $token = $this->getService('lexik_jwt_authentication.encoder')
+            ->encode(['pseudo' => 'gaetan']);
+
         $response = $this->client->post(ApiTestCase::TEST_PREFIX.'/fictions', [
+            'headers' => $this->getAuthorizedHeaders('gaetan'),
             'body' => json_encode($data)
         ]);
 
@@ -52,7 +60,10 @@ class FictionControllerTest extends ApiTestCase
         $this->assertTrue($response->hasHeader('Location'));
         $fictionUrl = $response->getHeader('Location');
 
-        $response = $this->client->get($fictionUrl[0]);
+        $response = $this->client->get($fictionUrl[0], [
+            'headers' => $this->getAuthorizedHeaders('gaetan'),
+            'body' => json_encode($data)
+        ]);
 
         $payload = json_decode($response->getBody(true), true);
         $this->assertArrayHasKey('titre', $payload, "Il n'y a pas de champ titre");
@@ -71,12 +82,8 @@ class FictionControllerTest extends ApiTestCase
             ->encode(['pseudo' => 'gaetan']);
 
         $response = $this->client->get(ApiTestCase::TEST_PREFIX.'/fictions/', [
-            'headers' => [
-                'Authorization' => 'Bearer '.$token
-            ]
+            'headers' => $this->getAuthorizedHeaders('gaetan'),
         ]);
-
-//        $response = $this->client->get(ApiTestCase::TEST_PREFIX.'/fictions');
 
         //page 1
         $this->assertEquals(200, $response->getStatusCode());
@@ -90,7 +97,10 @@ class FictionControllerTest extends ApiTestCase
 
         //page 2
         $nextLink = $payload['links']['next'];
-        $response = $this->client->get($nextLink);
+        $response = $this->client->get($nextLink, [
+            'headers' => $this->getAuthorizedHeaders('gaetan'),
+        ]);
+
         $payloadNext = json_decode($response->getBody(true), true);
 
         $this->assertEquals('Fiction 15', $payloadNext['items'][5]['titre']);
@@ -100,7 +110,9 @@ class FictionControllerTest extends ApiTestCase
 
         //last
         $lastLink = $payload['links']['last'];
-        $response = $this->client->get($lastLink);
+        $response = $this->client->get($lastLink, [
+            'headers' => $this->getAuthorizedHeaders('gaetan'),
+        ]);
         $payloadLast = json_decode($response->getBody(true), true);
 
         $this->assertEquals(200, $response->getStatusCode());
@@ -116,12 +128,8 @@ class FictionControllerTest extends ApiTestCase
             ->encode(['pseudo' => 'gaetan']);
 
         $response = $this->client->get(ApiTestCase::TEST_PREFIX.'/fictions/'.$fiction->getId(), [
-            'headers' => [
-                'Authorization' => 'Bearer '.$token
-            ]
+            'headers' => $this->getAuthorizedHeaders('gaetan')
         ]);
-
-//        $response = $this->client->get(ApiTestCase::TEST_PREFIX.'/fictions/'.$fiction->getId());
 
         $payload = json_decode($response->getBody(true), true);
         $this->assertArrayHasKey('titre', $payload, "Il n'y a pas de champ titre");
@@ -142,12 +150,15 @@ class FictionControllerTest extends ApiTestCase
         );
 
         $response = $this->client->put(ApiTestCase::TEST_PREFIX.'/fictions/'.$fiction->getId(), [
-            'body' => json_encode($data)
+            'headers' => $this->getAuthorizedHeaders('gaetan'),
+            'body' => json_encode($data),
         ]);
 
         $this->assertEquals(202, $response->getStatusCode());
 
-        $response = $this->client->get(ApiTestCase::TEST_PREFIX.'/fictions/'.$fiction->getId());
+        $response = $this->client->get(ApiTestCase::TEST_PREFIX.'/fictions/'.$fiction->getId(), [
+            'headers' => $this->getAuthorizedHeaders('gaetan'),
+            ]);
 
         $payload = json_decode($response->getBody(true), true);
         $this->assertArrayHasKey('titre', $payload, "Il n'y a pas de champ surnom");
@@ -160,7 +171,7 @@ class FictionControllerTest extends ApiTestCase
     {
         $fiction = $this->createFiction();
 
-        $response = $this->client->delete(ApiTestCase::TEST_PREFIX.'/fictions/'.$fiction->getId());
+        $response = $this->client->delete(ApiTestCase::TEST_PREFIX.'/fictions/'.$fiction->getId(), ['headers' => $this->getAuthorizedHeaders('gaetan'),]);
         $this->assertEquals(200, $response->getStatusCode());
     }
 }

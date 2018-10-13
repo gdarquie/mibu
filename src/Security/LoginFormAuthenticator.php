@@ -66,7 +66,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
         
         return $this->em
             ->getRepository(Inscrit::class)
-            ->findOneBy(['pseudo' => $data['username']]);
+            ->findOneBy(['pseudo' => $data['pseudo']]);
     }
 
     public function checkCredentials($credentials, UserInterface $user)
