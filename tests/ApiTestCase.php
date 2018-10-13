@@ -116,6 +116,9 @@ class ApiTestCase extends KernelTestCase
         }
     }
 
+    /**
+     * @param ResponseInterface $response
+     */
     protected function debugResponse(ResponseInterface $response)
     {
         foreach ($response->getHeaders() as $name => $values) {
@@ -197,6 +200,9 @@ class ApiTestCase extends KernelTestCase
         }
     }
 
+    /**
+     * @param $string
+     */
     protected function printDebug($string)
     {
         if ($this->output === null) {
@@ -238,6 +244,10 @@ class ApiTestCase extends KernelTestCase
         return $last['response'];
     }
 
+    /**
+     * @param string $titre
+     * @return Fiction
+     */
     protected function createFiction($titre = 'titre') {
 
         $fiction = new Fiction();
@@ -250,6 +260,12 @@ class ApiTestCase extends KernelTestCase
         return $fiction;
     }
 
+    /**
+     * @param string $titre
+     * @param string $pseudo
+     * @param string $email
+     * @return Inscrit
+     */
     protected function createInscrit($titre = 'Titre', $pseudo = 'Okita', $email = 'mon@email.fr')
     {
         $inscrit = new Inscrit();
@@ -270,6 +286,10 @@ class ApiTestCase extends KernelTestCase
         return $inscrit;
     }
 
+    /**
+     * @param $fiction
+     * @return Evenement
+     */
     protected function createEvenementFiction($fiction) {
 
         $evenement = new Evenement();
@@ -285,6 +305,10 @@ class ApiTestCase extends KernelTestCase
         return $evenement;
     }
 
+    /**
+     * @param $fiction
+     * @return Personnage
+     */
     protected function createPersonnageFiction($fiction) {
 
         $personnage = new Personnage('Barius', 'Le Sage');
@@ -298,6 +322,10 @@ class ApiTestCase extends KernelTestCase
         return $personnage;
     }
 
+    /**
+     * @param $fiction
+     * @return Texte
+     */
     protected function createTexteFiction($fiction) {
 
         $texte = new Texte('Titre de texte', 'Un contenu de texte', 'promesse');
@@ -309,6 +337,10 @@ class ApiTestCase extends KernelTestCase
         return $texte;
     }
 
+    /**
+     * @param $fiction
+     * @return Partie
+     */
     protected function createPartieFiction($fiction) {
 
         $partie = new Partie('Titre de texte','Un exemple de contenu de partie');
@@ -320,6 +352,10 @@ class ApiTestCase extends KernelTestCase
         return $partie;
     }
 
+    /**
+     * @param $fiction
+     * @return Lieu
+     */
     protected function createLieuFiction($fiction) {
 
         $lieu = new Lieu();
@@ -333,6 +369,20 @@ class ApiTestCase extends KernelTestCase
         $this->getService('doctrine')->getManager()->flush();
 
         return $lieu;
+    }
+
+    /**
+     * @param $pseudo
+     * @param array $headers
+     * @return array
+     */
+    protected function getAuthorizedHeaders($pseudo, $headers = array())
+    {
+        $token = $this->getService('lexik_jwt_authentication.encoder')
+            ->encode(['pseudo' => $pseudo]);
+        $headers['Authorization'] = 'Bearer '.$token;
+
+        return $headers;
     }
 
 

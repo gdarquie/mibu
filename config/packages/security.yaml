@@ -22,12 +22,12 @@ security:
 #                failure_handler:          lexik_jwt_authentication.handler.authentication_failure
 
         main:
-            anonymous: ~
-            http_basic: ~
+#            anonymous: ~
+#            http_basic: ~
 
-#            guard:
-#                authenticators:
-#                - 'App\Security\LoginFormAuthenticator'
+            guard:
+                authenticators:
+                - 'App\Security\LoginFormAuthenticator'
 
             # activate different ways to authenticate
 #            http_basic: true
