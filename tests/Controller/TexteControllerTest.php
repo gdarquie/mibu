@@ -18,21 +18,18 @@ class TexteControllerTest extends ApiTestCase
             'fictionId' => $fiction->getId()
         );
 
-        $token = $this->getService('lexik_jwt_authentication.encoder')
-            ->encode(['pseudo' => 'gaetan']);
-
         $response = $this->client->post(ApiTestCase::TEST_PREFIX.'/textes', [
+            'headers' => $this->getAuthorizedHeaders('gaetan'),
             'body' => json_encode($data),
-            'headers' => [
-                'Authorization' => 'Bearer '.$token
-            ]
         ]);
 
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertTrue($response->hasHeader('Location'));
 
         $texteUrl = $response->getHeader('Location');
-        $response = $this->client->get($texteUrl[0]);
+        $response = $this->client->get($texteUrl[0], [
+            'headers' => $this->getAuthorizedHeaders('gaetan'),
+        ]);
 
         $payload = json_decode($response->getBody(), true);
         $this->assertArrayHasKey('titre', $payload, "Il n'y a pas de champ titre");
@@ -54,7 +51,8 @@ class TexteControllerTest extends ApiTestCase
 
         try {
             $this->client->post(ApiTestCase::TEST_PREFIX . '/textes', [
-                'body' => json_encode($data)
+                'body' => json_encode($data),
+                'headers' => $this->getAuthorizedHeaders('gaetan'),
             ]);
 
         } catch (RequestException $e ) {
@@ -76,9 +74,7 @@ class TexteControllerTest extends ApiTestCase
             ->encode(['pseudo' => 'gaetan']);
 
         $response = $this->client->get(ApiTestCase::TEST_PREFIX.'/textes/'.$texte->getId(), [
-            'headers' => [
-                'Authorization' => 'Bearer '.$token
-            ]
+            'headers' => $this->getAuthorizedHeaders('gaetan'),
         ]);
 
         $payload = json_decode($response->getBody(true), true);
@@ -97,7 +93,9 @@ class TexteControllerTest extends ApiTestCase
         $texte2 = $this->createTexteFiction($fiction);
         $texte3 = $this->createTexteFiction($fiction);
 
-        $response = $this->client->get(ApiTestCase::TEST_PREFIX.'/textes/fiction/'.$fiction->getId());
+        $response = $this->client->get(ApiTestCase::TEST_PREFIX.'/textes/fiction/'.$fiction->getId(), [
+            'headers' => $this->getAuthorizedHeaders('gaetan'),
+        ]);
 
         $payload = json_decode($response->getBody(true), true);
         $this->assertCount(3, $payload['items']);
@@ -125,11 +123,14 @@ class TexteControllerTest extends ApiTestCase
         );
 
         $response = $this->client->put(ApiTestCase::TEST_PREFIX.'/textes/'.$texte->getId(), [
-            'body' => json_encode($data)
+            'headers' => $this->getAuthorizedHeaders('gaetan'),
+            'body' => json_encode($data),
         ]);
         $this->assertEquals(202, $response->getStatusCode());
 
-        $response = $this->client->get(ApiTestCase::TEST_PREFIX.'/textes/'.$texte->getId());
+        $response = $this->client->get(ApiTestCase::TEST_PREFIX.'/textes/'.$texte->getId(), [
+            'headers' => $this->getAuthorizedHeaders('gaetan'),
+        ]);
 
         $payload = json_decode($response->getBody(true), true);
         $this->assertArrayHasKey('titre', $payload, "Il n'y a pas de champ titre");
@@ -143,7 +144,9 @@ class TexteControllerTest extends ApiTestCase
         $texte = $this->createTexteFiction($fiction);
         $texte2 = $this->createTexteFiction($fiction);
 
-        $response = $this->client->delete(ApiTestCase::TEST_PREFIX.'/textes/'.$texte->getId());
+        $response = $this->client->delete(ApiTestCase::TEST_PREFIX.'/textes/'.$texte->getId(), [
+            'headers' => $this->getAuthorizedHeaders('gaetan'),
+        ]);
         $this->assertEquals(200, $response->getStatusCode());
     }
 
@@ -161,14 +164,17 @@ class TexteControllerTest extends ApiTestCase
         );
 
         $response = $this->client->post(ApiTestCase::TEST_PREFIX.'/textes', [
-            'body' => json_encode($data)
+            'headers' => $this->getAuthorizedHeaders('gaetan'),
+            'body' => json_encode($data),
         ]);
 
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertTrue($response->hasHeader('Location'));
 
         $texteUrl = $response->getHeader('Location');
-        $response = $this->client->get($texteUrl[0]);
+        $response = $this->client->get($texteUrl[0], [
+            'headers' => $this->getAuthorizedHeaders('gaetan'),
+        ]);
 
         $payload = json_decode($response->getBody(true), true);
         $this->assertArrayHasKey('titre', $payload, "Il n'y a pas de champ titre");
@@ -194,14 +200,17 @@ class TexteControllerTest extends ApiTestCase
         );
 
         $response = $this->client->post(ApiTestCase::TEST_PREFIX.'/textes', [
-            'body' => json_encode($data)
+            'headers' => $this->getAuthorizedHeaders('gaetan'),
+            'body' => json_encode($data),
         ]);
 
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertTrue($response->hasHeader('Location'));
 
         $texteUrl = $response->getHeader('Location');
-        $response = $this->client->get($texteUrl[0]);
+        $response = $this->client->get($texteUrl[0], [
+            'headers' => $this->getAuthorizedHeaders('gaetan'),
+        ]);
 
         $payload = json_decode($response->getBody(true), true);
         $this->assertArrayHasKey('titre', $payload, "Il n'y a pas de champ titre");
@@ -226,14 +235,17 @@ class TexteControllerTest extends ApiTestCase
         );
 
         $response = $this->client->post(ApiTestCase::TEST_PREFIX.'/textes', [
-            'body' => json_encode($data)
+            'headers' => $this->getAuthorizedHeaders('gaetan'),
+            'body' => json_encode($data),
         ]);
 
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertTrue($response->hasHeader('Location'));
 
         $texteUrl = $response->getHeader('Location');
-        $response = $this->client->get($texteUrl[0]);
+        $response = $this->client->get($texteUrl[0], [
+            'headers' => $this->getAuthorizedHeaders('gaetan'),
+        ]);
 
         $payload = json_decode($response->getBody(true), true);
         $this->assertArrayHasKey('titre', $payload, "Il n'y a pas de champ titre");
