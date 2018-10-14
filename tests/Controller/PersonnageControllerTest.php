@@ -22,6 +22,7 @@ class PersonnageControllerTest extends ApiTestCase
         );
 
         $response = $this->client->post(ApiTestCase::TEST_PREFIX.'/personnages', [
+            'headers' => $this->getAuthorizedHeaders(ApiTestCase::ADMIN),
             'body' => json_encode($data)
         ]);
 
@@ -30,7 +31,9 @@ class PersonnageControllerTest extends ApiTestCase
         $this->assertTrue($response->hasHeader('Location'));
 
         $personnageUrl = $response->getHeader('Location');
-        $response = $this->client->get($personnageUrl[0]);
+        $response = $this->client->get($personnageUrl[0], [
+            'headers' => $this->getAuthorizedHeaders(ApiTestCase::ADMIN),
+        ]);
 
         $payload = json_decode($response->getBody(), true);
         $this->assertArrayHasKey('nom', $payload, "Il n'y a pas de champ nom");
@@ -44,7 +47,9 @@ class PersonnageControllerTest extends ApiTestCase
         $fiction = $this->createFiction();
         $personnage = $this->createPersonnageFiction($fiction);
 
-        $response = $this->client->get(ApiTestCase::TEST_PREFIX.'/personnages/'.$personnage->getId());
+        $response = $this->client->get(ApiTestCase::TEST_PREFIX.'/personnages/'.$personnage->getId(), [
+            'headers' => $this->getAuthorizedHeaders(ApiTestCase::ADMIN),
+        ]);
 
         $payload = json_decode($response->getBody(true), true);
         $this->assertArrayHasKey('titre', $payload, "Il n'y a pas de champ titre");
@@ -62,7 +67,9 @@ class PersonnageControllerTest extends ApiTestCase
         $element2 = $this->createPersonnageFiction($fiction);
         $element3 = $this->createPersonnageFiction($fiction);
 
-        $response = $this->client->get(ApiTestCase::TEST_PREFIX.'/personnages/fiction/'.$fiction->getId());
+        $response = $this->client->get(ApiTestCase::TEST_PREFIX.'/personnages/fiction/'.$fiction->getId(), [
+            'headers' => $this->getAuthorizedHeaders(ApiTestCase::ADMIN),
+        ]);
 
         $payload = json_decode($response->getBody(true), true);
         $this->assertCount(3, $payload['items']);
@@ -91,11 +98,14 @@ class PersonnageControllerTest extends ApiTestCase
         );
 
         $response = $this->client->put(ApiTestCase::TEST_PREFIX.'/personnages/'.$personnage->getId(), [
+            'headers' => $this->getAuthorizedHeaders(ApiTestCase::ADMIN),
             'body' => json_encode($data)
         ]);
         $this->assertEquals(202, $response->getStatusCode());
 
-        $response = $this->client->get(ApiTestCase::TEST_PREFIX.'/personnages/'.$personnage->getId());
+        $response = $this->client->get(ApiTestCase::TEST_PREFIX.'/personnages/'.$personnage->getId(), [
+            'headers' => $this->getAuthorizedHeaders(ApiTestCase::ADMIN),
+        ]);
 
         $payload = json_decode($response->getBody(true), true);
         $this->assertArrayHasKey('titre', $payload, "Il n'y a pas de champ titre");
@@ -110,14 +120,18 @@ class PersonnageControllerTest extends ApiTestCase
         $personnage = $this->createPersonnageFiction($fiction);
         $personnage2 = $this->createPersonnageFiction($fiction);
 
-        $response = $this->client->get(ApiTestCase::TEST_PREFIX.'/personnages/'.$personnage->getId());
+        $response = $this->client->get(ApiTestCase::TEST_PREFIX.'/personnages/'.$personnage->getId(), [
+            'headers' => $this->getAuthorizedHeaders(ApiTestCase::ADMIN),
+        ]);
 
         $payload = json_decode($response->getBody(true), true);
         $this->assertArrayHasKey('titre', $payload, "Il n'y a pas de champ titre");
         $this->assertEquals($personnage->getId(), $payload['id']);
         $this->assertEquals(200, $response->getStatusCode());
 
-        $response = $this->client->delete(ApiTestCase::TEST_PREFIX.'/personnages/'.$personnage->getId());
+        $response = $this->client->delete(ApiTestCase::TEST_PREFIX.'/personnages/'.$personnage->getId(), [
+            'headers' => $this->getAuthorizedHeaders(ApiTestCase::ADMIN),
+        ]);
         $this->assertEquals(200, $response->getStatusCode());
     }
 }

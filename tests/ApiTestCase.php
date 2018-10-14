@@ -22,6 +22,7 @@ use Symfony\Component\DomCrawler\Crawler;
 class ApiTestCase extends KernelTestCase
 {
     CONST TEST_PREFIX = 'index_test.php';
+    CONST ADMIN = 'gaetan';
 
     private static $staticClient;
 
