@@ -386,5 +386,30 @@ class ApiTestCase extends KernelTestCase
         return $headers;
     }
 
+    protected function getAuthenticate($uri) {
+        return $this->client->get($uri, [
+            'headers' => $this->getAuthorizedHeaders(ApiTestCase::ADMIN),
+        ]);
+    }
+
+    protected function postAuthenticate($uri, $data) {
+        return $this->client->post($uri, [
+            'headers' => $this->getAuthorizedHeaders(ApiTestCase::ADMIN),
+            'body' => json_encode($data)
+        ]);
+    }
+
+    protected function putAuthenticate($uri, $data) {
+        return $this->client->put($uri, [
+            'headers' => $this->getAuthorizedHeaders(ApiTestCase::ADMIN),
+            'body' => json_encode($data)
+        ]);
+    }
+
+    protected function deleteAuthenticate($uri) {
+        return $this->client->delete($uri, [
+            'headers' => $this->getAuthorizedHeaders(ApiTestCase::ADMIN),
+        ]);
+    }
 
 }

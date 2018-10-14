@@ -18,15 +18,13 @@ class LieuControllerTest extends ApiTestCase
             "fictionId" => $fiction->getId()
         );
 
-        $response = $this->client->post(ApiTestCase::TEST_PREFIX.'/lieux', [
-            'body' => json_encode($data)
-        ]);
+        $response = $this->postAuthenticate(ApiTestCase::TEST_PREFIX.'/lieux', $data);
 
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertTrue($response->hasHeader('Location'));
 
         $evenementUrl = $response->getHeader('Location');
-        $response = $this->client->get($evenementUrl[0]);
+        $response = $this->getAuthenticate($evenementUrl[0]);
 
         $payload = json_decode($response->getBody(true), true);
         $this->assertArrayHasKey('titre', $payload, "Il n'y a pas de champ titre");
@@ -40,7 +38,7 @@ class LieuControllerTest extends ApiTestCase
         $fiction = $this->createFiction();
         $lieu = $this->createLieuFiction($fiction);
 
-        $response = $this->client->get(ApiTestCase::TEST_PREFIX.'/lieux/'.$lieu->getId());
+        $response = $this->getAuthenticate(ApiTestCase::TEST_PREFIX.'/lieux/'.$lieu->getId());
 
         $payload = json_decode($response->getBody(true), true);
         $this->assertArrayHasKey('titre', $payload, "Il n'y a pas de champ titre");
@@ -58,7 +56,8 @@ class LieuControllerTest extends ApiTestCase
         $element2 = $this->createLieuFiction($fiction);
         $element3 = $this->createLieuFiction($fiction);
 
-        $response = $this->client->get(ApiTestCase::TEST_PREFIX.'/lieux/fiction/'.$fiction->getId());
+        $response = $this->getAuthenticate(ApiTestCase::TEST_PREFIX.'/lieux/fiction/'.$fiction->getId());
+
         $payload = json_decode($response->getBody(true), true);
         $this->assertCount(3, $payload['items']);
 
@@ -85,13 +84,11 @@ class LieuControllerTest extends ApiTestCase
             "fictionId" => $fiction->getId()
         );
 
-        $response = $this->client->put(ApiTestCase::TEST_PREFIX.'/lieux/'.$lieu->getId(), [
-            'body' => json_encode($data)
-        ]);
+        $response = $this->putAuthenticate(ApiTestCase::TEST_PREFIX.'/lieux'.$lieu->getId(), $data);
+
         $this->assertEquals(202, $response->getStatusCode());
 
-        $response = $this->client->get(ApiTestCase::TEST_PREFIX.'/lieux/'.$lieu->getId());
-
+        $response = $this->getAuthenticate(ApiTestCase::TEST_PREFIX.'/lieux/'.$lieu->getId());
         $payload = json_decode($response->getBody(true), true);
         $this->assertArrayHasKey('titre', $payload, "Il n'y a pas de champ titre");
         $this->assertEquals( $data['titre'], $payload['titre']);
@@ -105,7 +102,7 @@ class LieuControllerTest extends ApiTestCase
         $lieu = $this->createLieuFiction($fiction);
         $lieu2 = $this->createLieuFiction($fiction); //use in test
 
-        $response = $this->client->delete(ApiTestCase::TEST_PREFIX.'/lieux/'.$lieu->getId());
+        $response = $this->deleteAuthenticate(ApiTestCase::TEST_PREFIX.'/lieux/'.$lieu->getId());
         $this->assertEquals(200, $response->getStatusCode());
     }
 
