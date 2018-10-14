@@ -21,6 +21,7 @@ class InscritControllerTest extends ApiTestCase
         );
 
         $response = $this->client->post(ApiTestCase::TEST_PREFIX.'/inscrits', [
+            'headers' => $this->getAuthorizedHeaders(ApiTestCase::ADMIN),
             'body' => json_encode($data)
         ]);
 
@@ -28,7 +29,9 @@ class InscritControllerTest extends ApiTestCase
         $this->assertTrue($response->hasHeader('Location'));
 
         $fictionUrl = $response->getHeader('Location');
-        $response = $this->client->get($fictionUrl[0]);
+        $response = $this->client->get($fictionUrl[0], [
+            'headers' => $this->getAuthorizedHeaders(ApiTestCase::ADMIN),
+        ]);
 
         $payload = json_decode($response->getBody(true), true);
         $this->assertArrayHasKey('titre', $payload, "Il n'y a pas de champ titre");
@@ -45,7 +48,9 @@ class InscritControllerTest extends ApiTestCase
        }
 
        //page 1
-        $response = $this->client->get(ApiTestCase::TEST_PREFIX.'/inscrits');
+        $response = $this->client->get(ApiTestCase::TEST_PREFIX.'/inscrits', [
+            'headers' => $this->getAuthorizedHeaders(ApiTestCase::ADMIN),
+        ]);
         $this->assertEquals(200, $response->getStatusCode());
         $payload = json_decode($response->getBody(true), true);
 
@@ -57,7 +62,9 @@ class InscritControllerTest extends ApiTestCase
 
         //page 2
         $nextLink = $payload['links']['next'];
-        $response = $this->client->get($nextLink);
+        $response = $this->client->get($nextLink, [
+            'headers' => $this->getAuthorizedHeaders(ApiTestCase::ADMIN),
+        ]);
         $payloadNext = json_decode($response->getBody(true), true);
 
         $this->assertEquals('Inscrit 14', $payloadNext['items'][5]['titre']);
@@ -67,7 +74,9 @@ class InscritControllerTest extends ApiTestCase
 
         //last
         $lastLink = $payload['links']['last'];
-        $response = $this->client->get($lastLink);
+        $response = $this->client->get($lastLink, [
+            'headers' => $this->getAuthorizedHeaders(ApiTestCase::ADMIN),
+        ]);
         $payloadLast = json_decode($response->getBody(true), true);
 
         $this->assertEquals(200, $response->getStatusCode());
@@ -79,7 +88,9 @@ class InscritControllerTest extends ApiTestCase
     {
         $inscrit = $this->createInscrit();
 
-        $response = $this->client->get(ApiTestCase::TEST_PREFIX.'/inscrits/'.$inscrit->getId());
+        $response = $this->client->get(ApiTestCase::TEST_PREFIX.'/inscrits/'.$inscrit->getId(), [
+            'headers' => $this->getAuthorizedHeaders(ApiTestCase::ADMIN),
+        ]);
 
         $payload = json_decode($response->getBody(true), true);
         $this->assertArrayHasKey('titre', $payload, "Il n'y a pas de champ titre");
@@ -107,12 +118,15 @@ class InscritControllerTest extends ApiTestCase
         );
 
         $response = $this->client->put(ApiTestCase::TEST_PREFIX.'/inscrits/'.$inscrit->getId(), [
+            'headers' => $this->getAuthorizedHeaders(ApiTestCase::ADMIN),
             'body' => json_encode($data)
         ]);
 
         $this->assertEquals(202, $response->getStatusCode());
 
-        $response = $this->client->get(ApiTestCase::TEST_PREFIX.'/inscrits/'.$inscrit->getId());
+        $response = $this->client->get(ApiTestCase::TEST_PREFIX.'/inscrits/'.$inscrit->getId(), [
+            'headers' => $this->getAuthorizedHeaders(ApiTestCase::ADMIN),
+        ]);
 
         $payload = json_decode($response->getBody(true), true);
         $this->assertArrayHasKey('titre', $payload, "Il n'y a pas de champ titre");
@@ -127,7 +141,9 @@ class InscritControllerTest extends ApiTestCase
     {
         $inscrit = $this->createInscrit();
 
-        $response = $this->client->delete(ApiTestCase::TEST_PREFIX.'/inscrits/'.$inscrit->getId());
+        $response = $this->client->delete(ApiTestCase::TEST_PREFIX.'/inscrits/'.$inscrit->getId(), [
+            'headers' => $this->getAuthorizedHeaders(ApiTestCase::ADMIN),
+        ]);
         $this->assertEquals(200, $response->getStatusCode());
     }
 }
