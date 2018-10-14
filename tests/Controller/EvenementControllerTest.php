@@ -19,6 +19,7 @@ class EvenementControllerTest extends ApiTestCase
         );
 
         $response = $this->client->post(ApiTestCase::TEST_PREFIX.'/evenements', [
+            'headers' => $this->getAuthorizedHeaders(ApiTestCase::ADMIN),
             'body' => json_encode($data)
         ]);
 
@@ -26,7 +27,9 @@ class EvenementControllerTest extends ApiTestCase
         $this->assertTrue($response->hasHeader('Location'));
 
         $evenementUrl = $response->getHeader('Location');
-        $response = $this->client->get($evenementUrl[0]);
+        $response = $this->client->get($evenementUrl[0], [
+            'headers' => $this->getAuthorizedHeaders(ApiTestCase::ADMIN),
+        ]);
 
         $payload = json_decode($response->getBody(true), true);
         $this->assertArrayHasKey('titre', $payload, "Il n'y a pas de champ titre");
@@ -40,7 +43,9 @@ class EvenementControllerTest extends ApiTestCase
         $fiction = $this->createFiction();
         $evenement = $this->createEvenementFiction($fiction);
 
-        $response = $this->client->get(ApiTestCase::TEST_PREFIX.'/evenements/'.$evenement->getId());
+        $response = $this->client->get(ApiTestCase::TEST_PREFIX.'/evenements/'.$evenement->getId(), [
+            'headers' => $this->getAuthorizedHeaders(ApiTestCase::ADMIN),
+        ]);
 
         $payload = json_decode($response->getBody(true), true);
         $this->assertArrayHasKey('titre', $payload, "Il n'y a pas de champ titre");
@@ -58,7 +63,9 @@ class EvenementControllerTest extends ApiTestCase
         $element2 = $this->createEvenementFiction($fiction);
         $element3 = $this->createEvenementFiction($fiction);
 
-        $response = $this->client->get(ApiTestCase::TEST_PREFIX.'/evenements/fiction/'.$fiction->getId());
+        $response = $this->client->get(ApiTestCase::TEST_PREFIX.'/evenements/fiction/'.$fiction->getId(), [
+            'headers' => $this->getAuthorizedHeaders(ApiTestCase::ADMIN),
+        ]);
         $payload = json_decode($response->getBody(true), true);
         $this->assertCount(3, $payload['items']);
 
@@ -86,11 +93,14 @@ class EvenementControllerTest extends ApiTestCase
         );
 
         $response = $this->client->put(ApiTestCase::TEST_PREFIX.'/evenements/'.$evenement->getId(), [
+            'headers' => $this->getAuthorizedHeaders(ApiTestCase::ADMIN),
             'body' => json_encode($data)
         ]);
         $this->assertEquals(202, $response->getStatusCode());
 
-        $response = $this->client->get(ApiTestCase::TEST_PREFIX.'/evenements/'.$evenement->getId());
+        $response = $this->client->get(ApiTestCase::TEST_PREFIX.'/evenements/'.$evenement->getId(), [
+            'headers' => $this->getAuthorizedHeaders(ApiTestCase::ADMIN),
+        ]);
 
         $payload = json_decode($response->getBody(true), true);
         $this->assertArrayHasKey('titre', $payload, "Il n'y a pas de champ titre");
@@ -104,7 +114,9 @@ class EvenementControllerTest extends ApiTestCase
         $evenement = $this->createEvenementFiction($fiction);
         $evenement2 = $this->createEvenementFiction($fiction); //use in test
 
-        $response = $this->client->delete(ApiTestCase::TEST_PREFIX.'/evenements/'.$evenement->getId());
+        $response = $this->client->delete(ApiTestCase::TEST_PREFIX.'/evenements/'.$evenement->getId(), [
+            'headers' => $this->getAuthorizedHeaders(ApiTestCase::ADMIN),
+        ]);
         $this->assertEquals(200, $response->getStatusCode());
     }
 
