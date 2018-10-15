@@ -46,7 +46,6 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
             'Authorization'
         );
 
-
         $token = $extractor->extract($request);
 
         if (!$token) {
