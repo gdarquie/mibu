@@ -54,7 +54,7 @@ class PartieControllerTest extends ApiTestCase
         $element2 = $this->createPartieFiction($fiction);
         $element3 = $this->createPartieFiction($fiction);
 
-        $response = $this->getAuthenticate(ApiTestCase::TEST_PREFIX.'/parties/'.$fiction->getId());
+        $response = $this->getAuthenticate(ApiTestCase::TEST_PREFIX.'/parties/fiction/'.$fiction->getId());
 
         $payload = json_decode($response->getBody(true), true);
         $this->assertCount(3, $payload['items']);
@@ -80,7 +80,7 @@ class PartieControllerTest extends ApiTestCase
             "fictionId" => $fiction->getId()
         );
 
-        $response = $this->putAuthenticate(ApiTestCase::TEST_PREFIX.'/parties'.$partie->getId(), $data);
+        $response = $this->putAuthenticate(ApiTestCase::TEST_PREFIX.'/parties/'.$partie->getId(), $data);
 
         $this->assertEquals(202, $response->getStatusCode());
 
