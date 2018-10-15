@@ -84,7 +84,7 @@ class LieuControllerTest extends ApiTestCase
             "fictionId" => $fiction->getId()
         );
 
-        $response = $this->putAuthenticate(ApiTestCase::TEST_PREFIX.'/lieux'.$lieu->getId(), $data);
+        $response = $this->putAuthenticate(ApiTestCase::TEST_PREFIX.'/lieux/'.$lieu->getId(), $data);
 
         $this->assertEquals(202, $response->getStatusCode());
 
