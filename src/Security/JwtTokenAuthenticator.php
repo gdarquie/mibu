@@ -49,6 +49,9 @@ class JwtTokenAuthenticator extends AbstractFormLoginAuthenticator
         else if($request->attributes->get('_route') === 'post_jeton') {
             return false;
         }
+        else if($request->attributes->get('_route') === 'post_inscrit') {
+            return false;
+        }
         return true;
 //        return $request->attributes->get('_route') !== 'post_jeton';
     }
