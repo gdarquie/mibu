@@ -12,22 +12,12 @@ security:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
 
-#        login:
-#            pattern:  ^/login
-#            stateless: true
-#            anonymous: true
-#            json_login:
-#                check_path:               /login_check
-#                success_handler:          lexik_jwt_authentication.handler.authentication_success
-#                failure_handler:          lexik_jwt_authentication.handler.authentication_failure
-
         main:
             anonymous: true
-#            http_basic: ~
-
+            stateless: true
             guard:
                 authenticators:
-                - 'App\Security\LoginFormAuthenticator'
+                - 'App\Security\JwtTokenAuthenticator'
 
             # activate different ways to authenticate
 #            http_basic: true
