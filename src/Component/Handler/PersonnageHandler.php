@@ -10,8 +10,6 @@ class PersonnageHandler extends BaseHandler
      * @param $fictionId
      * @param $limit
      * @return bool
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function generatePersonnages($fictionId, $limit)
     {
@@ -45,7 +43,7 @@ class PersonnageHandler extends BaseHandler
     /**
      * @return array|string
      */
-    public function generatePrenomAtalaire()
+    public function generatePrenomAtalaire():string
     {
         // calculer le nombre de syllabes
         $rand = rand(1,100);
@@ -80,7 +78,7 @@ class PersonnageHandler extends BaseHandler
         return $prenom;
     }
 
-    public function generateNomAtalaire()
+    public function generateNomAtalaire():string
     {
         // calculer le nombre de syllabes
         $rand = rand(1,100);
@@ -106,7 +104,7 @@ class PersonnageHandler extends BaseHandler
         }
 
         // créer le nom
-        $prenom = ucfirst(implode($nom));
+        $nom = ucfirst(implode($nom));
 
         return $nom;
     }
