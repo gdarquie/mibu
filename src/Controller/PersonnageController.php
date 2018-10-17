@@ -65,7 +65,7 @@ class PersonnageController extends BaseController
      */
     public function generatePersonnages($fictionId, $limit=10)
     {
-        if (!$this->getHandler()->generatePersonnages($fictionId, $limit)) {
+        if (!$this->getHandler($this->modelType)->generatePersonnages($fictionId, $limit)) {
             throw new BadRequestHttpException(sprintf(
                 "Une erreur s'est produite, aucune personnage n'a été généré."
             ));

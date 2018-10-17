@@ -309,8 +309,6 @@ class BaseHandler
      * @param $data
      * @param $modelType
      * @return mixed
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function putEntity($entityId, $data, $modelType)
     {
@@ -325,8 +323,6 @@ class BaseHandler
      * @param $entityId
      * @param $modelType
      * @return JsonResponse
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function deleteEntity($entityId, $modelType)
     {
