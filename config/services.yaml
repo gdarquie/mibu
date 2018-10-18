@@ -57,6 +57,10 @@ services:
         autowire: true
         public: true
 
+    App\Component\Handler\ProjetHandler:
+        autowire: true
+        public: true
+
     App\Component\Hydrator\InscritHydrator\:
         resource: '../src/Component/Hydrator/InscritHydrator.php'
         autowire: true

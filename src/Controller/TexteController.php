@@ -2,10 +2,6 @@
 
 namespace App\Controller;
 
-use App\Component\Handler\TexteHandler;
-use App\Component\IO\TexteIO;
-use App\Form\TexteType;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use App\Component\Constant\ModelType;
