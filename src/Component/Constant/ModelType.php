@@ -11,4 +11,5 @@ class ModelType
     const PERSONNAGE = 'personnage';
     const TEXTE = 'texte';
     const LIEU = 'lieu';
+    const PROJET = 'projet';
 }
