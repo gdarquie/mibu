@@ -14,6 +14,7 @@ use App\Entity\Element\Evenement;
 use App\Entity\Element\Lieu;
 use App\Entity\Element\Partie;
 use App\Entity\Element\Personnage;
+use App\Entity\Element\Projet;
 use App\Entity\Element\Texte;
 use Doctrine\ORM\EntityManagerInterface;
 use Pagerfanta\Adapter\ArrayAdapter;
@@ -289,6 +290,9 @@ class BaseHandler
                 break;
             case ModelType::LIEU:
                 $entity = new Lieu();
+                break;
+            case ModelType::PROJET:
+                $entity = new Projet();
                 break;
             case ModelType::INSCRIT:
                 $entity = new Inscrit();
