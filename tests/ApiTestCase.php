@@ -6,6 +6,7 @@ use App\Entity\Concept\Fiction;
 use App\Entity\Concept\Inscrit;
 use App\Entity\Element\Lieu;
 use App\Entity\Element\Partie;
+use App\Entity\Element\Projet;
 use App\Entity\Element\Texte;
 use App\Entity\Element\Evenement;
 use App\Entity\Element\Personnage;
@@ -386,12 +387,34 @@ class ApiTestCase extends KernelTestCase
         return $headers;
     }
 
+    protected function createProjetFiction($fiction) {
+
+        $projet = new Projet();
+        $projet->setTitre('Titre');
+        $projet->setDescription('Description');
+        $projet->setFiction($fiction);
+
+        $this->getService('doctrine')->getManager()->persist($projet);
+        $this->getService('doctrine')->getManager()->flush();
+
+        return $projet;
+    }
+
+    /**
+     * @param $uri
+     * @return ResponseInterface
+     */
     protected function getAuthenticate($uri) {
         return $this->client->get($uri, [
             'headers' => $this->getAuthorizedHeaders(ApiTestCase::ADMIN),
         ]);
     }
 
+    /**
+     * @param $uri
+     * @param $data
+     * @return ResponseInterface
+     */
     protected function postAuthenticate($uri, $data) {
         return $this->client->post($uri, [
             'headers' => $this->getAuthorizedHeaders(ApiTestCase::ADMIN),
@@ -399,6 +422,11 @@ class ApiTestCase extends KernelTestCase
         ]);
     }
 
+    /**
+     * @param $uri
+     * @param $data
+     * @return ResponseInterface
+     */
     protected function putAuthenticate($uri, $data) {
         return $this->client->put($uri, [
             'headers' => $this->getAuthorizedHeaders(ApiTestCase::ADMIN),
@@ -406,6 +434,10 @@ class ApiTestCase extends KernelTestCase
         ]);
     }
 
+    /**
+     * @param $uri
+     * @return ResponseInterface
+     */
     protected function deleteAuthenticate($uri) {
         return $this->client->delete($uri, [
             'headers' => $this->getAuthorizedHeaders(ApiTestCase::ADMIN),

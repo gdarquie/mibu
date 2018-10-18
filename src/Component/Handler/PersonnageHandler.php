@@ -3,6 +3,7 @@
 namespace App\Component\Handler;
 
 use App\Entity\Element\Personnage;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class PersonnageHandler extends BaseHandler
 {
@@ -78,6 +79,9 @@ class PersonnageHandler extends BaseHandler
         return $prenom;
     }
 
+    /**
+     * @return string
+     */
     public function generateNomAtalaire():string
     {
         // calculer le nombre de syllabes
@@ -107,5 +111,16 @@ class PersonnageHandler extends BaseHandler
         $nom = ucfirst(implode($nom));
 
         return $nom;
+    }
+
+    public function getFictionStats($fictionId)
+    {
+        $nb_personnages = $this->em->getRepository(Personnage::class)->countPersonnages($fictionId);
+        $nb_women = $this->em->getRepository(Personnage::class)->countNbWomen($fictionId);
+        $nb_men = $this->em->getRepository(Personnage::class)->countNbMen($fictionId);
+        $ratio_women = 100/$nb_personnages*$nb_women;
+        $average_age= $this->em->getRepository(Personnage::class)->countAverageAge($fictionId);
+
+        return new JsonResponse('Les stats sont : - nombre de personnages = '.$nb_personnages.' dont '.$nb_women.' soit un ratio de'.$ratio_women.'% de personnages féminins, l\'âge moyen est de '.$average_age);
     }
 }
