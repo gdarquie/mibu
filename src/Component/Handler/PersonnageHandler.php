@@ -25,8 +25,8 @@ class PersonnageHandler extends BaseHandler
 
             $clone->setTitre('Clone n°'.($i+1));
             $clone->setDescription('Un clone');
-            $clone->setPrenom($this->generatePrenomAtalaire());
-            $clone->setNom($this->generateNomAtalaire());
+            $clone->setPrenom($this->generateNomAtalaire('prenom'));
+            $clone->setNom($this->generateNomAtalaire('nom'));
 
             $genre = (rand(0,1)>0) ?$genre = 'M' :$genre = 'F';
             $clone->setGenre($genre);
@@ -41,35 +41,15 @@ class PersonnageHandler extends BaseHandler
 
     }
 
-    /**
-     * @return array|string
-     */
-    public function generatePrenomAtalaire():string
+    public function generateNomAtalaire($type)
     {
         // calculer le nombre de syllabes
-        $nbSyllables = $this->computeSyllablesNumberForPrenom(rand(1,100));
-
-        // liste des syllabes
-        $syllables = ['ba', 'rius', 'a', 'ta', 'lai', 're', 'da', 'mu', 'ni','no','so', 'mo', 'do', 'lne', 'sa'];
-
-        // assemblage des syllabes
-        for ($i = 0; $i < $nbSyllables; $i++) {
-            $prenom[] = $syllables[array_rand($syllables, 1)];
+        if ($type === 'prenom') {
+            $nbSyllables = $this->computeSyllablesNumberForPrenom(rand(1,100));
         }
-
-        // créer le prénom
-        $prenom = ucfirst(implode($prenom));
-
-        return $prenom;
-    }
-
-    /**
-     * @return string
-     */
-    public function generateNomAtalaire():string
-    {
-        // calculer le nombre de syllabes
-        $nbSyllables = $this->computeSyllablesNumberForNom(rand(1,100));
+        else {
+            $nbSyllables = $this->computeSyllablesNumberForNom(rand(1,100));
+        }
 
         // liste des syllabes
         $syllables = ['ba', 'rius', 'a', 'ta', 'lai', 're', 'da', 'mu', 'ni','no','so', 'mo', 'do', 'lne', 'sa'];
