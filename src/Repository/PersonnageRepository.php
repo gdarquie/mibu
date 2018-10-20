@@ -31,7 +31,7 @@ class PersonnageRepository extends ServiceEntityRepository
     public function countNbMen($fictionId){
         $query = $this->getEntityManager()->createQuery(
             'SELECT COUNT(p) FROM '.Personnage::class.' p JOIN p.fiction f WHERE f.id = :fictionId AND p.genre = :man'
-        )->setParameters(['fictionId'=> $fictionId, 'man' => 'H']);
+        )->setParameters(['fictionId'=> $fictionId, 'man' => 'M']);
         return $query->getSingleScalarResult();
     }
 
@@ -41,6 +41,11 @@ class PersonnageRepository extends ServiceEntityRepository
             'SELECT AVG((p.anneeMort)-(p.anneeNaissance)) FROM '.Personnage::class.' p JOIN p.fiction f WHERE f.id = :fictionId'
         )->setParameter('fictionId', $fictionId);
         return $query->getSingleScalarResult();
+    }
+
+    public function deleteGenerated()
+    {
+        //todo
     }
 
 }
