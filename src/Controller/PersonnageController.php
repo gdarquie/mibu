@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Element\Personnage;
 use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use App\Component\Constant\ModelType;
@@ -73,10 +74,12 @@ class PersonnageController extends BaseController
         return $this->redirectToRoute('get_personnages', array('fictionId'=> $fictionId));
     }
 
-    //new function for deleting all the generating characters for a fiction
-    public function deleteGenerated()
+    /**
+     * @Rest\Delete("personnages/generation/fiction={fictionId}", name="delete_generated_personnage")
+     */
+    public function deleteGenerated($fictionId)
     {
-        return 'Deleted';
+        return $this->getHandler($this->modelType)->handleDeleteGenerated($fictionId);
     }
 
     /**

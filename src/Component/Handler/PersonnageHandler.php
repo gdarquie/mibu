@@ -154,5 +154,17 @@ class PersonnageHandler extends BaseHandler
         return $nbSyllables;
 
     }
+
+    /**
+     * @param $fictionId
+     * @return mixed
+     */
+    public function handleDeleteGenerated($fictionId)
+    {
+        $this->em->getRepository(Personnage::class)->deleteGenerated($fictionId);
+
+        return new JsonResponse('Suppression des personnages générés automatiquement', 200);
+
+    }
     
 }
