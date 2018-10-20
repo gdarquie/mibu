@@ -13,6 +13,11 @@ class PersonnageRepository extends ServiceEntityRepository
         parent::__construct($registry, Personnage::class);
     }
 
+    /**
+     * @param $fictionId
+     * @return mixed
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
     public function countPersonnages($fictionId)
     {
         $query = $this->getEntityManager()->createQuery(
@@ -21,6 +26,11 @@ class PersonnageRepository extends ServiceEntityRepository
         return $query->getSingleScalarResult();
     }
 
+    /**
+     * @param $fictionId
+     * @return mixed
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
     public function countNbWomen($fictionId){
         $query = $this->getEntityManager()->createQuery(
             'SELECT COUNT(p) FROM '.Personnage::class.' p JOIN p.fiction f WHERE f.id = :fictionId AND p.genre = :woman'
@@ -28,6 +38,11 @@ class PersonnageRepository extends ServiceEntityRepository
         return $query->getSingleScalarResult();
     }
 
+    /**
+     * @param $fictionId
+     * @return mixed
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
     public function countNbMen($fictionId){
         $query = $this->getEntityManager()->createQuery(
             'SELECT COUNT(p) FROM '.Personnage::class.' p JOIN p.fiction f WHERE f.id = :fictionId AND p.genre = :man'
@@ -35,6 +50,11 @@ class PersonnageRepository extends ServiceEntityRepository
         return $query->getSingleScalarResult();
     }
 
+    /**
+     * @param $fictionId
+     * @return mixed
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
     public function countAverageAge($fictionId)
     {
         $query = $this->getEntityManager()->createQuery(
@@ -43,9 +63,22 @@ class PersonnageRepository extends ServiceEntityRepository
         return $query->getSingleScalarResult();
     }
 
-    public function deleteGenerated()
+    /**
+     * @param $fictionId
+     * @return bool
+     */
+    public function deleteGenerated($fictionId)
     {
-        //todo
+        $query = $this->getEntityManager()->createQuery(
+            'SELECT p FROM '.Personnage::class.' p JOIN p.fiction f WHERE f.id =:fictionId'
+        )->setParameter('fictionId', $fictionId);
+        $personnages = $query->getResult();
+
+        $query = $this->getEntityManager()->createQuery(
+            'DELETE FROM '.Personnage::class.' p WHERE p.id IN (:personnages) AND p.auto = TRUE'
+        )->setParameter('personnages', $personnages);
+
+        return $query->execute();
     }
 
 }
