@@ -114,16 +114,16 @@ class PersonnageHandler extends BaseHandler
      */
     public function computeSyllablesNumberForNom($randomValue)
     {
-        if($randomValue < 30) {
+        switch (true){
+            case ($randomValue < 30):
             $nbSyllables = 1;
-        }
-
-        else if($randomValue > 30 && $randomValue <70) {
+            break;
+            case ($randomValue > 30 && $randomValue <70):
             $nbSyllables = 2;
-        }
-
-        else {
+            break;
+            default:
             $nbSyllables = 3;
+            break;
         }
 
         return $nbSyllables;
