@@ -139,13 +139,18 @@ class PersonnageControllerTest extends ApiTestCase
     {
         $fiction = $this->createFiction();
 
-        $response = $this->client->get(ApiTestCase::TEST_PREFIX.'/personnages/generation/fiction='.$fiction->getId().'/limit', [
+        $response = $this->client->post(ApiTestCase::TEST_PREFIX.'/personnages/generation/fiction='.$fiction->getId().'/10', [
             'headers' => $this->getAuthorizedHeaders(ApiTestCase::ADMIN),
         ]);
         $this->assertEquals(200, $response->getStatusCode());
 
         $payload = json_decode($response->getBody(true), true);
+        $this->assertCount(10, $payload['items']);
+    }
 
+    public function testGetStats()
+    {
+        //todo
     }
 
 }
