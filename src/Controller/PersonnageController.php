@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Component\Handler\PersonnageHandler;
 use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use App\Component\Constant\ModelType;
@@ -78,6 +77,14 @@ class PersonnageController extends BaseController
     public function deleteGenerated()
     {
         return 'Deleted';
+    }
+
+    /**
+     * @Rest\Get("personnages/fiction={fictionId}/stats", name="get_personnages_stats_fiction")
+     */
+    public function getStatsPersonnagesFiction($fictionId)
+    {
+        return $this->getHandler($this->modelType)->getFictionStats($fictionId);
     }
 
 }

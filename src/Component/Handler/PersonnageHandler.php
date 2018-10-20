@@ -3,6 +3,7 @@
 namespace App\Component\Handler;
 
 use App\Entity\Element\Personnage;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class PersonnageHandler extends BaseHandler
 {
@@ -46,23 +47,7 @@ class PersonnageHandler extends BaseHandler
     public function generatePrenomAtalaire():string
     {
         // calculer le nombre de syllabes
-        $rand = rand(1,100);
-
-        if($rand < 10) {
-            $nbSyllables = 1;
-        }
-
-        else if($rand > 10 && $rand <70) {
-            $nbSyllables = 2;
-        }
-
-        else if ($rand > 70 && $rand <90) {
-            $nbSyllables = 3;
-        }
-
-        else {
-            $nbSyllables = 4;
-        }
+        $nbSyllables = $this->computeSyllablesNumberForPrenom(rand(1,100));
 
         // liste des syllabes
         $syllables = ['ba', 'rius', 'a', 'ta', 'lai', 're', 'da', 'mu', 'ni','no','so', 'mo', 'do', 'lne', 'sa'];
@@ -78,22 +63,13 @@ class PersonnageHandler extends BaseHandler
         return $prenom;
     }
 
+    /**
+     * @return string
+     */
     public function generateNomAtalaire():string
     {
         // calculer le nombre de syllabes
-        $rand = rand(1,100);
-
-        if($rand < 30) {
-            $nbSyllables = 1;
-        }
-
-        else if($rand > 30 && $rand <70) {
-            $nbSyllables = 2;
-        }
-
-        else {
-            $nbSyllables = 3;
-        }
+        $nbSyllables = $this->computeSyllablesNumberForNom(rand(1,100));
 
         // liste des syllabes
         $syllables = ['ba', 'rius', 'a', 'ta', 'lai', 're', 'da', 'mu', 'ni','no','so', 'mo', 'do', 'lne', 'sa'];
@@ -108,4 +84,75 @@ class PersonnageHandler extends BaseHandler
 
         return $nom;
     }
+
+    /**
+     * @param $fictionId
+     * @return JsonResponse
+     */
+    public function getFictionStats($fictionId)
+    {
+        $nb_personnages = $this->em->getRepository(Personnage::class)->countPersonnages($fictionId);
+        $nb_women = $this->em->getRepository(Personnage::class)->countNbWomen($fictionId);
+        $nb_men = $this->em->getRepository(Personnage::class)->countNbMen($fictionId);
+        $ratio_women = round(100/$nb_personnages*$nb_women, 2);
+        $average_age= round($this->em->getRepository(Personnage::class)->countAverageAge($fictionId),1);
+
+        $payload = [
+            'nb_personnages' => $nb_personnages,
+            'nb_women' => $nb_women,
+            'nb_men' => $nb_men,
+            'ratio_women' => $ratio_women,
+            'average_age' => $average_age
+        ];
+
+        return new JsonResponse($payload);
+    }
+
+    /**
+     * @param $randomValue
+     * @return int
+     */
+    public function computeSyllablesNumberForNom($randomValue)
+    {
+        if($randomValue < 30) {
+            $nbSyllables = 1;
+        }
+
+        else if($randomValue > 30 && $randomValue <70) {
+            $nbSyllables = 2;
+        }
+
+        else {
+            $nbSyllables = 3;
+        }
+
+        return $nbSyllables;
+    }
+
+    /**
+     * @param $randomValue
+     * @return int
+     */
+    public function computeSyllablesNumberForPrenom($randomValue)
+    {
+        if($randomValue < 10) {
+            $nbSyllables = 1;
+        }
+
+        else if($randomValue > 10 && $randomValue <70) {
+            $nbSyllables = 2;
+        }
+
+        else if ($randomValue > 70 && $randomValue <90) {
+            $nbSyllables = 3;
+        }
+
+        else {
+            $nbSyllables = 4;
+        }
+
+        return $nbSyllables;
+
+    }
+    
 }

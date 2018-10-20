@@ -134,4 +134,18 @@ class PersonnageControllerTest extends ApiTestCase
         ]);
         $this->assertEquals(200, $response->getStatusCode());
     }
+
+    public function testGeneratePersonnages()
+    {
+        $fiction = $this->createFiction();
+
+        $response = $this->client->get(ApiTestCase::TEST_PREFIX.'/personnages/generation/fiction='.$fiction->getId().'/limit', [
+            'headers' => $this->getAuthorizedHeaders(ApiTestCase::ADMIN),
+        ]);
+        $this->assertEquals(200, $response->getStatusCode());
+
+        $payload = json_decode($response->getBody(true), true);
+
+    }
+
 }
