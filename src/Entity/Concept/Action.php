@@ -77,9 +77,9 @@ class Action extends AbstractConcept
     }
 
     /**
-     * @param datetime $debut
+     * @param $debut
      */
-    public function setDebut(datetime $debut): void
+    public function setDebut($debut): void
     {
         $this->debut = $debut;
     }
@@ -93,7 +93,7 @@ class Action extends AbstractConcept
     }
 
     /**
-     * @param datetime $fin
+     * @param $fin
      */
     public function setFin(datetime $fin): void
     {
