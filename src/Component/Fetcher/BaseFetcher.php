@@ -3,12 +3,6 @@
 namespace App\Component\Fetcher;
 
 use App\Component\Constant\ModelType;
-use App\Entity\Concept\Fiction;
-use App\Entity\Concept\Inscrit;
-use App\Entity\Element\Evenement;
-use App\Entity\Element\Texte;
-use App\Entity\Element\Partie;
-use App\Entity\Element\Personnage;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
