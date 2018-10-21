@@ -95,7 +95,7 @@ class Action extends AbstractConcept
     /**
      * @param $fin
      */
-    public function setFin(datetime $fin): void
+    public function setFin($fin): void
     {
         $this->fin = $fin;
     }
