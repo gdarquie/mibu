@@ -71,7 +71,7 @@ class Action extends AbstractConcept
     /**
      * @return datetime
      */
-    public function getDebut(): datetime
+    public function getDebut()
     {
         return $this->debut;
     }
@@ -87,7 +87,7 @@ class Action extends AbstractConcept
     /**
      * @return datetime
      */
-    public function getFin(): datetime
+    public function getFin()
     {
         return $this->fin;
     }
