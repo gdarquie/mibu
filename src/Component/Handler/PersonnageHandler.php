@@ -3,6 +3,7 @@
 namespace App\Component\Handler;
 
 use App\Entity\Element\Personnage;
+use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 class PersonnageHandler extends BaseHandler
@@ -27,6 +28,8 @@ class PersonnageHandler extends BaseHandler
             $clone->setDescription('Un clone');
             $clone->setPrenom($this->generateNomAtalaire('prenom'));
             $clone->setNom($this->generateNomAtalaire('nom'));
+            $clone->setAnneeNaissance($this->computeDates(-100, 60)['dateNaissance']);
+            $clone->setAnneeMort($this->computeDates(-100,60)['dateMort']);
 
             $genre = (rand(0,1)>0) ?$genre = 'M' :$genre = 'F';
             $clone->setGenre($genre);
@@ -131,7 +134,66 @@ class PersonnageHandler extends BaseHandler
         }
 
         return $nbSyllables;
+    }
 
+    /**
+     * @param $generationYear
+     * @param $periods
+     * @param $lifeExpectancy
+     * @return array
+     */
+    public function computeDates($generationYear, $lifeExpectancy, $periods = [18, 35, 65, 100]) :array
+    {
+            if(count($periods) !== 4) {
+                throw new Exception('Length of $periods[] parameters must be 4 for computeDates(), it is '.count($periods));
+            }
+
+        $pourcent = rand(0,100);
+
+        //compute the age of the character
+        switch($pourcent) {
+            case ($pourcent < 25):
+                $age = rand(0, $periods[0]);
+                break;
+            case ($pourcent < 26 && 50):
+                $age = rand(($periods[0]+1), $periods[1]);
+                break;
+            case ($pourcent < 51 && 75):
+                $age = rand(($periods[1]+1), $periods[2]);
+                break;
+            case ($pourcent > 76):
+                $age = rand(($periods[2]+1), $periods[3]);
+                break;
+            default:
+                $age = rand($periods[0], $periods[3]);
+                break;
+        }
+
+        //deduct birth year => dateNaissance
+        $dateNaissance = $generationYear - $age;
+
+        //compute lifetime
+        $pourcent2 = rand(0,100);
+
+        switch($pourcent2) {
+            case ($pourcent < 50):
+                $lifeExpectancy = rand($lifeExpectancy-5, $lifeExpectancy+5);
+                break;
+            case ($pourcent < 51 && 75):
+                $lifeExpectancy = rand(0, $lifeExpectancy);
+                break;
+            case ($pourcent < 76 && 100):
+                $lifeExpectancy = rand($lifeExpectancy, 100);
+                break;
+            default:
+                $lifeExpectancy = rand(0, 100); //100 always max?
+                break;
+        }
+
+        //deduct death year => dateMort
+        $dateMort = $dateNaissance + $lifeExpectancy;
+
+        return ['dateNaissance' => $dateNaissance, 'dateMort' => $dateMort];
     }
 
     /**
