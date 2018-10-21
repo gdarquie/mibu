@@ -28,8 +28,10 @@ class PersonnageHandler extends BaseHandler
             $clone->setDescription('Un clone');
             $clone->setPrenom($this->generateNomAtalaire('prenom'));
             $clone->setNom($this->generateNomAtalaire('nom'));
-            $clone->setAnneeNaissance($this->computeDates(-100, 60)['dateNaissance']);
-            $clone->setAnneeMort($this->computeDates(-100,60)['dateMort']);
+
+            $dates = $this->computeDates(-100, 60);
+            $clone->setAnneeNaissance($dates['dateNaissance']);
+            $clone->setAnneeMort($dates['dateMort']);
 
             $genre = (rand(0,1)>0) ?$genre = 'M' :$genre = 'F';
             $clone->setGenre($genre);
@@ -55,7 +57,7 @@ class PersonnageHandler extends BaseHandler
         }
 
         // liste des syllabes
-        $syllables = ['ba', 'rius', 'a', 'ta', 'lai', 're', 'da', 'mu', 'ni','no','so', 'mo', 'do', 'lne', 'sa'];
+        $syllables = ['ba', 'riu', 'a', 'ta', 'lai', 're', 'da', 'mu', 'ni','no','so', 'mo', 'do', 'ne', 'sa'];
 
         // assemblage des syllabes
         for ($i = 0; $i < $nbSyllables; $i++) {

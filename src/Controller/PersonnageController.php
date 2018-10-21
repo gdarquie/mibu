@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Entity\Element\Personnage;
 use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use App\Component\Constant\ModelType;
