@@ -7,16 +7,16 @@ L'installation nécessite PHP 7.1+, composer et postgreSQL (9+?)
 
 git clone https://github.com/gdarquie/mibu.git
 
-###Installer les dépendances
+### Installer les dépendances
 
 composer install
 
-###Créer la BD
+### Créer la BD
 
 php bin/console doctrine:database:create
 php bin/console doctrine:migrations:migrate
 
-###Lancer l'application en local
+### Lancer l'application en local
 
 php bin/console server:run
 
