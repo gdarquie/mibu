@@ -29,6 +29,57 @@ php bin/console doctrine:migrations:migrate
 php bin/console server:run
 ```
 
+## Génération de token
+
+Se connecter à l'application nécessite des jetons. La seule route accessible publiquement en GET est l'accueil.
+
+Nous utilisons LexikJWTAuthenticationBundle pour générer des tokens.
+
+Afin d'y parvenir, il faut créer deux clés SSH (une privée et une publique).
+
+```
+mkdir config/jwt
+openssl genrsa -out config/jwt/private.pem -aes256 4096
+openssl rsa -pubout -in config/jwt/private.pem -out config/jwt/public.pem
+```
+
+Ajouter la configuration suivante dans lexik_jwt_authentication.yaml :
+
+```
+lexik_jwt_authentication:
+    secret_key: '%env(resolve:JWT_SECRET_KEY)%'
+    public_key: '%env(resolve:JWT_PUBLIC_KEY)%'
+    pass_phrase: '%env(JWT_PASSPHRASE)%'
+    token_ttl:        3600
+```
+
+Pour plus de documentation, consulter : https://github.com/lexik/LexikJWTAuthenticationBundle/blob/master/Resources/doc/index.md#installation 
+
+## S'authentifier
+
+Toutes les routes de l'API sont sécurisée à l'exception des suivantes
+ - GET / : l'accueil
+ - POST /jetons : voir plus bas
+
+Pour se connecter à l'API, il faut donc générer au préalable un jeton. 
+
+La route POST jetons permet de le faire, il faut ajouter un body avec le pseudo et le mot de passe d'un inscrit sur le modèle suivant :
+
+```
+{
+  "pseudo" : "gaotian",
+  "password" : "motdepasse"
+}   
+```
+
+Pour l'instant, il n'existe pas encore de système de générations de fixtures, il faut donc créer directement via la BD un inscrit.
+
+Par exemple :
+
+```
+INSERT INTO inscrit (SELECT 1, 'Nom', 'Prénom', 'femme',	'1980-01-01',	'gaetan@interlivre.fr',	NOW(), NOW(), '23ed908c-f566-4c85-fe18-9fafeff969c0',	'titre', 'Description', 'pseudo',	'[]',	'motdepasseEncodéAvecBcrypt');
+```
+
 ## Présentation de l'application mibu
 
 Mibu est une API dédiée l'écriture de fictions interactive.
