@@ -33,6 +33,7 @@ security:
 #        - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
 #        - { path: ^/jetons, role: IS_AUTHENTICATED_ANONYMOUSLY, methods: [POST] }
 #        - { path: ^/, role: IS_AUTHENTICATED_ANONYMOUSLY, methods: [POST, PUT, DELETE] }
+#        - { path: ^/api/, role: IS_AUTHENTICATED_ANONYMOUSLY, methods: [GET] }
 
     encoders:
         App\Entity\Concept\Inscrit:

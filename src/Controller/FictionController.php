@@ -7,6 +7,9 @@ use App\Component\Handler\FictionHandler;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use FOS\RestBundle\Controller\Annotations as Rest;
+use Nelmio\ApiDocBundle\Annotation\Model;
+use Nelmio\ApiDocBundle\Annotation\Security;
+use Swagger\Annotations as SWG;
 
 class FictionController extends BaseController
 {
@@ -15,8 +18,18 @@ class FictionController extends BaseController
      */
     public $modelType = ModelType::FICTION;
 
+
     /**
-     * @Rest\Get("fictions", name="get_fictions")
+     * List all fictions.
+     *
+     *
+     * @Rest\Get("/fictions", name="get_fictions")
+     *
+     * @SWG\Response(
+     *     response=200,
+     *     description="Returns all fictions"
+     * )
+     * @SWG\Tag(name="fictions")
      */
     public function getFictions(Request $request): Response
     {
