@@ -64,13 +64,27 @@ class PersonnageController extends BaseController
      */
     public function generatePersonnages($fictionId, $limit=10)
     {
-        if (!$this->getHandler($this->modelType)->generatePersonnages($fictionId, $limit)) {
+        if (!$this->getHandler($this->modelType)->handleGeneratePersonnages($fictionId, $limit)) {
             throw new BadRequestHttpException(sprintf(
                 "Une erreur s'est produite, aucune personnage n'a été généré."
             ));
         }
 
         return $this->redirectToRoute('get_personnages', array('fictionId'=> $fictionId));
+    }
+
+    /**
+     * @Rest\Post("personnages/generation/routines/personnage={personnageId}", name="generate_personnage_routines")
+     */
+    public function generatePersonnageRoutines($personnageId)
+    {
+        if (!$this->getHandler($this->modelType)->handleGenerateRoutines($personnageId)) {
+            throw new BadRequestHttpException(sprintf(
+                "Une erreur s'est produite, aucune routine n'a été générée."
+            ));
+        }
+
+        return $this->redirectToRoute('get_personnage', array('personnageId'=> $personnageId));
     }
 
     /**
