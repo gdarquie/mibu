@@ -46,10 +46,8 @@ class ApiTestCase extends KernelTestCase
     {
         $_SERVER['APP_ENV'] = 'test';
 
-        $baseUrl = getenv('DATABASE_HOST');
-
         self::$staticClient = new Client([
-            'base_uri' => $baseUrl,
+            'base_uri' => 'http://localhost/',
             'defaults' => [
                 'exceptions' => false
             ]

@@ -10,9 +10,9 @@ RUN apt-get update \
         libghc-postgresql-libpq-dev \
         zlib1g-dev \
         netcat-openbsd \
-        imagemagick \
     && rm -rf /var/lib/apt/lists/*
 
+RUN docker-php-ext-configure pgsql -with-pgsql=/usr/include/postgresql/
 RUN docker-php-ext-install \
     bcmath \
     intl \
@@ -27,5 +27,12 @@ RUN docker-php-ext-install \
 RUN curl -k -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
     && composer global require hirak/prestissimo \
     && composer clear-cache
+
+ENV DATABASE_URL_TEST="pgsql://postgres:password@mibu_db:5432/fictio"
+ENV JWT_SECRET_KEY="%kernel.project_dir%/config/jwt/private.pem"
+ENV JWT_PUBLIC_KEY="%kernel.project_dir%/config/jwt/public.pem"
+ENV JWT_PASSPHRASE=1234
+
+WORKDIR /var/www/html
 
 CMD ["php", "-S", "0.0.0.0:80", "-t", "/var/www/html/public", "/var/www/html/public/index.php"]
