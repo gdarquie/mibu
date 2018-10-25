@@ -74,20 +74,6 @@ class PersonnageController extends BaseController
     }
 
     /**
-     * @Rest\Post("personnages/generation/routines/personnage={personnageId}", name="generate_personnage_routines")
-     */
-    public function generatePersonnageRoutines($personnageId)
-    {
-        if (!$this->getHandler($this->modelType)->handleGenerateRoutines($personnageId)) {
-            throw new BadRequestHttpException(sprintf(
-                "Une erreur s'est produite, aucune routine n'a été générée."
-            ));
-        }
-
-        return $this->redirectToRoute('get_personnage', array('personnageId'=> $personnageId));
-    }
-
-    /**
      * @Rest\Delete("personnages/generation/fiction={fictionId}", name="delete_generated_personnage")
      */
     public function deleteGenerated($fictionId)
