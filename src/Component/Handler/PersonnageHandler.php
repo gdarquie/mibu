@@ -215,15 +215,28 @@ class PersonnageHandler extends BaseHandler
      */
     public function handleGenerateRoutines($personnageId)
     {
+
+        //récupérer le personnage
+        $personnage = $this->em->getRepository(Personnage::class)->findOneById($personnageId);
         $routine = [];
 
         $actions = ['dormir', 'manger', 'travailler', 'lire', 'rêver', 'marcher', 'se battre', 'tuer', 'rire', 'parler', 'rencontrer', 'attendre', 'cuisiner', 'faire le ménage'];
 
-        //commence à 0h et finit à 23h59
-        for ($heure = 0; $heure <= 24; $heure++) {
-            $routine[$heure] = [$heure => array_rand($actions)];
+        $jour = 1;
+
+        $duree = $personnage->getAnneeMort() - $personnage->getAnneeNaissance();
+        $limite = intval(ceil($duree*365.25)); // nombre de jours
+
+        for($jour = 1; $jour <= $limite; $jour++) {
+            for ($heure = 0; $heure <= 24; $heure++) {
+                $routine[$jour][$heure] = [$heure => $actions[array_rand($actions)]];
+            }
         }
-        
+        //commence à 0h et finit à 23h59
+
+        //save les actions
+
+//        dump($routine);die;
         return $actions;
     }
     
