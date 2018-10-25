@@ -13,7 +13,7 @@ class PersonnageHandler extends BaseHandler
      * @param $limit
      * @return bool
      */
-    public function generatePersonnages($fictionId, $limit)
+    public function handleGeneratePersonnages($fictionId, $limit)
     {
         if($limit > 1000) {
             $limit = 1000;
@@ -208,6 +208,23 @@ class PersonnageHandler extends BaseHandler
 
         return new JsonResponse('Suppression des personnages générés automatiquement', 200);
 
+    }
+
+    /**
+     * @return array
+     */
+    public function handleGenerateRoutines($personnageId)
+    {
+        $routine = [];
+
+        $actions = ['dormir', 'manger', 'travailler', 'lire', 'rêver', 'marcher', 'se battre', 'tuer', 'rire', 'parler', 'rencontrer', 'attendre', 'cuisiner', 'faire le ménage'];
+
+        //commence à 0h et finit à 23h59
+        for ($heure = 0; $heure <= 24; $heure++) {
+            $routine[$heure] = [$heure => array_rand($actions)];
+        }
+        
+        return $actions;
     }
     
 }
