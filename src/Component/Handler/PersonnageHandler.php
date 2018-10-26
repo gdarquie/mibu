@@ -211,16 +211,14 @@ class PersonnageHandler extends BaseHandler
     }
 
     /**
-     * @return array
+     * @param $personnageId
+     * @return mixed
      */
     public function handleGenerateRoutines($personnageId)
     {
-
         //récupérer le personnage
         $personnage = $this->em->getRepository(Personnage::class)->findOneById($personnageId);
         $routine = [];
-
-        $actions = ['dormir', 'manger', 'travailler', 'lire', 'rêver', 'marcher', 'se battre', 'tuer', 'rire', 'parler', 'rencontrer', 'attendre', 'cuisiner', 'faire le ménage'];
 
         $jour = 1;
 
@@ -228,16 +226,35 @@ class PersonnageHandler extends BaseHandler
         $limite = intval(ceil($duree*365.25)); // nombre de jours
 
         for($jour = 1; $jour <= $limite; $jour++) {
-            for ($heure = 0; $heure <= 24; $heure++) {
-                $routine[$jour][$heure] = [$heure => $actions[array_rand($actions)]];
-            }
+            $routines[$jour] = $this->createRoutine();
         }
         //commence à 0h et finit à 23h59
-
         //save les actions
 
-//        dump($routine);die;
-        return $actions;
+        return $routines;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function createRoutine()
+    {
+        //générer une routine = du lever au sommeil
+        for ($heure = 6; $heure <= 22; $heure++) {
+            $routine[$heure] = [$heure => $this->getAction()];
+        }
+
+        return $routine;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAction()
+    {
+        $actions = ['dormir', 'manger', 'travailler', 'lire', 'rêver', 'marcher', 'se battre', 'tuer', 'rire', 'parler', 'rencontrer', 'attendre', 'cuisiner', 'faire le ménage'];
+
+        return $actions[array_rand($actions)];
     }
     
 }
