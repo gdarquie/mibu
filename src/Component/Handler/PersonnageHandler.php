@@ -210,22 +210,35 @@ class PersonnageHandler extends BaseHandler
 
     }
 
-    public function handleGenerateRoutines($personnageId)
+    public function handleGenerateRoutines($personnageId, $debutFiction = -100, $finFiction = -97)
     {
-        //récupérer le personnage
+        //get personnages
         $personnage = $this->em->getRepository(Personnage::class)->findOneById($personnageId);
+
+        //compute number of routines before fiction begining "debutFiction" : how many routines between character birth and the begining of the fiction ?
+        $numberOfRoutinesBeforeDebut = intval(ceil(($debutFiction - $personnage->getAnneeNaissance())
+            *365.25)); // nombre de jours
+
+        //compute number of routines between begining and end of fiction or death of character if it dies before
+        $numberOfRoutines = intval(ceil($finFiction-$debutFiction)*365.25); // nombre de jours
+
+        //compute number of routines between end of fiction and death of character
+        $numberOfRoutinesToSubstract = $finFiction - $personnage->getAnneeMort();
+        if($numberOfRoutinesToSubstract > 0) {
+            $numberOfRoutines = $numberOfRoutines - $numberOfRoutinesToSubstract;
+        };
+
+        //si on génère le passé des personnages / possible de ne générer qu'une ou deux année au préalable
+//        $totalRoutines = $numberOfRoutines+$numberOfRoutinesBeforeDebut;
+
         $routine = [];
-
-        $jour = 1;
-
-        $duree = $personnage->getAnneeMort() - $personnage->getAnneeNaissance();
-        $limite = intval(ceil($duree*365.25)); // nombre de jours
-
-        for($jour = 1; $jour <= $limite; $jour++) {
+        //commence à 0h et finit à 23h59
+        for($jour = 1; $jour <= $numberOfRoutines; $jour++) {
             $routines[$jour] = $this->createRoutine();
         }
-        //commence à 0h et finit à 23h59
+
         //save les actions
+        //todo : sauvegarder les actions
 
         return $routines;
     }
@@ -236,6 +249,8 @@ class PersonnageHandler extends BaseHandler
     public function createRoutine()
     {
         //générer une routine = du lever au sommeil
+
+        //todo : donner une date aux actions
         for ($heure = 6; $heure <= 22; $heure++) {
             $routine[$heure] = [$heure => $this->getAction()];
         }
