@@ -2,6 +2,7 @@
 
 namespace App\Component\Handler;
 
+use App\Entity\Concept\Action;
 use App\Entity\Element\Personnage;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -210,32 +211,39 @@ class PersonnageHandler extends BaseHandler
 
     }
 
+    /**
+     * @param $personnageId
+     * @param int $debutFiction
+     * @param int $finFiction
+     */
     public function handleGenerateRoutines($personnageId, $debutFiction = -100, $finFiction = -97)
     {
         //get personnages
         $personnage = $this->em->getRepository(Personnage::class)->findOneById($personnageId);
+//
+//        //compute number of routines before fiction begining "debutFiction" : how many routines between character birth and the begining of the fiction ?
+//        $numberOfRoutinesBeforeDebut = intval(ceil(($debutFiction - $personnage->getAnneeNaissance())
+//            *365.25)); // nombre de jours
+//
+//        //compute number of routines between begining and end of fiction or death of character if it dies before
+//        $numberOfRoutines = intval(ceil($finFiction-$debutFiction)*365.25); // nombre de jours
+//
+//        //compute number of routines between end of fiction and death of character
+//        $numberOfRoutinesToSubstract = $finFiction - $personnage->getAnneeMort();
+//        if($numberOfRoutinesToSubstract > 0) {
+//            $numberOfRoutines = $numberOfRoutines - $numberOfRoutinesToSubstract;
+//        };
+//
+//        //si on génère le passé des personnages / possible de ne générer qu'une ou deux année au préalable
+////        $totalRoutines = $numberOfRoutines+$numberOfRoutinesBeforeDebut;
+//
+//        $routine = [];
+//        //commence à 0h et finit à 23h59
+//        for($jour = 1; $jour <= $numberOfRoutines; $jour++) {
+//            $routines[$jour] = $this->createRoutine();
+//        }
 
-        //compute number of routines before fiction begining "debutFiction" : how many routines between character birth and the begining of the fiction ?
-        $numberOfRoutinesBeforeDebut = intval(ceil(($debutFiction - $personnage->getAnneeNaissance())
-            *365.25)); // nombre de jours
-
-        //compute number of routines between begining and end of fiction or death of character if it dies before
-        $numberOfRoutines = intval(ceil($finFiction-$debutFiction)*365.25); // nombre de jours
-
-        //compute number of routines between end of fiction and death of character
-        $numberOfRoutinesToSubstract = $finFiction - $personnage->getAnneeMort();
-        if($numberOfRoutinesToSubstract > 0) {
-            $numberOfRoutines = $numberOfRoutines - $numberOfRoutinesToSubstract;
-        };
-
-        //si on génère le passé des personnages / possible de ne générer qu'une ou deux année au préalable
-//        $totalRoutines = $numberOfRoutines+$numberOfRoutinesBeforeDebut;
-
-        $routine = [];
-        //commence à 0h et finit à 23h59
-        for($jour = 1; $jour <= $numberOfRoutines; $jour++) {
-            $routines[$jour] = $this->createRoutine();
-        }
+        $routines = $this->createRoutines($personnage);
 
         //save les actions
         //todo : sauvegarder les actions
@@ -243,19 +251,69 @@ class PersonnageHandler extends BaseHandler
         return $routines;
     }
 
+    public function createRoutines($personnage)
+    {
+        $debut = $personnage->getAnneeNaissance();
+        $fin = $personnage->getAnneeMort();
+
+        //convertir en date
+
+        //création de la routine du début de la journée à la fin
+
+//        for ($heure = 6; $heure <= 22; $heure++) {
+//            $routine[$heure] = [$heure => $this->getAction()];
+//        }
+
+        $this->createRoutine();
+    }
+
     /**
+     * @param string $jour
+     * @param string $heure
      * @return mixed
+     * @throws \Exception
      */
-    public function createRoutine()
+    public function createRoutine($jour = '5000-01-01', $heure = '12:00')
     {
         //générer une routine = du lever au sommeil
 
-        //todo : donner une date aux actions
-        for ($heure = 6; $heure <= 22; $heure++) {
-            $routine[$heure] = [$heure => $this->getAction()];
-        }
+        //todo #100 : donner une date de début et de fin aux actions
+        //ajouter heure début
+
+        $format = 'Y-m-d H:i';
+        $time = $jour.' '.$heure;
+
+        $datetime = new \DateTime();
+        $debutRoutine = $datetime::createFromFormat($format, $time);
+
+        //calcul de la durée de la routine
+        $duree = new \DateInterval('PT6H47M');
+        $finRoutine = $debutRoutine->add($duree);
+
+        $routine[] = $this->generateActions($debutRoutine, $finRoutine);
 
         return $routine;
+    }
+
+    public function generateActions($debutRoutine, $finRoutine)
+    {
+        //créer une action
+//        while($debutAction >) {
+//
+//        }
+
+        $action = new Action();
+        $action->setDebut($debutRoutine);
+        $action->setFin($finRoutine);
+
+        $routine = $action;
+
+        return $routine;
+    }
+
+    public function saveRoutines()
+    {
+        //todo
     }
 
     /**
