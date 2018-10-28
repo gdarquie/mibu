@@ -227,18 +227,30 @@ class PersonnageHandler extends BaseHandler
 
     public function createRoutines($personnage)
     {
-        $debut = $personnage->getAnneeNaissance();
-        $fin = $personnage->getAnneeMort();
+        $debut = $personnage->getAnneeNaissance()+5000;
+        $fin = $personnage->getAnneeMort()+5000;
 
-        //convertir en date
+        $format = 'Y-m-d H:i';
 
-        //création de la routine du début de la journée à la fin
+        //date de début
+        $jourDebut = $debut.'-01-01'; //todo : random pour les mois et jour / ou bien le sauvegarder avec perso
+        $heureDebut = '08:00';
+        $timeDebut = $jourDebut.' '.$heureDebut;
+        $datetime = new \DateTime();
+        $datetimeDebut = $datetime::createFromFormat($format, $timeDebut);
 
-//        for ($heure = 6; $heure <= 22; $heure++) {
+        //date de fin
+        $jourFin = $fin.'-01-01';
+        $heureFin = '08:00';
+        $timeFin = $jourFin.' '.$heureFin;
+        $datetime = new \DateTime();
+        $datetimeFin = $datetime::createFromFormat($format, $timeFin);
+
+        //todo : remplacer par une vraie boucle
+        //        for ($heure = 6; $heure <= 22; $heure++) {
 //            $routine[$heure] = [$heure => $this->getAction()];
 //        }
-
-        $routines[0] = $this->createRoutine();
+        $routines[0] = $this->createRoutine($datetimeDebut);
 
         return $routines;
     }
@@ -249,20 +261,9 @@ class PersonnageHandler extends BaseHandler
      * @return mixed
      * @throws \Exception
      */
-    public function createRoutine($datetime)
+    public function createRoutine($debutRoutine)
     {
         //générer une routine = du lever au sommeil
-
-        dump($datetime);
-
-        //ajouter heure début
-        $jour = '5000-01-01';
-        $heure = '12:00';
-        $format = 'Y-m-d H:i';
-        $time = $jour.' '.$heure;
-
-        $datetime = new \DateTime();
-        $debutRoutine = $datetime::createFromFormat($format, $time);
 
         //calcul de la durée de la routine
         $duree = new \DateInterval('PT6H47M');
