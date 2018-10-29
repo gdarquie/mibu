@@ -246,46 +246,68 @@ class PersonnageHandler extends BaseHandler
         $datetime = new \DateTime();
         $datetimeFin = $datetime::createFromFormat($format, $timeFin);
 
-        //todo : remplacer par une vraie boucle
-        //        for ($heure = 6; $heure <= 22; $heure++) {
-//            $routine[$heure] = [$heure => $this->getAction()];
-//        }
-        $routines[0] = $this->createRoutine($datetimeDebut);
+        $routines[0] = $this->createRoutine($datetimeDebut, $personnage);
 
         return $routines;
     }
 
     /**
-     * @param string $jour
-     * @param string $heure
-     * @return mixed
+     * @param $debutRoutine
+     * @param $personnage
+     * @return array
      * @throws \Exception
      */
-    public function createRoutine($debutRoutine)
+    public function createRoutine($debutRoutine, $personnage)
     {
         //générer une routine = du lever au sommeil
 
         //calcul de la durée de la routine
-        $duree = new \DateInterval('PT6H47M');
-        $finRoutine = $debutRoutine->add($duree);
+        $duree = new \DateInterval('PT14H30M');
+        $finRoutine = (clone $debutRoutine)->add($duree);
 
-        $routine[] = $this->generateActions($debutRoutine, $finRoutine);
+        $routine[] = $this->generateActions($debutRoutine, $finRoutine, $personnage);
 
         return $routine;
     }
 
-    public function generateActions($debutRoutine, $finRoutine)
+    /**
+     * @param $debutRoutine
+     * @param $finRoutine
+     * @param $personnage
+     * @return array
+     * @throws \Exception
+     */
+    public function generateActions($debutRoutine, $finRoutine, $personnage)
     {
-        //créer une action
-//        while($debutAction >) {
-//
-//        }
+        $routine = [];
+        $debutAction = $debutRoutine;
 
-        $action = new Action();
-        $action->setDebut($debutRoutine);
-        $action->setFin($finRoutine);
+        while ($debutAction < $finRoutine) {
 
-        $routine = $action;
+            $intervalHeure = new \DateInterval('PT3H');
+            $intervalMinute = new \DateInterval('PT30M');
+
+            $finAction = (clone $debutRoutine)->add($intervalHeure);
+            $finAction = $finAction->add($intervalMinute);
+
+            $action = new Action();
+            $action->setTitre($this->getAction());
+            $action->setDebut($debutRoutine);
+            $action->setFin($finAction);
+            $action->setPersonnage($personnage);
+
+            $routine[] = $action;
+            $debutRoutine = $finAction;
+
+            $action = new Action();
+            $action->setTitre($this->getAction());
+            $action->setDebut($debutRoutine);
+            $action->setFin($finAction);
+            $action->setPersonnage($personnage);
+
+            $routine[] = $action;
+            $debutAction = $finAction;
+        }
 
         return $routine;
     }
@@ -295,6 +317,11 @@ class PersonnageHandler extends BaseHandler
         //todo
     }
 
+    public function createAction()
+    {
+        //todo
+    }
+    
     /**
      * @return mixed
      */
