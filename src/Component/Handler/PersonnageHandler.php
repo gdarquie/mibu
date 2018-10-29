@@ -232,16 +232,20 @@ class PersonnageHandler extends BaseHandler
         $heureDebut = '08:00';
         $timeDebut = $jourDebut.' '.$heureDebut;
         $datetime = new \DateTime();
-        $datetimeDebut = $datetime::createFromFormat($format, $timeDebut);
+        $debutRoutine = $datetime::createFromFormat($format, $timeDebut);
 
         //date de fin
         $jourFin = $fin.'-01-01';
         $heureFin = '08:00';
         $timeFin = $jourFin.' '.$heureFin;
         $datetime = new \DateTime();
-        $datetimeFin = $datetime::createFromFormat($format, $timeFin);
+        $finRoutine = $datetime::createFromFormat($format, $timeFin);
 
-        $routines[0] = $this->createRoutine($datetimeDebut, $personnage);
+        while($debutRoutine < $finRoutine) {
+            $routines[] = $this->createRoutine($debutRoutine, $personnage);
+            $array = $this->createRoutine($debutRoutine, $personnage);
+            $debutRoutine = end($array[0])->getFin();
+        }
 
         return $routines;
     }
@@ -277,7 +281,6 @@ class PersonnageHandler extends BaseHandler
         $debutAction = $debutRoutine;
 
         while ($debutAction < $finRoutine) {
-
             $action = $this->createAction($debutAction, $personnage);
             $routine[] = $action;
             $debutAction = $action->getFin();
@@ -299,7 +302,7 @@ class PersonnageHandler extends BaseHandler
      */
     public function createAction($debutRoutine, $personnage)
     {
-        //random
+        //todo: rendre aléatoire les intervalles
         $intervalHeure = new \DateInterval('PT3H');
         $intervalMinute = new \DateInterval('PT30M');
 
