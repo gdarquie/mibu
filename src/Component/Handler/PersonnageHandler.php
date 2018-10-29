@@ -208,7 +208,6 @@ class PersonnageHandler extends BaseHandler
         $this->em->getRepository(Personnage::class)->deleteGenerated($fictionId);
 
         return new JsonResponse('Suppression des personnages générés automatiquement', 200);
-
     }
 
     /**
@@ -216,17 +215,13 @@ class PersonnageHandler extends BaseHandler
      * @param int $debutFiction
      * @param int $finFiction
      * @return mixed
+     * @throws \Exception
      */
     public function handleGenerateRoutines($personnageId, $debutFiction = -100, $finFiction = -97)
     {
         //get personnages
         $personnage = $this->em->getRepository(Personnage::class)->findOneById($personnageId);
 
-        return $this->createRoutines($personnage);
-    }
-
-    public function createRoutines($personnage)
-    {
         $debut = $personnage->getAnneeNaissance()+5000;
         $fin = $personnage->getAnneeMort()+5000;
 
@@ -264,7 +259,6 @@ class PersonnageHandler extends BaseHandler
         //calcul de la durée de la routine
         $duree = new \DateInterval('PT14H30M');
         $finRoutine = (clone $debutRoutine)->add($duree);
-
         $routine[] = $this->generateActions($debutRoutine, $finRoutine, $personnage);
 
         return $routine;
@@ -284,29 +278,9 @@ class PersonnageHandler extends BaseHandler
 
         while ($debutAction < $finRoutine) {
 
-            $intervalHeure = new \DateInterval('PT3H');
-            $intervalMinute = new \DateInterval('PT30M');
-
-            $finAction = (clone $debutRoutine)->add($intervalHeure);
-            $finAction = $finAction->add($intervalMinute);
-
-            $action = new Action();
-            $action->setTitre($this->getAction());
-            $action->setDebut($debutRoutine);
-            $action->setFin($finAction);
-            $action->setPersonnage($personnage);
-
+            $action = $this->createAction($debutAction, $personnage);
             $routine[] = $action;
-            $debutRoutine = $finAction;
-
-            $action = new Action();
-            $action->setTitre($this->getAction());
-            $action->setDebut($debutRoutine);
-            $action->setFin($finAction);
-            $action->setPersonnage($personnage);
-
-            $routine[] = $action;
-            $debutAction = $finAction;
+            $debutAction = $action->getFin();
         }
 
         return $routine;
@@ -317,9 +291,37 @@ class PersonnageHandler extends BaseHandler
         //todo
     }
 
-    public function createAction()
+    /**
+     * @param $debutRoutine
+     * @param $personnage
+     * @return Action
+     * @throws \Exception
+     */
+    public function createAction($debutRoutine, $personnage)
     {
-        //todo
+        //random
+        $intervalHeure = new \DateInterval('PT3H');
+        $intervalMinute = new \DateInterval('PT30M');
+
+        $finAction = (clone $debutRoutine)->add($intervalHeure);
+        $finAction = $finAction->add($intervalMinute);
+
+        $action = new Action();
+        $action->setTitre($this->getAction());
+        $action->setDebut($debutRoutine);
+        $action->setFin($finAction);
+        $action->setPersonnage($personnage);
+
+        $routine[] = $action;
+        $debutRoutine = $finAction;
+
+        $action = new Action();
+        $action->setTitre($this->getAction());
+        $action->setDebut($debutRoutine);
+        $action->setFin($finAction);
+        $action->setPersonnage($personnage);
+
+        return $action;
     }
     
     /**
