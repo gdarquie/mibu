@@ -18,7 +18,7 @@ class Action extends AbstractConcept
     private $personnage;
 
     /**
-     * @ORM\Column(type="string", length=12)
+     * @ORM\Column(type="string", length=12, nullable=true)
      */
     private $cle;
 
