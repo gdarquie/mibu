@@ -29,6 +29,14 @@ class RoutineController extends BaseController
     }
 
     /**
+     * @Rest\Get("routines/personnage={personnageId}", name="get_routines_personnage")
+     */
+    public function getRoutinesPersonnage($personnage)
+    {
+        //todo : return routines
+    }
+
+    /**
      * @Rest\Delete("routines/personnage={personnageId}", name="delete_routines_personnage")
      */
     public function deleteRoutinesPersonnage()
