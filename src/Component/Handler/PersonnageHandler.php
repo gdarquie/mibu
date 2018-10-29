@@ -243,8 +243,8 @@ class PersonnageHandler extends BaseHandler
 
         while($debutRoutine < $finRoutine) {
             $routines[] = $this->createRoutine($debutRoutine, $personnage);
-            $array = $this->createRoutine($debutRoutine, $personnage);
-            $debutRoutine = end($array[0])->getFin();
+            $lastRoutine = end($routines);
+            $debutRoutine = end($lastRoutine[0])->getFin();
         }
 
         return $routines;
@@ -284,15 +284,14 @@ class PersonnageHandler extends BaseHandler
             $action = $this->createAction($debutAction, $personnage);
             $routine[] = $action;
             $debutAction = $action->getFin();
+            $this->em->persist($action);
+
         }
+        $this->em->flush();
 
         return $routine;
     }
 
-    public function saveRoutines()
-    {
-        //todo
-    }
 
     /**
      * @param $debutRoutine
@@ -309,17 +308,12 @@ class PersonnageHandler extends BaseHandler
         $finAction = (clone $debutRoutine)->add($intervalHeure);
         $finAction = $finAction->add($intervalMinute);
 
-        $action = new Action();
-        $action->setTitre($this->getAction());
-        $action->setDebut($debutRoutine);
-        $action->setFin($finAction);
-        $action->setPersonnage($personnage);
-
-        $routine[] = $action;
-        $debutRoutine = $finAction;
+        $texte = $this->getAction();
 
         $action = new Action();
-        $action->setTitre($this->getAction());
+        $action->setTitre($texte);
+        $action->setCle(substr($texte, 0,3));
+        $action->setDescription($texte);
         $action->setDebut($debutRoutine);
         $action->setFin($finAction);
         $action->setPersonnage($personnage);
