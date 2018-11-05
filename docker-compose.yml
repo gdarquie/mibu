@@ -1,0 +1,41 @@
+version: '3'
+services:
+  api:
+    container_name: mibu-api
+    build: ./docker/api
+    depends_on:
+      - "db"
+    ports:
+      - "80:80"
+    volumes:
+      - .:/var/www/html
+    environment:
+      COMPOSER_CACHE_DIR: /srv/cache/composer
+      COMPOSER_ALLOW_SUPERUSER: 1
+      APP_ENV: dev
+      APP_SECRET: "966536d311ddae0996d1ffd21efa1027"
+      MAILER_URL: "null://localhost"
+      DATABASE_URL: "pgsql://postgres:password@db:5432/fictio"
+      DATABASE_URL_TEST: "pgsql://postgres:password@db:5432/fictio_test"
+      CORS_ALLOW_ORIGIN: "^https?://localhost:?[0-9]*$$"
+      JWT_SECRET_KEY: "%kernel.project_dir%/config/jwt/private.pem"
+      JWT_PUBLIC_KEY: "%kernel.project_dir%/config/jwt/public.pem"
+      JWT_PASSPHRASE: ~
+  composer:
+    container_name: mibu-composer
+    restart: 'no'
+    image: composer
+    command: install
+    volumes:
+      - .:/app
+      - ~/.composer:/srv/cache/composer
+    environment:
+      COMPOSER_CACHE_DIR: /srv/cache/composer
+      COMPOSER_ALLOW_SUPERUSER: 1
+  db:
+    container_name: mibu-db
+    image: postgres:10-alpine
+    depends_on:
+      - "composer"
+    ports:
+      - "5432:5432"
