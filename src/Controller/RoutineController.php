@@ -39,8 +39,9 @@ class RoutineController extends BaseController
     /**
      * @Rest\Delete("routines/personnage={personnageId}", name="delete_routines_personnage")
      */
-    public function deleteRoutinesPersonnage()
+    public function deleteRoutinesPersonnage($personnageId)
     {
+        return $this->getHandler(ModelType::PERSONNAGE)->handleDeleteRoutinesPersonnage($personnageId);
 
     }
 

@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Concept\Action;
 use App\Entity\Element\Personnage;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
@@ -80,6 +81,19 @@ class PersonnageRepository extends ServiceEntityRepository
 
         return $query->execute();
     }
+
+    public function deleteRoutinesPersonnage($personnageId)
+    {
+        $query = $this->getEntityManager()->createQuery(
+            'SELECT a FROM '.Action::class.' a JOIN a.personnage p WHERE p.id =:personnageId'
+        )->setParameter('personnageId', $personnageId);
+        $actions = $query->getResult();
+
+        $query = $this->getEntityManager()->createQuery(
+            'DELETE FROM '.Action::class.' a WHERE a.id IN (:actions)'
+        )->setParameter('actions', $actions);
+
+        return $query->execute();    }
 
 }
 

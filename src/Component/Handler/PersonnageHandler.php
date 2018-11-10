@@ -211,6 +211,18 @@ class PersonnageHandler extends BaseHandler
     }
 
     /**
+     * @param $fictionId
+     * @return JsonResponse
+     */
+    public function handleDeleteRoutinesPersonnage($personnageId)
+    {
+        $this->em->getRepository(Personnage::class)->deleteRoutinesPersonnage($personnageId);
+
+        return new JsonResponse('Suppression des actions du personnage', 200);
+    }
+
+
+    /**
      * @param $personnageId
      * @param int $debutFiction
      * @param int $finFiction
