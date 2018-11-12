@@ -16,22 +16,22 @@ class Projet extends AbstractElement
      *
      * @ORM\Column(type="boolean", options={"default" = false})
      */
-    private $publique = false;
+    private $public = false;
 
     /**
      * @return bool
      */
-    public function isPublique(): bool
+    public function isPublic(): bool
     {
-        return $this->publique;
+        return $this->public;
     }
 
     /**
-     * @param bool $publique
+     * @param bool $public
      */
-    public function setPublique(bool $publique): void
+    public function setPublic(bool $public): void
     {
-        $this->publique = $publique;
+        $this->public = $public;
     }
-    
+
 }
