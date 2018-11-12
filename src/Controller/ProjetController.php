@@ -18,6 +18,10 @@ class ProjetController extends BaseController
      */
     public function getProjet($projetId)
     {
+        if(!$this->getHandler($this->modelType)->isProjetPublic($projetId)) {
+            $this->denyAccessUnlessGranted('ROLE_USER');
+        }
+
         return $this->getAction($projetId, $this->modelType);
     }
 
