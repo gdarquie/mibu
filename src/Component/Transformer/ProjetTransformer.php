@@ -11,6 +11,7 @@ class ProjetTransformer extends ElementTransformer
     {
         $projetIO = new ProjetIO();
         $projetIO = $this->transformElement($projet, $projetIO, ModelType::PROJET);
+        $projetIO->setPublic($projet->isPublic());
 
         return $projetIO;
     }
