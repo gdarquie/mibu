@@ -9,7 +9,7 @@ class ProjetHandler extends BaseHandler
     public function isProjetPublic($id)
     {
         $projet = $this->em->getRepository(Projet::class)->findOneById($id);
-        return $projet->isPublique();
+        return $projet->isPublic();
     }
 }
 

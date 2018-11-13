@@ -15,6 +15,7 @@ class ProjetType extends AbstractType
             ->add('titre')
             ->add('description')
             ->add('fictionId')
+            ->add('public')
             ;
     }
 
