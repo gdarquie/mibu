@@ -60,6 +60,7 @@ class BaseController extends FOSRestController
     public function getAction($id, $modelType)
     {
         $io = $this->getHandler($modelType)->getEntity($id, $modelType);
+        //voter?
 
         return $this->createApiResponse(
             $io,

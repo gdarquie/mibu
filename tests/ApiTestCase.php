@@ -394,6 +394,7 @@ class ApiTestCase extends KernelTestCase
         $projet->setTitre('Titre');
         $projet->setDescription('Description');
         $projet->setFiction($fiction);
+        $projet->setPublic(false);
 
         $this->getService('doctrine')->getManager()->persist($projet);
         $this->getService('doctrine')->getManager()->flush();

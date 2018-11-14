@@ -53,6 +53,7 @@ class JwtTokenAuthenticator extends AbstractFormLoginAuthenticator
             return false;
         }
         else if($request->attributes->get('_route') === 'get_projet') {
+//            dump($request->attributes->get('projetId'));die;
             return false;
         }
         return true;
