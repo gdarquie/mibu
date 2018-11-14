@@ -13,7 +13,8 @@ class ProjetControllerTest extends ApiTestCase
         $data = array(
             "titre" => "Titre de projet",
             "description" => "Description de projet",
-            "fictionId" => $fiction->getId()
+            "fictionId" => $fiction->getId(),
+            "public" => false
         );
 
         $response = $this->client->post(ApiTestCase::TEST_PREFIX.'/projets', [
@@ -85,7 +86,8 @@ class ProjetControllerTest extends ApiTestCase
         $data = array(
             "titre" => "Titre de projet modifié",
             "description" => "Description de projet",
-            "fictionId" => $fiction->getId()
+            "fictionId" => $fiction->getId(),
+            "public" => false
         );
 
         $response = $this->client->put(ApiTestCase::TEST_PREFIX.'/projets/'.$projet->getId(), [
@@ -113,6 +115,39 @@ class ProjetControllerTest extends ApiTestCase
         $response = $this->client->delete(ApiTestCase::TEST_PREFIX.'/projets/'.$projet->getId(), [
             'headers' => $this->getAuthorizedHeaders(ApiTestCase::ADMIN),
         ]);
+        $this->assertEquals(200, $response->getStatusCode());
+    }
+
+    public function testProjetPublic()
+    {
+        //create non public project
+        $fiction = $this->createFiction();
+        $projet = $this->createProjetFiction($fiction);
+        $this->assertFalse( $projet->isPublic());
+
+        $response = $this->client->get(ApiTestCase::TEST_PREFIX.'/projets/'.$projet->getId(), [
+            'headers' => $this->getAuthorizedHeaders(ApiTestCase::ADMIN),
+        ]);
+
+        //update project for making it public
+        $data = array(
+            "titre" => "Titre de projet modifié",
+            "description" => "Description de projet",
+            "fictionId" => $fiction->getId(),
+            "public" => true
+        );
+
+        $response = $this->client->put(ApiTestCase::TEST_PREFIX.'/projets/'.$projet->getId(), [
+            'headers' => $this->getAuthorizedHeaders(ApiTestCase::ADMIN),
+            'body' => json_encode($data)
+        ]);
+        $this->assertEquals(202, $response->getStatusCode());
+
+        $response = $this->client->get(ApiTestCase::TEST_PREFIX.'/projets/'.$projet->getId());
+
+        $payload = json_decode($response->getBody(true), true);
+        $this->assertArrayHasKey('titre', $payload, "Il n'y a pas de champ titre");
+        $this->assertEquals( $data['titre'], $payload['titre']);
         $this->assertEquals(200, $response->getStatusCode());
     }
 

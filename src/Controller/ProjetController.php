@@ -18,10 +18,10 @@ class ProjetController extends BaseController
      */
     public function getProjet($projetId)
     {
-        if(!$this->getHandler($this->modelType)->isProjetPublic($projetId)) {
-            $this->denyAccessUnlessGranted('ROLE_USER');
-        }
-
+//        if(!$this->getHandler($this->modelType)->isProjetPublic($projetId)) {
+//            $this->denyAccessUnlessGranted('ROLE_USER');
+//        }
+//      remplacer par un voter, la route est public par défaut, mais si le projet n'est pas public et que l'user n'est ni admin, ni auteur, il ne peut lire le texte
         return $this->getAction($projetId, $this->modelType);
     }
 
