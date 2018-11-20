@@ -3,4 +3,43 @@ fos_elastica:
     clients:
         default: { host: localhost, port: 9200 }
     indexes:
-        app: ~
+        fiction:
+            index_name: fiction_%kernel.environment%
+            types:
+                fiction:
+                    properties:
+                        id: ~
+                        titre: ~
+                        description: ~
+                    persistence:
+                        # the driver can be orm, mongodb or phpcr
+                        driver: orm
+                        model: App\Entity\Concept\Fiction
+                        provider: ~
+                        finder: ~
+        personnage:
+            index_name: personnage_%kernel.environment%
+            types:
+                personnage:
+                    properties:
+                        id: ~
+                        titre: ~
+                        description: ~
+                        genre: ~
+                    persistence:
+                        driver: orm
+                        model: App\Entity\Element\Personnage
+                        provider: ~
+                        finder: ~
+        action:
+            index_name: action_%kernel.environment%
+            types:
+                action:
+                    properties:
+                        id: ~
+                        titre: ~
+                    persistence:
+                        driver: orm
+                        model: App\Entity\Concept\Action
+                        provider: ~
+                        finder: ~
