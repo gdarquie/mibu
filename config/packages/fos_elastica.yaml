@@ -11,6 +11,9 @@ fos_elastica:
                         id: ~
                         titre: ~
                         description: ~
+                        projets: ~
+#                        inscrits: ~
+#                        personnages: ~
                     persistence:
                         # the driver can be orm, mongodb or phpcr
                         driver: orm
@@ -31,15 +34,19 @@ fos_elastica:
                         model: App\Entity\Element\Personnage
                         provider: ~
                         finder: ~
-        action:
-            index_name: action_%kernel.environment%
-            types:
-                action:
-                    properties:
-                        id: ~
-                        titre: ~
-                    persistence:
-                        driver: orm
-                        model: App\Entity\Concept\Action
-                        provider: ~
-                        finder: ~
+        inscrit:
+        evenement:
+        lieu:
+        texte:
+#        action:
+#            index_name: action_%kernel.environment%
+#            types:
+#                action:
+#                    properties:
+#                        id: ~
+#                        titre: ~
+#                    persistence:
+#                        driver: orm
+#                        model: App\Entity\Concept\Action
+#                        provider: ~
+#                        finder: ~

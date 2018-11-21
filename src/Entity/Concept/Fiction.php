@@ -30,6 +30,11 @@ class Fiction extends AbstractConcept
     private $inscrit; //nullable false quand inscrits ok
 
     /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Element\Projet", mappedBy="fiction")
+     */
+    private $projets;
+
+    /**
      * @return mixed
      */
     public function getTextes()
@@ -83,6 +88,22 @@ class Fiction extends AbstractConcept
     public function __toString()
     {
         return (string) $this->getId();
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getProjets()
+    {
+        return $this->projets;
+    }
+
+    /**
+     * @param mixed $projets
+     */
+    public function setProjets($projets): void
+    {
+        $this->projets = $projets;
     }
 
 }
