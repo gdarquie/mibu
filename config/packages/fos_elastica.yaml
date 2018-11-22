@@ -11,7 +11,23 @@ fos_elastica:
                         id: ~
                         titre: ~
                         description: ~
-                        projets: ~
+                        uuid: ~
+                        projets:
+                            type: nested
+                            properties:
+                                id:
+                                    type: integer
+                                titre:
+                                    type: keyword
+                                description: ~
+                        textes:
+                            type: nested
+                            properties:
+                                id:
+                                    type: integer
+                                titre:
+                                    type: keyword
+                                description: ~
 #                        inscrits: ~
 #                        personnages: ~
                     persistence:
@@ -34,10 +50,10 @@ fos_elastica:
                         model: App\Entity\Element\Personnage
                         provider: ~
                         finder: ~
-        inscrit:
-        evenement:
-        lieu:
-        texte:
+#        inscrit:
+#        evenement:
+#        lieu:
+#        texte:
 #        action:
 #            index_name: action_%kernel.environment%
 #            types:
