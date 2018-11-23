@@ -6,6 +6,8 @@ use Doctrine\ORM\Mapping as ORM;
 use App\Entity\Modele\AbstractConcept;
 use App\Entity\Element\Texte;
 use App\Entity\Element\Personnage;
+use App\Entity\Element\Evenement;
+use App\Entity\Element\Lieu;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\FictionRepository")
@@ -24,10 +26,25 @@ class Fiction extends AbstractConcept
     private $personnages;
 
     /**
+     * @ORM\OneToMany(targetEntity=Evenement::class, mappedBy="fiction")
+     */
+    private $evenements;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Lieu::class, mappedBy="fiction")
+     */
+    private $lieux;
+
+    /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Concept\Inscrit")
      * @ORM\JoinColumn(name="inscrit_id", referencedColumnName="id", nullable=true, onDelete="CASCADE")
      */
     private $inscrit; //nullable false quand inscrits ok
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Element\Projet", mappedBy="fiction")
+     */
+    private $projets;
 
     /**
      * @return mixed
@@ -83,6 +100,54 @@ class Fiction extends AbstractConcept
     public function __toString()
     {
         return (string) $this->getId();
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getProjets()
+    {
+        return $this->projets;
+    }
+
+    /**
+     * @param mixed $projets
+     */
+    public function setProjets($projets): void
+    {
+        $this->projets = $projets;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getEvenements()
+    {
+        return $this->evenements;
+    }
+
+    /**
+     * @param mixed $evenements
+     */
+    public function setEvenements($evenements): void
+    {
+        $this->evenements = $evenements;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLieux()
+    {
+        return $this->lieux;
+    }
+
+    /**
+     * @param mixed $lieux
+     */
+    public function setLieux($lieux): void
+    {
+        $this->lieux = $lieux;
     }
 
 }
