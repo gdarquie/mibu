@@ -6,6 +6,8 @@ use Doctrine\ORM\Mapping as ORM;
 use App\Entity\Modele\AbstractConcept;
 use App\Entity\Element\Texte;
 use App\Entity\Element\Personnage;
+use App\Entity\Element\Evenement;
+use App\Entity\Element\Lieu;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\FictionRepository")
@@ -22,6 +24,16 @@ class Fiction extends AbstractConcept
      * @ORM\OneToMany(targetEntity=Personnage::class, mappedBy="fiction")
      */
     private $personnages;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Evenement::class, mappedBy="fiction")
+     */
+    private $evenements;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Lieu::class, mappedBy="fiction")
+     */
+    private $lieux;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Concept\Inscrit")
@@ -104,6 +116,38 @@ class Fiction extends AbstractConcept
     public function setProjets($projets): void
     {
         $this->projets = $projets;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getEvenements()
+    {
+        return $this->evenements;
+    }
+
+    /**
+     * @param mixed $evenements
+     */
+    public function setEvenements($evenements): void
+    {
+        $this->evenements = $evenements;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLieux()
+    {
+        return $this->lieux;
+    }
+
+    /**
+     * @param mixed $lieux
+     */
+    public function setLieux($lieux): void
+    {
+        $this->lieux = $lieux;
     }
 
 }
