@@ -146,6 +146,7 @@ class BaseController extends FOSRestController
     {
         $response = new Response($this->getSerializer()->serialize($data));
         $response->headers->set('Content-Type', 'application/json');
+        $response->headers->set('Access-Control-Allow-Origin', '*');
         $response->setStatusCode($statusCode);
 
         if (isset($url)) {
