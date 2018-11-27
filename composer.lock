@@ -4003,16 +4003,16 @@
         },
         {
             "name": "symfony/dependency-injection",
-            "version": "v4.1.7",
+            "version": "v4.1.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/dependency-injection.git",
-                "reference": "e72ee2c23d952e4c368ee98610fa22b79b89b483"
+                "reference": "9508a26af7e2546babf67a1494683ffabcd5a0a3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/dependency-injection/zipball/e72ee2c23d952e4c368ee98610fa22b79b89b483",
-                "reference": "e72ee2c23d952e4c368ee98610fa22b79b89b483",
+                "url": "https://api.github.com/repos/symfony/dependency-injection/zipball/9508a26af7e2546babf67a1494683ffabcd5a0a3",
+                "reference": "9508a26af7e2546babf67a1494683ffabcd5a0a3",
                 "shasum": ""
             },
             "require": {
@@ -4070,7 +4070,7 @@
             ],
             "description": "Symfony DependencyInjection Component",
             "homepage": "https://symfony.com",
-            "time": "2018-10-31T10:54:16+00:00"
+            "time": "2018-11-20T16:14:00+00:00"
         },
         {
             "name": "symfony/doctrine-bridge",
@@ -5818,16 +5818,16 @@
         },
         {
             "name": "symfony/security-bundle",
-            "version": "v4.1.7",
+            "version": "v4.1.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/security-bundle.git",
-                "reference": "1163903123399ee72c128f5bdb64f0e07c839b81"
+                "reference": "f1dcbeb847e32f8570d0567454bb72301b8ae303"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/security-bundle/zipball/1163903123399ee72c128f5bdb64f0e07c839b81",
-                "reference": "1163903123399ee72c128f5bdb64f0e07c839b81",
+                "url": "https://api.github.com/repos/symfony/security-bundle/zipball/f1dcbeb847e32f8570d0567454bb72301b8ae303",
+                "reference": "f1dcbeb847e32f8570d0567454bb72301b8ae303",
                 "shasum": ""
             },
             "require": {
@@ -5894,7 +5894,7 @@
             ],
             "description": "Symfony SecurityBundle",
             "homepage": "https://symfony.com",
-            "time": "2018-10-28T18:38:52+00:00"
+            "time": "2018-11-11T19:51:29+00:00"
         },
         {
             "name": "symfony/serializer",
