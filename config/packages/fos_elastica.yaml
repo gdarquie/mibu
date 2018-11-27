@@ -6,12 +6,11 @@ fos_elastica:
             port: '%env(ELASTICA_PORT)%'
             transport: '%env(ELASTICA_TRANSPORT)%'
             headers:
-                Authorization: "%env(ELASTICA_AUHTORIZATION)%"
-
+                Authorization: '%env(ELASTICA_AUHTORIZATION)%'
 
     indexes:
         fiction:
-            index_name: fiction_%kernel.environment%
+#            index_name: fiction_%kernel.environment%
             types:
                 fiction:
                     properties:
