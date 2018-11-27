@@ -28,9 +28,11 @@ php bin/console server:run
 
 ### Compilation + execution des containers docker
 
+```
 docker run --detach --name mibu_db postgres:10.2
 docker build docker/api -t mibu_api
 docker run -p 80:80 --volume $PWD:/var/www/html --link mibu_db --name mibu_api mibu_api
+```
 
 ### Copier les variables d'environnements
 
