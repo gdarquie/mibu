@@ -146,7 +146,6 @@ class BaseController extends FOSRestController
     {
         $response = new Response($this->getSerializer()->serialize($data));
         $response->headers->set('Content-Type', 'application/json');
-        $response->headers->set('Access-Control-Allow-Origin', 'https://fictio-mde.herokuapp.com');
         $response->setStatusCode($statusCode);
 
         if (isset($url)) {
