@@ -7237,16 +7237,16 @@
         },
         {
             "name": "doctrine/doctrine-fixtures-bundle",
-            "version": "3.0.3",
+            "version": "3.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/DoctrineFixturesBundle.git",
-                "reference": "0b0fba559cb4e7fb179e33f149b2324bcb0f0c33"
+                "reference": "0438f8dd0a21bc5325c6be3ae0a09131815e10d4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/DoctrineFixturesBundle/zipball/0b0fba559cb4e7fb179e33f149b2324bcb0f0c33",
-                "reference": "0b0fba559cb4e7fb179e33f149b2324bcb0f0c33",
+                "url": "https://api.github.com/repos/doctrine/DoctrineFixturesBundle/zipball/0438f8dd0a21bc5325c6be3ae0a09131815e10d4",
+                "reference": "0438f8dd0a21bc5325c6be3ae0a09131815e10d4",
                 "shasum": ""
             },
             "require": {
@@ -7295,7 +7295,7 @@
                 "Fixture",
                 "persistence"
             ],
-            "time": "2018-11-25T12:09:34+00:00"
+            "time": "2018-11-26T19:40:34+00:00"
         },
         {
             "name": "symfony/browser-kit",
