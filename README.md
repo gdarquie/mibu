@@ -91,17 +91,15 @@ La route POST jetons permet de le faire, il faut ajouter un body avec le pseudo 
 
 ```
 {
-  "pseudo" : "gaotian",
-  "password" : "motdepasse"
+  "pseudo" : "user",
+  "password" : "password"
 }   
 ```
 
-Pour l'instant, il n'existe pas encore de système de générations de fixtures, il faut donc créer directement via la BD un inscrit.
-
-Par exemple :
+Pour générer les fixtures (pour l'instant, elles sont encore très sommaires puisqu'il n'y a qu'un inscrit et des fictions), lancer la commande :
 
 ```
-INSERT INTO inscrit (SELECT 1, 'Nom', 'Prénom', 'femme',	'1980-01-01',	'gaetan@interlivre.fr',	NOW(), NOW(), '23ed908c-f566-4c85-fe18-9fafeff969c0',	'titre', 'Description', 'pseudo',	'[]',	'motdepasseEncodéAvecBcrypt');
+php bin/console doctrine:fixtures:load
 ```
 
 ## Présentation de l'application mibu
