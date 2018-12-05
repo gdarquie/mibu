@@ -65,6 +65,38 @@ fos_elastica:
                         model: App\Entity\Concept\Fiction
                         provider: ~
                         finder: ~
+
+        personnage:
+            types:
+                personnage:
+                    properties:
+                        id: ~
+                        titre:
+                            type: keyword
+                        nom:
+                            type: keyword
+                        prenom:
+                            type: keyword
+                        genre:
+                            type: keyword
+                        anneeNaissance: ~
+                        anneeMort: ~
+                        description: ~
+                        uuid: ~
+                        fiction:
+                            type: nested
+                            properties:
+                                id:
+                                    type: integer
+                                titre:
+                                    type: keyword
+                                description: ~
+                    persistence:
+                        # the driver can be orm, mongodb or phpcr
+                        driver: orm
+                        model: App\Entity\Element\Personnage
+                        provider: ~
+                        finder: ~
 #        personnage:
 #            index_name: personnage_%kernel.environment%
 #            types:
