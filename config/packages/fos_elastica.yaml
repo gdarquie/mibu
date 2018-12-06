@@ -83,6 +83,7 @@ fos_elastica:
                         anneeMort: ~
                         description: ~
                         uuid: ~
+                        auto: ~
                         fiction:
                             type: nested
                             properties:
@@ -97,33 +98,40 @@ fos_elastica:
                         model: App\Entity\Element\Personnage
                         provider: ~
                         finder: ~
-#        personnage:
-#            index_name: personnage_%kernel.environment%
-#            types:
-#                personnage:
-#                    properties:
-#                        id: ~
-#                        titre: ~
-#                        description: ~
-#                        genre: ~
-#                    persistence:
-#                        driver: orm
-#                        model: App\Entity\Element\Personnage
-#                        provider: ~
-#                        finder: ~
+        texte:
+            types:
+                texte:
+                    properties:
+                        id: ~
+                        titre:
+                            type: keyword
+                        type:
+                            type: keyword
+                        description: ~
+                        uuid: ~
+                        fiction:
+                            type: nested
+                            properties:
+                                id:
+                                    type: integer
+                                titre:
+                                    type: keyword
+                                description: ~
+                    persistence:
+                        # the driver can be orm, mongodb or phpcr
+                        driver: orm
+                        model: App\Entity\Element\Texte
+                        provider: ~
+                        finder: ~
 #        inscrit:
-#        evenement:
-#        lieu:
-#        texte:
-#        action:
 #            index_name: action_%kernel.environment%
 #            types:
-#                action:
+#                inscrit:
 #                    properties:
 #                        id: ~
 #                        titre: ~
 #                    persistence:
 #                        driver: orm
-#                        model: App\Entity\Concept\Action
+#                        model: App\Entity\Concept\Inscrit
 #                        provider: ~
 #                        finder: ~

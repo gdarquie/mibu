@@ -5,6 +5,7 @@ namespace App\DataFixtures;
 use App\Entity\Concept\Fiction;
 use App\Entity\Concept\Inscrit;
 use App\Entity\Element\Personnage;
+use App\Entity\Element\Texte;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 
@@ -33,6 +34,12 @@ class AppFixtures extends Fixture
         $fiction->setDescription('Description de la fiction');
         $manager->persist($fiction);
 
+        //create textes
+        for ($i = 0; $i < 20; $i++) {
+            $texte = new Texte('texte'.$i, 'description du texte '.$i, 'fragment');
+            $texte->setFiction($fiction);
+            $manager->persist($texte);
+        }
 
         //create personnages
         for ($i = 0; $i < 20; $i++) {
