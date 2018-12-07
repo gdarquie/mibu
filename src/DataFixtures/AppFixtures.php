@@ -4,6 +4,7 @@ namespace App\DataFixtures;
 
 use App\Entity\Concept\Fiction;
 use App\Entity\Concept\Inscrit;
+use App\Entity\Element\Lieu;
 use App\Entity\Element\Personnage;
 use App\Entity\Element\Texte;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -55,9 +56,14 @@ class AppFixtures extends Fixture
         }
 
         //create lieux
+        for ($i = 0; $i < 20; $i++) {
 
-        //create textes
-
+            $lieu = new Lieu('lieu'.$i, 'Description du lieu'.$i);
+            $lieu->setTitre('Saeda');
+            $lieu->setDescription('Le pays où est né Atalaire');
+            $lieu->setFiction($fiction);
+            $manager->persist($personnage);
+        }
 
         $manager->flush();
     }
