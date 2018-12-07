@@ -58,7 +58,7 @@ class AppFixtures extends Fixture
         //create lieux
         for ($i = 0; $i < 20; $i++) {
 
-            $lieu = new Lieu('lieu'.$i, 'Description du lieu'.$i);
+            $lieu = new Lieu();
             $lieu->setTitre('Saeda');
             $lieu->setDescription('Le pays où est né Atalaire');
             $lieu->setFiction($fiction);
