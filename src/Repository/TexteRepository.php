@@ -20,8 +20,4 @@ class TexteRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('texte')->orderBy('texte.id', 'ASC');
     }
-
-
 }
-
-

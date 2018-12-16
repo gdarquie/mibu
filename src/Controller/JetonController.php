@@ -43,7 +43,7 @@ class JetonController extends BaseController
         $token = $this->get('lexik_jwt_authentication.encoder')
             ->encode([
                 'pseudo' => $inscrit->getPseudo(),
-                'exp' => time() + 3600 // 1 hour expiration
+                'exp' => time() + 3600, // 1 hour expiration
             ]);
 
         return new JsonResponse(['token' => $token]);

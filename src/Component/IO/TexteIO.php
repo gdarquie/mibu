@@ -21,5 +21,4 @@ class TexteIO extends ElementIO
     {
         $this->type = $type;
     }
-
 }

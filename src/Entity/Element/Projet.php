@@ -33,5 +33,4 @@ class Projet extends AbstractElement
     {
         $this->public = $public;
     }
-
 }

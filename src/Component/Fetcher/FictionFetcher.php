@@ -15,7 +15,6 @@ class FictionFetcher
         $this->em = $em;
     }
 
-
     public function fetchFiction($fictionId)
     {
         $fiction = $this->em->getRepository(Fiction::class)->findOneById($fictionId);
@@ -29,5 +28,4 @@ class FictionFetcher
 
         return $fiction;
     }
-
 }

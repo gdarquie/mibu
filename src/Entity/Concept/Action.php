@@ -23,14 +23,14 @@ class Action extends AbstractConcept
     private $cle;
 
     /**
-     * @var datetime $created
+     * @var datetime
      *
      * @ORM\Column(type="datetime")
      */
     private $debut;
 
     /**
-     * @var datetime $created
+     * @var datetime
      *
      * @ORM\Column(type="datetime")
      */

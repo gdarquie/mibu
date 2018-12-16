@@ -4,8 +4,6 @@ namespace App\Component\Transformer;
 
 use App\Component\Constant\ModelType;
 use App\Component\IO\FictionIO;
-use Doctrine\ORM\EntityManager;
-
 
 class FictionTransformer extends ConceptTransformer
 {
@@ -32,5 +30,4 @@ class FictionTransformer extends ConceptTransformer
 
         return $fictionIO;
     }
-
 }

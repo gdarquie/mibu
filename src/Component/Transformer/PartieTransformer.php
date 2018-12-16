@@ -15,6 +15,4 @@ class PartieTransformer extends ElementTransformer
 
         return $partieIO;
     }
-
-
 }

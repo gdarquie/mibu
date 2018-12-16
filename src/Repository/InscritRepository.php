@@ -20,5 +20,4 @@ class InscritRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('inscrit')->orderBy('inscrit.id', 'ASC');
     }
-
 }

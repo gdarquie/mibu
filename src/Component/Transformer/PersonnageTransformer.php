@@ -19,6 +19,4 @@ class PersonnageTransformer extends ElementTransformer
 
         return $personnageIO;
     }
-
 }
-

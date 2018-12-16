@@ -15,7 +15,6 @@ class SaveDBCommand extends Command
             ->setName('app:db:export')
             ->setDescription('Export de la base de données')
             ->setHelp("Cette commande permet d'exporter le contenu de la BD pour pouvoir en conserver une version de sauvegarde.");
-        ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -30,7 +29,7 @@ class SaveDBCommand extends Command
         //export de toutes les tables
 
         // outputs a message followed by a "\n"
-        $output->writeln("Attention, le script va être lancé.");
+        $output->writeln('Attention, le script va être lancé.');
 
         // outputs a message without adding a "\n" at the end of the line
         $output->write('Whoa! L\'export est achevé.');

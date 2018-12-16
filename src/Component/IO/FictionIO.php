@@ -55,5 +55,4 @@ class FictionIO extends AbstractConceptIO
     {
         $this->evenements = $evenements;
     }
-
 }

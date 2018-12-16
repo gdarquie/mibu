@@ -12,8 +12,8 @@ use App\Entity\Modele\AbstractItem;
 class Lieu extends AbstractItem
 {
     /**
-    * @ORM\Column(type="decimal", scale=8)
-    **/
+     * @ORM\Column(type="decimal", scale=8)
+     **/
     protected $lat;
 
     /**
@@ -52,5 +52,4 @@ class Lieu extends AbstractItem
     {
         $this->long = $long;
     }
-
 }

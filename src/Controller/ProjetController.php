@@ -61,4 +61,3 @@ class ProjetController extends BaseController
         return $this->deleteAction($projetId, $this->modelType);
     }
 }
-

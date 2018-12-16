@@ -51,14 +51,14 @@ class Partie extends AbstractItem
      */
     private $children;
 
-
     /**
      * Partie constructor.
+     *
      * @param $titre
      * @param $description
      * @param null $item
      */
-    public function __construct($titre, $description, $item =null)
+    public function __construct($titre, $description, $item = null)
     {
         parent::__construct();
         $this->setTitre($titre);
@@ -177,5 +177,4 @@ class Partie extends AbstractItem
     {
         $this->item = $item;
     }
-
 }

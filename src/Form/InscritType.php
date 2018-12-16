@@ -4,7 +4,6 @@ namespace App\Form;
 
 use App\Component\IO\InscritIO;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -36,5 +35,4 @@ class InscritType extends AbstractType
             'csrf_protection' => false,
         ));
     }
-
 }

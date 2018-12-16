@@ -14,4 +14,3 @@ class PartieHydrator extends ElementHydrator
         return $partie;
     }
 }
-

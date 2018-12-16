@@ -16,6 +16,4 @@ class LieuTransformer extends ElementTransformer
 
         return $lieuIO;
     }
-
-
 }

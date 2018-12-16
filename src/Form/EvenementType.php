@@ -30,5 +30,4 @@ class EvenementType extends AbstractType
             'csrf_protection' => false,
         ));
     }
-
 }

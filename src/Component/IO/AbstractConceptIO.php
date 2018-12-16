@@ -129,5 +129,4 @@ abstract class AbstractConceptIO extends AbstractIdIO
     {
         $this->dateModification = $dateModification;
     }
-
 }

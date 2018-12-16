@@ -38,5 +38,4 @@ class EvenementIO extends ElementIO
     {
         $this->anneeFin = $anneeFin;
     }
-
 }

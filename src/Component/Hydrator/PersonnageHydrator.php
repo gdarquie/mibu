@@ -2,7 +2,6 @@
 
 namespace App\Component\Hydrator;
 
-
 use App\Entity\Element\Personnage;
 
 class PersonnageHydrator extends ElementHydrator

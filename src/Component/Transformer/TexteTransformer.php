@@ -9,10 +9,10 @@ class TexteTransformer extends ElementTransformer
 {
     public function convertEntityIntoIO($texte)
     {
-        $texteIO = new TexteIO;
+        $texteIO = new TexteIO();
         $texteIO = $this->transformElement($texte, $texteIO, ModelType::TEXTE);
 
-        if($texte->getItem()) {
+        if ($texte->getItem()) {
             $texteIO->setItemId($texte->getItem()->getId());
         }
 
@@ -20,5 +20,4 @@ class TexteTransformer extends ElementTransformer
 
         return $texteIO;
     }
-
 }

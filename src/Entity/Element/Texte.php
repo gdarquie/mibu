@@ -11,10 +11,10 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Texte extends AbstractElement
 {
-    CONST TYPE_FRAGMENT = 'fragment';
-    CONST TYPE_PROMESSE = 'promesse';
-    CONST TYPE_PERSONNAGE = 'personnage';
-    CONST TYPE_EVENEMENT = 'evenement';
+    const TYPE_FRAGMENT = 'fragment';
+    const TYPE_PROMESSE = 'promesse';
+    const TYPE_PERSONNAGE = 'personnage';
+    const TYPE_EVENEMENT = 'evenement';
 
     /**
      * @ORM\Column(type="string")
@@ -29,6 +29,7 @@ class Texte extends AbstractElement
 
     /**
      * Texte constructor.
+     *
      * @param $titre
      * @param $description
      * @param $type
@@ -72,5 +73,4 @@ class Texte extends AbstractElement
     {
         $this->item = $item;
     }
-
 }

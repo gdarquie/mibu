@@ -16,20 +16,22 @@ class FictionRepository extends ServiceEntityRepository
     /**
      * @param $fictionId
      * @param $modelType
+     *
      * @return mixed
      */
     public function getElements($fictionId, $modelType)
     {
-        $class= 'App:Element\\'.ucfirst($modelType);
+        $class = 'App:Element\\'.ucfirst($modelType);
         $query = $this->getEntityManager()->createQuery('SELECT e FROM '.$class.' e JOIN e.fiction f WHERE f.id = :id ORDER BY e.id');
         $query->setParameter('id', $fictionId);
         $textes = $query->getResult();
 
         return $textes;
     }
-    
+
     /**
      * @param $id
+     *
      * @return mixed
      */
     public function getTextesFiction($id)
@@ -43,6 +45,7 @@ class FictionRepository extends ServiceEntityRepository
 
     /**
      * @param $fictionId
+     *
      * @return mixed
      */
     public function getPersonnagesFiction($fictionId)
@@ -56,6 +59,7 @@ class FictionRepository extends ServiceEntityRepository
 
     /**
      * @param $fictionId
+     *
      * @return mixed
      */
     public function getEvenementsFiction($fictionId)
@@ -74,5 +78,4 @@ class FictionRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('texte')->orderBy('texte.id', 'ASC');
     }
-
 }

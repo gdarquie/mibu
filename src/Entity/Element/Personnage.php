@@ -12,14 +12,14 @@ use Doctrine\ORM\Mapping as ORM;
 class Personnage extends AbstractItem
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(type="integer", nullable=true)
      */
     private $anneeNaissance;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(type="integer", nullable=true)
      */
@@ -48,7 +48,7 @@ class Personnage extends AbstractItem
 
     /**
      * @var bool
-     * généré automatiquement ?
+     *           généré automatiquement ?
      *
      * @ORM\Column(type="boolean")
      */
@@ -62,7 +62,9 @@ class Personnage extends AbstractItem
         $this->setItem($item);
     }
 
-    function __clone() {}
+    public function __clone()
+    {
+    }
 
     /**
      * @return int
@@ -175,5 +177,4 @@ class Personnage extends AbstractItem
     {
         $this->auto = $auto;
     }
-
 }

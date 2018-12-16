@@ -33,8 +33,9 @@ class BaseHandler
 
     /**
      * BaseHandler constructor.
-     * @param EntityManagerInterface $em
-     * @param RouterInterface $router
+     *
+     * @param EntityManagerInterface       $em
+     * @param RouterInterface              $router
      * @param UserPasswordEncoderInterface $passwordEncoder
      */
     public function __construct(EntityManagerInterface $em, RouterInterface $router, UserPasswordEncoderInterface $passwordEncoder)
@@ -44,11 +45,11 @@ class BaseHandler
         $this->passwordEncoder = $passwordEncoder;
     }
 
-
     /**
      * @param $route
      * @param array $params
      * @param $targetPage
+     *
      * @return string
      */
     public function generateUrl($route, array $params, $targetPage)
@@ -65,6 +66,7 @@ class BaseHandler
     /**
      * @param $route
      * @param array $params
+     *
      * @return string
      */
     public function generateSimpleUrl($route, array $params)
@@ -79,6 +81,7 @@ class BaseHandler
 
     /**
      * @param $entity
+     *
      * @return bool
      */
     public function save($entity)
@@ -100,40 +103,45 @@ class BaseHandler
     /**
      * @return BaseFetcher
      */
-    public function getEntityFetcher() {
-
+    public function getEntityFetcher()
+    {
         return new BaseFetcher($this->em);
     }
 
     /**
      * @param $modelType
+     *
      * @return mixed
      */
     public function getEntityHydrator($modelType)
     {
         $className = 'App\Component\Hydrator\\'.ucfirst($modelType).'Hydrator';
+
         return new $className();
     }
 
     /**
      * @param $modelType
+     *
      * @return mixed
      */
     public function getEntityTransformer($modelType)
     {
         $className = 'App\Component\Transformer\\'.ucfirst($modelType).'Transformer';
+
         return new $className();
     }
 
     /**
      * @param $fictionId
+     *
      * @return mixed
      */
     public function getFiction($fictionId)
     {
         $fictionFetcher = new FictionFetcher($this->em);
 
-        if(!$fictionId) {
+        if (!$fictionId) {
             throw new BadRequestHttpException(sprintf(
                 "Il n'y a pas de fiction liée à cet élément."
             ));
@@ -144,13 +152,14 @@ class BaseHandler
 
     /**
      * @param $itemId
+     *
      * @return mixed
      */
     public function getItem($itemId)
     {
         $itemFetcher = new ItemFetcher($this->em);
 
-        if(!$itemId) {
+        if (!$itemId) {
             throw new BadRequestHttpException(sprintf(
                 "Il n'y a pas d'item liée à cet élément."
             ));
@@ -162,19 +171,21 @@ class BaseHandler
     /**
      * @param $entityId
      * @param $modelType
+     *
      * @return mixed
      */
     public function getEntity($entityId, $modelType)
     {
         $entity = $this->getEntityFetcher()->fetch($entityId, $modelType);
-        return $this->getEntityTransformer($modelType)->convertEntityIntoIO($entity);
 
+        return $this->getEntityTransformer($modelType)->convertEntityIntoIO($entity);
     }
 
     /**
      * @param $request
      * @param $fictionId
      * @param $modelType
+     *
      * @return PaginatedCollectionIO
      */
     public function getElementsCollection($request, $fictionId, $modelType)
@@ -189,7 +200,7 @@ class BaseHandler
         $pagerfanta->setCurrentPage($page);
 
         $entitiesIO = [];
-        foreach ($pagerfanta->getCurrentPageResults() as $entity){
+        foreach ($pagerfanta->getCurrentPageResults() as $entity) {
             $entityIO = $this->getEntityTransformer($modelType)->convertEntityIntoIO($entity);
 
             array_push($entitiesIO, $entityIO);
@@ -197,13 +208,11 @@ class BaseHandler
 
         $total = $pagerfanta->getNbResults();
 
-        $collection = new PaginatedCollectionIO($entitiesIO,$total);
+        $collection = new PaginatedCollectionIO($entitiesIO, $total);
 
-        if($modelType === ModelType::LIEU) {
+        if ($modelType === ModelType::LIEU) {
             $routeName = 'get_'.$modelType.'x';
-        }
-
-        else {
+        } else {
             $routeName = 'get_'.$modelType.'s';
         }
 
@@ -225,6 +234,7 @@ class BaseHandler
     /**
      * @param $request
      * @param $modelType
+     *
      * @return PaginatedCollectionIO
      */
     public function getConceptsCollection($request, $modelType)
@@ -249,7 +259,7 @@ class BaseHandler
 
         $total = $pagerfanta->getNbResults();
 
-        $collection = new PaginatedCollectionIO($entitiesIO,$total);
+        $collection = new PaginatedCollectionIO($entitiesIO, $total);
         $routeName = 'get_'.$modelType.'s';
 
         $collection->addLink('self', $this->generateUrl($routeName, [], $page));
@@ -265,12 +275,12 @@ class BaseHandler
         }
 
         return $collection;
-
     }
 
     /**
      * @param $data
      * @param $modelType
+     *
      * @return mixed
      */
     public function postEntity($data, $modelType)
@@ -296,15 +306,18 @@ class BaseHandler
                 break;
             case ModelType::INSCRIT:
                 $entity = new Inscrit();
+
                 return $this->changeConcept($data, $entity, $modelType);
             case ModelType::FICTION:
                 $entity = new Fiction();
+
                 return $this->changeConcept($data, $entity, $modelType);
             default:
                 throw new UnauthorizedHttpException(sprintf(
                     "Aucun modelType n'est renseigné."
                 ));
         }
+
         return $this->changeElement($data, $entity, $modelType);
     }
 
@@ -312,11 +325,12 @@ class BaseHandler
      * @param $entityId
      * @param $data
      * @param $modelType
+     *
      * @return mixed
      */
     public function putEntity($entityId, $data, $modelType)
     {
-        if($modelType === ModelType::INSCRIT || $modelType === ModelType::FICTION) {
+        if ($modelType === ModelType::INSCRIT || $modelType === ModelType::FICTION) {
             return $this->changeConcept($data, $this->getEntityFetcher()->fetch($entityId, $modelType), $modelType);
         }
 
@@ -326,6 +340,7 @@ class BaseHandler
     /**
      * @param $entityId
      * @param $modelType
+     *
      * @return JsonResponse
      */
     public function deleteEntity($entityId, $modelType)
@@ -340,6 +355,7 @@ class BaseHandler
      * @param $data
      * @param $entity
      * @param $modelType
+     *
      * @return mixed
      */
     public function changeConcept($data, $entity, $modelType)
@@ -353,11 +369,12 @@ class BaseHandler
 
         return $transformer->convertEntityIntoIO($entity);
     }
-    
+
     /**
      * @param $data
      * @param $entity
      * @param $modelType
+     *
      * @return mixed
      */
     public function changeElement($data, $entity, $modelType)
@@ -366,7 +383,7 @@ class BaseHandler
         $transformer = $this->getEntityTransformer($modelType);
 
         //devrait se faire dans l'hydrator ??? pb avec l'appel des fetchers pour getFiction
-        if(!isset($data['fictionId'])){
+        if (!isset($data['fictionId'])) {
             throw new UnauthorizedHttpException(sprintf(
                 "Le champ fictionId n'est pas renseigné."
             ));
@@ -374,7 +391,7 @@ class BaseHandler
 
         $data['fiction'] = $this->getFiction($data['fictionId']);
 
-        if(isset($data['itemId'])){
+        if (isset($data['itemId'])) {
             $data['item'] = $this->getItem($data['itemId']);
         }
 
@@ -384,7 +401,4 @@ class BaseHandler
 
         return $transformer->convertEntityIntoIO($entity);
     }
-
-
-
 }

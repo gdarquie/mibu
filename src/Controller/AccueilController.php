@@ -19,5 +19,4 @@ class AccueilController extends AbstractController
     {
         return new Response('Bienvenue');
     }
-
 }

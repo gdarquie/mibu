@@ -11,3 +11,7 @@ stop:
 
 db:
 	psql -h 0.0.0.0 -U postgres fictio
+
+#installer localement cs
+cs:
+	php-cs-fixer fix src --verbose --diff  --rules=@Symfony,object_operator_without_whitespace,-yoda_style $(CS_OPTION) || true

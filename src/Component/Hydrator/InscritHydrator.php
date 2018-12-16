@@ -32,5 +32,4 @@ class InscritHydrator extends ConceptHydrator
 
         return $inscrit;
     }
-
 }

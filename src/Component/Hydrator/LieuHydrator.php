@@ -16,4 +16,3 @@ class LieuHydrator extends ElementHydrator
         return $lieu;
     }
 }
-

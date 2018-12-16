@@ -149,5 +149,4 @@ class Fiction extends AbstractConcept
     {
         $this->lieux = $lieux;
     }
-
 }

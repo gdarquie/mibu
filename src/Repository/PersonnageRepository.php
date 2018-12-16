@@ -16,7 +16,9 @@ class PersonnageRepository extends ServiceEntityRepository
 
     /**
      * @param $fictionId
+     *
      * @return mixed
+     *
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function countPersonnages($fictionId)
@@ -24,36 +26,47 @@ class PersonnageRepository extends ServiceEntityRepository
         $query = $this->getEntityManager()->createQuery(
             'SELECT COUNT(p) FROM '.Personnage::class.' p JOIN p.fiction f WHERE f.id = :fictionId'
         )->setParameter('fictionId', $fictionId);
+
         return $query->getSingleScalarResult();
     }
 
     /**
      * @param $fictionId
+     *
      * @return mixed
+     *
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function countNbWomen($fictionId){
+    public function countNbWomen($fictionId)
+    {
         $query = $this->getEntityManager()->createQuery(
             'SELECT COUNT(p) FROM '.Personnage::class.' p JOIN p.fiction f WHERE f.id = :fictionId AND p.genre = :woman'
-        )->setParameters(['fictionId'=> $fictionId, 'woman' => 'F']);
+        )->setParameters(['fictionId' => $fictionId, 'woman' => 'F']);
+
         return $query->getSingleScalarResult();
     }
 
     /**
      * @param $fictionId
+     *
      * @return mixed
+     *
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function countNbMen($fictionId){
+    public function countNbMen($fictionId)
+    {
         $query = $this->getEntityManager()->createQuery(
             'SELECT COUNT(p) FROM '.Personnage::class.' p JOIN p.fiction f WHERE f.id = :fictionId AND p.genre = :man'
-        )->setParameters(['fictionId'=> $fictionId, 'man' => 'M']);
+        )->setParameters(['fictionId' => $fictionId, 'man' => 'M']);
+
         return $query->getSingleScalarResult();
     }
 
     /**
      * @param $fictionId
+     *
      * @return mixed
+     *
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function countAverageAge($fictionId)
@@ -61,11 +74,13 @@ class PersonnageRepository extends ServiceEntityRepository
         $query = $this->getEntityManager()->createQuery(
             'SELECT AVG((p.anneeMort)-(p.anneeNaissance)) FROM '.Personnage::class.' p JOIN p.fiction f WHERE f.id = :fictionId'
         )->setParameter('fictionId', $fictionId);
+
         return $query->getSingleScalarResult();
     }
 
     /**
      * @param $fictionId
+     *
      * @return bool
      */
     public function deleteGenerated($fictionId)
@@ -93,8 +108,6 @@ class PersonnageRepository extends ServiceEntityRepository
             'DELETE FROM '.Action::class.' a WHERE a.id IN (:actions)'
         )->setParameter('actions', $actions);
 
-        return $query->execute();    }
-
+        return $query->execute();
+    }
 }
-
-

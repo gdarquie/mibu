@@ -27,7 +27,7 @@ class InscritController extends BaseController
      */
     public function getInscrit($inscritId)
     {
-        return $this->getAction($inscritId,  $this->modelType);
+        return $this->getAction($inscritId, $this->modelType);
     }
 
     /**
@@ -35,7 +35,7 @@ class InscritController extends BaseController
      */
     public function postInscrit(Request $request)
     {
-        return $this->postAction($request,  $this->modelType);
+        return $this->postAction($request, $this->modelType);
     }
 
     /**
@@ -43,16 +43,14 @@ class InscritController extends BaseController
      */
     public function putInscrit(Request $request, $inscritId)
     {
-        return $this->putAction($request, $inscritId,  $this->modelType);
+        return $this->putAction($request, $inscritId, $this->modelType);
     }
-    
 
     /**
      * @Rest\Delete("/inscrits/{inscritId}",name="delete_inscrit")
      */
     public function deleteInscrit($inscritId)
     {
-        return $this->deleteAction($inscritId,  $this->modelType);
+        return $this->deleteAction($inscritId, $this->modelType);
     }
-
 }

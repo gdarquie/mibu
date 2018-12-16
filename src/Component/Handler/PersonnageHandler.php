@@ -12,20 +12,21 @@ class PersonnageHandler extends BaseHandler
     /**
      * @param $fictionId
      * @param $limit
+     *
      * @return bool
      */
     public function handleGeneratePersonnages($fictionId, $limit)
     {
-        if($limit > 1000) {
+        if ($limit > 1000) {
             $limit = 1000;
         }
 
         $personnage = new Personnage('Original', 'Le personnage original');
 
-        for($i= 0; $i < $limit; $i++) {
+        for ($i = 0; $i < $limit; ++$i) {
             $clone = clone $personnage;
 
-            $clone->setTitre('Clone n°'.($i+1));
+            $clone->setTitre('Clone n°'.($i + 1));
             $clone->setDescription('Un clone');
             $clone->setPrenom($this->generateNomAtalaire('prenom'));
             $clone->setNom($this->generateNomAtalaire('nom'));
@@ -34,34 +35,32 @@ class PersonnageHandler extends BaseHandler
             $clone->setAnneeNaissance($dates['dateNaissance']);
             $clone->setAnneeMort($dates['dateMort']);
 
-            $genre = (rand(0,1)>0) ?$genre = 'M' :$genre = 'F';
+            $genre = (rand(0, 1) > 0) ? $genre = 'M' : $genre = 'F';
             $clone->setGenre($genre);
 
-            $clone->setAuto(TRUE);
+            $clone->setAuto(true);
             $clone->setFiction($this->getFiction($fictionId));
 
             $this->save($clone);
         }
 
         return true;
-
     }
 
     public function generateNomAtalaire($type)
     {
         // calculer le nombre de syllabes
         if ($type === 'prenom') {
-            $nbSyllables = $this->computeSyllablesNumberForPrenom(rand(1,100));
-        }
-        else {
-            $nbSyllables = $this->computeSyllablesNumberForNom(rand(1,100));
+            $nbSyllables = $this->computeSyllablesNumberForPrenom(rand(1, 100));
+        } else {
+            $nbSyllables = $this->computeSyllablesNumberForNom(rand(1, 100));
         }
 
         // liste des syllabes
-        $syllables = ['ba', 'riu', 'a', 'ta', 'lai', 're', 'da', 'mu', 'ni','no','so', 'mo', 'do', 'ne', 'sa'];
+        $syllables = ['ba', 'riu', 'a', 'ta', 'lai', 're', 'da', 'mu', 'ni', 'no', 'so', 'mo', 'do', 'ne', 'sa'];
 
         // assemblage des syllabes
-        for ($i = 0; $i < $nbSyllables; $i++) {
+        for ($i = 0; $i < $nbSyllables; ++$i) {
             $nom[] = $syllables[array_rand($syllables, 1)];
         }
 
@@ -73,6 +72,7 @@ class PersonnageHandler extends BaseHandler
 
     /**
      * @param $fictionId
+     *
      * @return JsonResponse
      */
     public function getFictionStats($fictionId)
@@ -80,15 +80,15 @@ class PersonnageHandler extends BaseHandler
         $nb_personnages = $this->em->getRepository(Personnage::class)->countPersonnages($fictionId);
         $nb_women = $this->em->getRepository(Personnage::class)->countNbWomen($fictionId);
         $nb_men = $this->em->getRepository(Personnage::class)->countNbMen($fictionId);
-        $ratio_women = round(100/$nb_personnages*$nb_women, 2);
-        $average_age= round($this->em->getRepository(Personnage::class)->countAverageAge($fictionId),1);
+        $ratio_women = round(100 / $nb_personnages * $nb_women, 2);
+        $average_age = round($this->em->getRepository(Personnage::class)->countAverageAge($fictionId), 1);
 
         $payload = [
             'nb_personnages' => $nb_personnages,
             'nb_women' => $nb_women,
             'nb_men' => $nb_men,
             'ratio_women' => $ratio_women,
-            'average_age' => $average_age
+            'average_age' => $average_age,
         ];
 
         return new JsonResponse($payload);
@@ -96,15 +96,16 @@ class PersonnageHandler extends BaseHandler
 
     /**
      * @param $randomValue
+     *
      * @return int
      */
     public function computeSyllablesNumberForNom($randomValue)
     {
-        switch (true){
-            case ($randomValue < 30):
+        switch (true) {
+            case $randomValue < 30:
             $nbSyllables = 1;
             break;
-            case ($randomValue > 30 && $randomValue <70):
+            case $randomValue > 30 && $randomValue < 70:
             $nbSyllables = 2;
             break;
             default:
@@ -117,18 +118,19 @@ class PersonnageHandler extends BaseHandler
 
     /**
      * @param $randomValue
+     *
      * @return int
      */
     public function computeSyllablesNumberForPrenom($randomValue)
     {
-        switch (true){
-            case ($randomValue < 10):
+        switch (true) {
+            case $randomValue < 10:
                 $nbSyllables = 1;
                 break;
-            case ($randomValue > 10 && $randomValue <70):
+            case $randomValue > 10 && $randomValue < 70:
                 $nbSyllables = 2;
                 break;
-            case ($randomValue > 80 && $randomValue <90):
+            case $randomValue > 80 && $randomValue < 90:
                 $nbSyllables = 3;
                 break;
             default:
@@ -143,29 +145,30 @@ class PersonnageHandler extends BaseHandler
      * @param $generationYear
      * @param $periods
      * @param $lifeExpectancy
+     *
      * @return array
      */
-    public function computeDates($generationYear, $lifeExpectancy, $periods = [18, 35, 65, 100]) :array
+    public function computeDates($generationYear, $lifeExpectancy, $periods = [18, 35, 65, 100]): array
     {
-            if(count($periods) !== 4) {
-                throw new Exception('Length of $periods[] parameters must be 4 for computeDates(), it is '.count($periods));
-            }
+        if (count($periods) !== 4) {
+            throw new Exception('Length of $periods[] parameters must be 4 for computeDates(), it is '.count($periods));
+        }
 
-        $pourcent = rand(0,100);
+        $pourcent = rand(0, 100);
 
         //compute the age of the character
-        switch($pourcent) {
-            case ($pourcent < 25):
+        switch ($pourcent) {
+            case $pourcent < 25:
                 $age = rand(0, $periods[0]);
                 break;
-            case ($pourcent < 26 && 50):
-                $age = rand(($periods[0]+1), $periods[1]);
+            case $pourcent < 26 && 50:
+                $age = rand(($periods[0] + 1), $periods[1]);
                 break;
-            case ($pourcent < 51 && 75):
-                $age = rand(($periods[1]+1), $periods[2]);
+            case $pourcent < 51 && 75:
+                $age = rand(($periods[1] + 1), $periods[2]);
                 break;
-            case ($pourcent > 76):
-                $age = rand(($periods[2]+1), $periods[3]);
+            case $pourcent > 76:
+                $age = rand(($periods[2] + 1), $periods[3]);
                 break;
             default:
                 $age = rand($periods[0], $periods[3]);
@@ -176,16 +179,16 @@ class PersonnageHandler extends BaseHandler
         $dateNaissance = $generationYear - $age;
 
         //compute lifetime
-        $pourcent2 = rand(0,100);
+        $pourcent2 = rand(0, 100);
 
-        switch($pourcent2) {
-            case ($pourcent < 50):
-                $lifeExpectancy = rand($lifeExpectancy-5, $lifeExpectancy+5);
+        switch ($pourcent2) {
+            case $pourcent < 50:
+                $lifeExpectancy = rand($lifeExpectancy - 5, $lifeExpectancy + 5);
                 break;
-            case ($pourcent < 51 && 75):
+            case $pourcent < 51 && 75:
                 $lifeExpectancy = rand(0, $lifeExpectancy);
                 break;
-            case ($pourcent < 76 && 100):
+            case $pourcent < 76 && 100:
                 $lifeExpectancy = rand($lifeExpectancy, 100);
                 break;
             default:
@@ -201,6 +204,7 @@ class PersonnageHandler extends BaseHandler
 
     /**
      * @param $fictionId
+     *
      * @return mixed
      */
     public function handleDeleteGenerated($fictionId)
@@ -212,6 +216,7 @@ class PersonnageHandler extends BaseHandler
 
     /**
      * @param $fictionId
+     *
      * @return JsonResponse
      */
     public function handleDeleteRoutinesPersonnage($personnageId)
@@ -221,12 +226,13 @@ class PersonnageHandler extends BaseHandler
         return new JsonResponse('Suppression des actions du personnage', 200);
     }
 
-
     /**
      * @param $personnageId
      * @param int $debutFiction
      * @param int $finFiction
+     *
      * @return mixed
+     *
      * @throws \Exception
      */
     public function handleGenerateRoutines($personnageId, $debutFiction = -100, $finFiction = -97)
@@ -234,8 +240,8 @@ class PersonnageHandler extends BaseHandler
         //get personnages
         $personnage = $this->em->getRepository(Personnage::class)->findOneById($personnageId);
 
-        $debut = $personnage->getAnneeNaissance()+5000;
-        $fin = $personnage->getAnneeMort()+5000;
+        $debut = $personnage->getAnneeNaissance() + 5000;
+        $fin = $personnage->getAnneeMort() + 5000;
 
         $format = 'Y-m-d H:i';
 
@@ -253,7 +259,7 @@ class PersonnageHandler extends BaseHandler
         $datetime = new \DateTime();
         $finRoutine = $datetime::createFromFormat($format, $timeFin);
 
-        while($debutRoutine < $finRoutine) {
+        while ($debutRoutine < $finRoutine) {
             $routines[] = $this->createRoutine($debutRoutine, $personnage);
             $lastRoutine = end($routines);
             $debutRoutine = end($lastRoutine[0])->getFin();
@@ -265,7 +271,9 @@ class PersonnageHandler extends BaseHandler
     /**
      * @param $debutRoutine
      * @param $personnage
+     *
      * @return array
+     *
      * @throws \Exception
      */
     public function createRoutine($debutRoutine, $personnage)
@@ -284,7 +292,9 @@ class PersonnageHandler extends BaseHandler
      * @param $debutRoutine
      * @param $finRoutine
      * @param $personnage
+     *
      * @return array
+     *
      * @throws \Exception
      */
     public function generateActions($debutRoutine, $finRoutine, $personnage)
@@ -297,18 +307,18 @@ class PersonnageHandler extends BaseHandler
             $routine[] = $action;
             $debutAction = $action->getFin();
             $this->em->persist($action);
-
         }
         $this->em->flush();
 
         return $routine;
     }
 
-
     /**
      * @param $debutRoutine
      * @param $personnage
+     *
      * @return Action
+     *
      * @throws \Exception
      */
     public function createAction($debutRoutine, $personnage)
@@ -324,7 +334,7 @@ class PersonnageHandler extends BaseHandler
 
         $action = new Action();
         $action->setTitre($texte);
-        $action->setCle(substr($texte, 0,3));
+        $action->setCle(substr($texte, 0, 3));
         $action->setDescription($texte);
         $action->setDebut($debutRoutine);
         $action->setFin($finAction);
@@ -332,7 +342,7 @@ class PersonnageHandler extends BaseHandler
 
         return $action;
     }
-    
+
     /**
      * @return mixed
      */
@@ -342,5 +352,4 @@ class PersonnageHandler extends BaseHandler
 
         return $actions[array_rand($actions)];
     }
-    
 }

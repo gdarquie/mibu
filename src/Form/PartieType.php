@@ -28,5 +28,4 @@ class PartieType extends AbstractType
             'csrf_protection' => false,
         ));
     }
-
 }

@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Form;
+
 use App\Component\IO\FictionIO;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -27,5 +28,4 @@ class FictionType extends AbstractType
             'csrf_protection' => false,
         ));
     }
-
 }

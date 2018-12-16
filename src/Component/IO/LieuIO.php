@@ -45,5 +45,4 @@ class LieuIO extends ElementIO
     {
         $this->long = $long;
     }
-
 }
