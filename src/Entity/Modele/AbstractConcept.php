@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping\MappedSuperclass;
 use App\Component\Id\Uuid;
 
 /**
- * Abstract base class to be extended by my entity classes with same fields
+ * Abstract base class to be extended by my entity classes with same fields.
  *
  * @MappedSuperclass
  * @ORM\HasLifecycleCallbacks
@@ -15,7 +15,7 @@ use App\Component\Id\Uuid;
 abstract class AbstractConcept
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Id
      * @ORM\Column(type="integer")
@@ -24,14 +24,14 @@ abstract class AbstractConcept
     protected $id;
 
     /**
-     * @var datetime $created
+     * @var datetime
      *
      * @ORM\Column(type="datetime")
      */
     protected $dateCreation;
 
     /**
-     * @var datetime $created
+     * @var datetime
      *
      * @ORM\Column(type="datetime")
      */
@@ -51,7 +51,6 @@ abstract class AbstractConcept
      * @ORM\Column(type="text")
      */
     protected $description;
-
 
     public function __construct()
     {
@@ -147,9 +146,7 @@ abstract class AbstractConcept
         $this->description = $description;
     }
 
-
     /**
-     *
      * @ORM\PrePersist
      * @ORM\PreUpdate
      */
@@ -161,5 +158,4 @@ abstract class AbstractConcept
             $this->setDateCreation(new \DateTime('now'));
         }
     }
-
 }

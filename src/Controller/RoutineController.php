@@ -18,7 +18,8 @@ class RoutineController extends BaseController
                 "Une erreur s'est produite, aucune routine n'a été générée."
             ));
         }
-        return $this->redirectToRoute('get_personnage', array('personnageId'=> $personnageId));
+
+        return $this->redirectToRoute('get_personnage', array('personnageId' => $personnageId));
     }
 
     /**
@@ -42,7 +43,6 @@ class RoutineController extends BaseController
     public function deleteRoutinesPersonnage($personnageId)
     {
         return $this->getHandler(ModelType::PERSONNAGE)->handleDeleteRoutinesPersonnage($personnageId);
-
     }
 
     /**
@@ -50,6 +50,5 @@ class RoutineController extends BaseController
      */
     public function deleteRoutinesFiction()
     {
-
     }
 }

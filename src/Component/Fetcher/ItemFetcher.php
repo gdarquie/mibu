@@ -14,7 +14,6 @@ class ItemFetcher
         $this->em = $em;
     }
 
-
     public function fetchItem($itemId)
     {
         $item = $this->em->getRepository(AbstractItem::class)->findOneById($itemId);

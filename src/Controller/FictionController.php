@@ -3,12 +3,9 @@
 namespace App\Controller;
 
 use App\Component\Constant\ModelType;
-use App\Component\Handler\FictionHandler;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use FOS\RestBundle\Controller\Annotations as Rest;
-use Nelmio\ApiDocBundle\Annotation\Model;
-use Nelmio\ApiDocBundle\Annotation\Security;
 use Swagger\Annotations as SWG;
 
 class FictionController extends BaseController
@@ -17,7 +14,6 @@ class FictionController extends BaseController
      * @var string
      */
     public $modelType = ModelType::FICTION;
-
 
     /**
      * List all fictions.

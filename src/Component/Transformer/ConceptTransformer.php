@@ -11,6 +11,7 @@ class ConceptTransformer
      * @param AbstractConcept $concept
      * @param $io
      * @param ModelType $modelType
+     *
      * @return mixed
      */
     public function transformConcept(AbstractConcept $concept, $io, $modelType)

@@ -129,5 +129,4 @@ class PersonnageIO extends ElementIO
     {
         $this->auto = $auto;
     }
-
 }

@@ -3,13 +3,8 @@
 namespace App\Controller;
 
 use App\Component\Constant\ModelType;
-use App\Component\Handler\LieuHandler;
-use App\Component\IO\LieuIO;
-use App\Form\LieuType;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\Controller\Annotations as Rest;
-
 
 class LieuController extends BaseController
 {
@@ -24,7 +19,6 @@ class LieuController extends BaseController
     public function getLieu($lieuId)
     {
         return $this->getAction($lieuId, ModelType::LIEU);
-
     }
 
     /**
@@ -45,7 +39,6 @@ class LieuController extends BaseController
     public function postLieu(Request $request)
     {
         return $this->postAction($request, $this->modelType);
-
     }
 
     /**
@@ -63,5 +56,4 @@ class LieuController extends BaseController
     {
         return $this->deleteAction($lieuId, $this->modelType);
     }
-
 }

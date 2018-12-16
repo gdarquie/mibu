@@ -21,5 +21,4 @@ abstract class AbstractIndexIO
     {
         $this->id = $id;
     }
-
 }

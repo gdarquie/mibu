@@ -7,14 +7,15 @@ class Uuid
     /**
      * @return uuid
      */
-    function gen_uuid() {
+    public function gen_uuid()
+    {
         $uuid = array(
-            'time_low'  => 0,
-            'time_mid'  => 0,
-            'time_hi'  => 0,
+            'time_low' => 0,
+            'time_mid' => 0,
+            'time_hi' => 0,
             'clock_seq_hi' => 0,
             'clock_seq_low' => 0,
-            'node'   => array()
+            'node' => array(),
         );
 
         $uuid['time_low'] = mt_rand(0, 0xffff) + (mt_rand(0, 0xffff) << 16);
@@ -23,7 +24,7 @@ class Uuid
         $uuid['clock_seq_hi'] = (1 << 7) | (mt_rand(0, 128));
         $uuid['clock_seq_low'] = mt_rand(0, 255);
 
-        for ($i = 0; $i < 6; $i++) {
+        for ($i = 0; $i < 6; ++$i) {
             $uuid['node'][$i] = mt_rand(0, 255);
         }
 

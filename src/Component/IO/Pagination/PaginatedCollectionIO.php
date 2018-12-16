@@ -86,5 +86,4 @@ class PaginatedCollectionIO
     {
         $this->links[$ref] = $url;
     }
-
 }

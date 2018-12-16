@@ -28,10 +28,11 @@ class JwtTokenAuthenticator extends AbstractFormLoginAuthenticator
 
     /**
      * JwtTokenAuthenticator constructor.
-     * @param JWTEncoderInterface $jwtEncoder
-     * @param EntityManagerInterface $em
+     *
+     * @param JWTEncoderInterface          $jwtEncoder
+     * @param EntityManagerInterface       $em
      * @param UserPasswordEncoderInterface $passwordEncoder
-     * @param RouterInterface $router
+     * @param RouterInterface              $router
      */
     public function __construct(JWTEncoderInterface $jwtEncoder, EntityManagerInterface $em, UserPasswordEncoderInterface $passwordEncoder, RouterInterface $router)
     {
@@ -43,19 +44,17 @@ class JwtTokenAuthenticator extends AbstractFormLoginAuthenticator
 
     public function supports(Request $request)
     {
-        if($request->attributes->get('_route') === 'accueil') {
+        if ($request->attributes->get('_route') === 'accueil') {
             return false;
-        }
-        else if($request->attributes->get('_route') === 'post_jeton') {
+        } elseif ($request->attributes->get('_route') === 'post_jeton') {
             return false;
-        }
-        else if($request->attributes->get('_route') === 'post_inscrit') {
+        } elseif ($request->attributes->get('_route') === 'post_inscrit') {
             return false;
-        }
-        else if($request->attributes->get('_route') === 'get_projet') {
+        } elseif ($request->attributes->get('_route') === 'get_projet') {
 //            dump($request->attributes->get('projetId'));die;
             return false;
         }
+
         return true;
     }
 
@@ -82,7 +81,7 @@ class JwtTokenAuthenticator extends AbstractFormLoginAuthenticator
         } catch (JWTDecodeFailureException $e) {
             throw new CustomUserMessageAuthenticationException('Invalid Token');
         }
-        
+
         return $this->em
             ->getRepository(Inscrit::class)
             ->findOneBy(['pseudo' => $data['pseudo']]);
@@ -92,7 +91,6 @@ class JwtTokenAuthenticator extends AbstractFormLoginAuthenticator
     {
         return true;
     }
-
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
     {
@@ -105,15 +103,15 @@ class JwtTokenAuthenticator extends AbstractFormLoginAuthenticator
     }
 
     /**
-     * @param Request $request
+     * @param Request                      $request
      * @param AuthenticationException|null $authException
+     *
      * @return JsonResponse|RedirectResponse
      */
     public function start(Request $request, AuthenticationException $authException = null)
     {
         return new JsonResponse([
-            'error' => 'auth required'
+            'error' => 'auth required',
         ], 401);
     }
-
 }

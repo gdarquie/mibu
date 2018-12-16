@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Component\Constant\ModelType;
-use App\Component\Handler\EvenementHandler;
 use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\Controller\Annotations as Rest;
 
@@ -36,7 +35,6 @@ class EvenementController extends BaseController
 
     /**
      * @Rest\Post("evenements", name="post_evemement")
-     *
      */
     public function postEvenement(Request $request)
     {
@@ -46,7 +44,7 @@ class EvenementController extends BaseController
     /**
      * @Rest\Put("/evenements/{evenementId}",name="put_evenement")
      */
-    public function putEvenement(Request $request,$evenementId)
+    public function putEvenement(Request $request, $evenementId)
     {
         return $this->putAction($request, $evenementId, $this->modelType);
     }
@@ -57,7 +55,5 @@ class EvenementController extends BaseController
     public function deleteEvenement($evenementId)
     {
         return $this->deleteAction($evenementId, $this->modelType);
-
     }
-
 }

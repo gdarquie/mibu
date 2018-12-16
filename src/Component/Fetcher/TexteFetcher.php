@@ -7,7 +7,6 @@ use App\Entity\Element\Texte;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-
 class TexteFetcher
 {
     private $em;
@@ -17,8 +16,8 @@ class TexteFetcher
         $this->em = $em;
     }
 
-    public function fetchTexte($texteId) {
-
+    public function fetchTexte($texteId)
+    {
         $texte = $this->em
             ->getRepository(Texte::class)
             ->findOneById($texteId);
@@ -33,8 +32,8 @@ class TexteFetcher
         return $texte;
     }
 
-    public function fetchTextes($fictionId) {
-
+    public function fetchTextes($fictionId)
+    {
         $textes = $this->em->getRepository(Fiction::class)->getTextesFiction($fictionId);
 
         if (!$textes) {
@@ -46,5 +45,4 @@ class TexteFetcher
 
         return $textes;
     }
-
 }

@@ -30,5 +30,4 @@ class LieuType extends AbstractType
             'csrf_protection' => false,
         ));
     }
-
 }

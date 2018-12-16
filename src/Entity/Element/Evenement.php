@@ -52,5 +52,4 @@ class Evenement extends AbstractItem
     {
         $this->anneeFin = $anneeFin;
     }
-
 }

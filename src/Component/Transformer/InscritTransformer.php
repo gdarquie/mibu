@@ -2,7 +2,6 @@
 
 namespace App\Component\Transformer;
 
-
 use App\Component\Constant\ModelType;
 use App\Component\IO\InscritIO;
 
@@ -19,6 +18,7 @@ class InscritTransformer extends ConceptTransformer
         $inscritIO->setGenre($inscrit->getGenre());
         $inscritIO->setEmail($inscrit->getEmail());
         $inscritIO->setDateNaissance($inscrit->getDateNaissance());
+
         return $inscritIO;
     }
 }

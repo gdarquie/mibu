@@ -93,17 +93,18 @@ class Inscrit extends AbstractConcept implements UserInterface
      * @see UserInterface
      */
     public function getRoles(): array
-
     {
         $roles = $this->roles;
         // guarantee every user at least has ROLE_USER
         $roles[] = 'ROLE_USER';
+
         return array_unique($roles);
     }
-    public function setRoles(array $roles): self
 
+    public function setRoles(array $roles): self
     {
         $this->roles = $roles;
+
         return $this;
     }
 
@@ -127,7 +128,6 @@ class Inscrit extends AbstractConcept implements UserInterface
      * @see UserInterface
      */
     public function getSalt()
-
     {
         // not needed when using bcrypt or argon
     }
@@ -136,7 +136,6 @@ class Inscrit extends AbstractConcept implements UserInterface
      * @see UserInterface
      */
     public function eraseCredentials()
-
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
@@ -210,19 +209,19 @@ class Inscrit extends AbstractConcept implements UserInterface
      * @return null|string
      */
     public function getEmail(): ?string
-
     {
         return $this->email;
     }
 
     /**
      * @param string $email
+     *
      * @return Inscrit
      */
     public function setEmail(string $email): self
-
     {
         $this->email = $email;
+
         return $this;
     }
 
@@ -241,7 +240,4 @@ class Inscrit extends AbstractConcept implements UserInterface
     {
         $this->fictions = $fictions;
     }
-
-
-
 }

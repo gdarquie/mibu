@@ -5,7 +5,7 @@ namespace App\Entity\Modele;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Abstract base class to be extended by my entity classes with same fields
+ * Abstract base class to be extended by my entity classes with same fields.
  *
  * @ORM\MappedSuperclass()
  * @ORM\HasLifecycleCallbacks

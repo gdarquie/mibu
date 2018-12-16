@@ -28,5 +28,4 @@ class InscritFetcher
 
         return $inscrit;
     }
-
 }

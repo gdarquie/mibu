@@ -3,11 +3,7 @@
 namespace App\Controller;
 
 use App\Component\Constant\ModelType;
-use App\Component\Handler\PartieHandler;
-use App\Component\IO\PartieIO;
-use App\Form\PartieType;
 use FOS\RestBundle\Controller\Annotations as Rest;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 class PartieController extends BaseController
@@ -45,14 +41,12 @@ class PartieController extends BaseController
         return $this->postAction($request, $this->modelType);
     }
 
-
     /**
      * @Rest\Put("parties/{partieId}", name="put_partie")
      */
     public function putPartie(Request $request, $partieId)
     {
         return $this->putAction($request, $partieId, $this->modelType);
-
     }
 
     /**
@@ -62,5 +56,4 @@ class PartieController extends BaseController
     {
         return $this->deleteAction($partieId, $this->modelType);
     }
-
 }

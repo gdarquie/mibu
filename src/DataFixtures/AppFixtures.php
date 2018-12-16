@@ -36,15 +36,14 @@ class AppFixtures extends Fixture
         $manager->persist($fiction);
 
         //create textes
-        for ($i = 0; $i < 20; $i++) {
+        for ($i = 0; $i < 20; ++$i) {
             $texte = new Texte('texte'.$i, 'description du texte '.$i, 'fragment');
             $texte->setFiction($fiction);
             $manager->persist($texte);
         }
 
         //create personnages
-        for ($i = 0; $i < 20; $i++) {
-
+        for ($i = 0; $i < 20; ++$i) {
             $personnage = new Personnage('personnage'.$i, 'Description du personnage'.$i);
             $personnage->setPrenom('Okita');
             $personnage->setNom('Soji');
@@ -56,8 +55,7 @@ class AppFixtures extends Fixture
         }
 
         //create lieux
-        for ($i = 0; $i < 20; $i++) {
-
+        for ($i = 0; $i < 20; ++$i) {
             $lieu = new Lieu();
             $lieu->setTitre('Saeda');
             $lieu->setDescription('Le pays où est né Atalaire');

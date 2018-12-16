@@ -7,19 +7,18 @@ abstract class AbstractIdIO
     private $id;
 
     /**
-    * @return mixed
-    */
+     * @return mixed
+     */
     public function getId()
     {
-       return $this->id;
+        return $this->id;
     }
 
     /**
-    * @param mixed $id
-    */
+     * @param mixed $id
+     */
     public function setId($id)
     {
-       $this->id = $id;
+        $this->id = $id;
     }
-
 }

@@ -24,6 +24,7 @@ class BaseController extends FOSRestController
 
     /**
      * BaseController constructor.
+     *
      * @param UserPasswordEncoderInterface $passwordEncoder
      */
     public function __construct(UserPasswordEncoderInterface $passwordEncoder)
@@ -34,14 +35,14 @@ class BaseController extends FOSRestController
     /**
      * @param Request $request
      * @param $modelType
+     *
      * @return Response
      */
     public function getAllAction(Request $request, $modelType)
     {
-        if($modelType === ModelType::LIEU) {
+        if ($modelType === ModelType::LIEU) {
             $suffixe = 'x';
-        }
-        else {
+        } else {
             $suffixe = 's';
         }
 
@@ -55,6 +56,7 @@ class BaseController extends FOSRestController
     /**
      * @param $id
      * @param $modelType
+     *
      * @return Response
      */
     public function getAction($id, $modelType)
@@ -73,9 +75,10 @@ class BaseController extends FOSRestController
      * @param Request $request
      * @param $id
      * @param $modelType
+     *
      * @return Response
      */
-    public function putAction(Request $request,$id, $modelType)
+    public function putAction(Request $request, $id, $modelType)
     {
         $data = $this->getData($request);
         $io = $this->getHandler($modelType)->putEntity($id, $data, $modelType);
@@ -90,6 +93,7 @@ class BaseController extends FOSRestController
     /**
      * @param $request
      * @param $modelType
+     *
      * @return JsonResponse|Response
      */
     public function postAction($request, $modelType)
@@ -104,7 +108,7 @@ class BaseController extends FOSRestController
         $form = $this->createForm($formType, $io);
         $form->submit($data);
 
-        if(!$form->isValid()) {
+        if (!$form->isValid()) {
             return $this->createValidationErrorResponse($form);
         }
 
@@ -120,6 +124,7 @@ class BaseController extends FOSRestController
     /**
      * @param $id
      * @param $modelType
+     *
      * @return mixed
      */
     public function deleteAction($id, $modelType)
@@ -129,6 +134,7 @@ class BaseController extends FOSRestController
 
     /**
      * @param $request
+     *
      * @return mixed
      */
     public function getData(Request $request)
@@ -138,8 +144,9 @@ class BaseController extends FOSRestController
 
     /**
      * @param $data
-     * @param int $statusCode
+     * @param int  $statusCode
      * @param null $url
+     *
      * @return Response
      */
     public function createApiResponse($data, $statusCode = 200, $url = null)
@@ -165,6 +172,7 @@ class BaseController extends FOSRestController
 
     /**
      * @param FormInterface $form
+     *
      * @return array
      */
     protected function getErrorsFromForm(FormInterface $form)
@@ -180,11 +188,13 @@ class BaseController extends FOSRestController
                 }
             }
         }
+
         return $errors;
     }
 
     /**
      * @param FormInterface $form
+     *
      * @return JsonResponse
      */
     protected function createValidationErrorResponse(FormInterface $form)
@@ -194,17 +204,19 @@ class BaseController extends FOSRestController
         $data = [
             'type' => 'validation_error',
             'title' => 'There was a validation error',
-            'errors' => $errors
+            'errors' => $errors,
         ];
+
         return new JsonResponse($data, 400);
     }
 
     /**
      * @param $modelType
+     *
      * @return mixed
      */
-    protected function getHandler($modelType) {
-
+    protected function getHandler($modelType)
+    {
         return $this->get('App\Component\Handler\\'.ucfirst($modelType).'Handler');
     }
 }

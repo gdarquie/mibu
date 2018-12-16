@@ -154,5 +154,4 @@ class InscritIO extends AbstractConceptIO
     {
         $this->email = $email;
     }
-
 }

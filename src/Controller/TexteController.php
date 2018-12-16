@@ -6,7 +6,6 @@ use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use App\Component\Constant\ModelType;
 
-
 class TexteController extends BaseController
 {
     /**
@@ -20,7 +19,6 @@ class TexteController extends BaseController
     public function getTexte($texteId)
     {
         return $this->getAction($texteId, $this->modelType);
-
     }
 
     /**
@@ -58,5 +56,4 @@ class TexteController extends BaseController
     {
         return $this->deleteAction($texteId, $this->modelType);
     }
-
 }
