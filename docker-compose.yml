@@ -5,6 +5,7 @@ services:
     build: ./docker/api
     depends_on:
       - "db"
+      - "elastic"
     ports:
       - "81:80"
     volumes:
@@ -21,6 +22,10 @@ services:
       JWT_SECRET_KEY: "%kernel.project_dir%/config/jwt/private.pem"
       JWT_PUBLIC_KEY: "%kernel.project_dir%/config/jwt/public.pem"
       JWT_PASSPHRASE: ~
+      ELASTICA_HOST: "elastic"
+      ELASTICA_PORT: 9200
+      ELASTICA_TRANSPORT: Http
+      ELASTICA_AUHTORIZATION: ''
   composer:
     container_name: mibu-composer
     restart: 'no'
@@ -38,4 +43,7 @@ services:
     depends_on:
       - "composer"
     ports:
-      - "5432:5432"
+      - "15432:5432"
+  elastic:
+    container_name: mibu-elastic
+    image: elasticsearch:6.5.4
