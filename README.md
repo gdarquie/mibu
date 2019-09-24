@@ -2,7 +2,7 @@
 
 ## Installer mibu en local
 
-L'installation nécessite PHP 7.1+, composer et postgreSQL (9+?)
+L'installation nécessite PHP 7.1+, composer, postgreSQL (9+?) et Elastic Search.
 
 ### Installer les dépendances
 
@@ -15,7 +15,7 @@ composer install
 ```
 php bin/console doctrine:database:create --if-not-exists
 
-php bin/console doctrine:migrations:migrate
+php bin/console doctrine:schema:update --force
 ```
 
 ### Lancer l'application en local
