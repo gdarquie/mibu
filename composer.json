@@ -11,7 +11,7 @@
         "lexik/jwt-authentication-bundle": "^2.5",
         "nelmio/api-doc-bundle": "^3.3",
         "nelmio/cors-bundle": "^1.5",
-        "pagerfanta/pagerfanta": "^1.0.5",
+        "pagerfanta/pagerfanta": "^2.3.0",
         "sensio/framework-extra-bundle": "^5.2",
         "sensiolabs/security-checker": "^5.0",
         "stof/doctrine-extensions-bundle": "^1.3",
